@@ -167,3 +167,46 @@ export const Cup = () => {
     </svg>
   );
 };
+
+export const CheckBox = ({ checked }) => {
+  return checked ? (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 27 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.75 26.5H17.25C23.5 26.5 26 24 26 17.75V10.25C26 4 23.5 1.5 17.25 1.5H9.75C3.5 1.5 1 4 1 10.25V17.75C1 24 3.5 26.5 9.75 26.5Z"
+        stroke="#0DB12B"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8.1875 14.0001L11.725 17.5376L18.8125 10.4626"
+        stroke="#0DB12B"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ) : (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 27 27"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.75 26H17.25C23.5 26 26 23.5 26 17.25V9.75C26 3.5 23.5 1 17.25 1H9.75C3.5 1 1 3.5 1 9.75V17.25C1 23.5 3.5 26 9.75 26Z"
+        stroke="#6D6D6D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};

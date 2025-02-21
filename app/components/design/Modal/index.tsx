@@ -3,20 +3,15 @@ import React from "react";
 
 interface IModalProps {
   isOpen: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   handleClose: () => void;
-  open: boolean;
 }
-export default function Modal({
-  isOpen,
-  children,
-  handleClose,
-  open,
-}: IModalProps) {
+export default function Modal({ isOpen, children, handleClose }: IModalProps) {
   return (
     <Dialog
       open={isOpen}
       onClose={handleClose}
+      maxWidth="md"
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >

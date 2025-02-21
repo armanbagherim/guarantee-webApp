@@ -4,8 +4,10 @@ import CardType from "./Modules/CardType";
 import CardNumber from "./Modules/CardNumber";
 import { toast } from "react-toastify";
 import { Skeleton } from "@mui/material";
+import Cart from "../components/design/Cart";
+import Success from "./Modules/Success";
 
-const steps = ["cardType", "personalInfo", "address", "summary"];
+const steps = ["cardType", "personalInfo", "address", "success"];
 
 export default function SubmitCardMain() {
   const [state, setState] = useState<string>("cardType");
@@ -67,14 +69,13 @@ export default function SubmitCardMain() {
           <CardNumber cardNumber={cardNumber} setCardNumber={setCardNumber} />
         );
       case "address":
-        return <div>Address Form</div>;
-      case "summary":
         return (
-          <div>
-            <h2>خلاصه</h2>
-            <p>نوع کارت انتخابی: {cardTypeState}</p>
+          <div className="mb-8">
+            <Cart expireDate="10/32" color="#039a0b" cardNumber={cardNumber} />
           </div>
         );
+      case "success":
+        return <Success />;
       default:
         return null;
     }
@@ -88,22 +89,24 @@ export default function SubmitCardMain() {
     <div>
       {renderStepContent()}
 
-      <div className="flex justify-between gap-8">
-        {state !== "cardType" && (
+      {state !== "success" && (
+        <div className="flex justify-between gap-4">
+          {state !== "cardType" && (
+            <button
+              onClick={handlePrevStep}
+              className="bg-gray-400 p-4 text-white rounded-2xl font-bold text-sm w-full"
+            >
+              مرحله قبلی
+            </button>
+          )}
           <button
-            onClick={handlePrevStep}
-            className="bg-gray-400 p-4 text-white rounded-2xl font-bold text-sm w-full"
+            onClick={handleNextStep}
+            className="bg-primary p-4 text-white rounded-2xl font-bold text-sm w-full"
           >
-            مرحله قبلی
+            {state === "success" ? "تمام" : "مرحله بعد"}
           </button>
-        )}
-        <button
-          onClick={handleNextStep}
-          className="bg-primary p-4 text-white rounded-2xl font-bold text-sm w-full"
-        >
-          {state === "summary" ? "تمام" : "مرحله بعد"}
-        </button>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

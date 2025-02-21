@@ -24,7 +24,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" dir="rtl">
+    <html lang="fa" dir="rtl">
       <body>
         <div className="grid grid-cols-1 lg:grid-cols-12 px-8 gap-7 ">
           <div className="col-span-3">

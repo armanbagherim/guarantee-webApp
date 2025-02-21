@@ -869,7 +869,7 @@ html {
 
 .MuiPaper-rounded {
   border: 0 !important;
-  border-radius: 15px !important;
+  border-radius: 35px !important;
 }
 
 .MuiButton-root {
@@ -936,4 +936,19 @@ button.swal2-cancel.swal2-styled.swal2-default-outline {
   top: unset !important;
   left: 6px !important;
 
+}
+
+.request {
+  .MuiSelect-root, .MuiFormControl-root {
+    fieldset {
+      height: 80px !important;
+      border-radius: 20px !important;
+    }
+  }
+  .MuiInputLabel-outlined {
+    top: 9px !important;
+  }
+  .MuiSelect-outlined, .MuiOutlinedInput-input{
+    min-height: 42px !important;
+  }
 }

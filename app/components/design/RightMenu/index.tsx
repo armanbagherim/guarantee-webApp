@@ -60,13 +60,13 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <span>پرداخت ها</span>
             </li>
           </Link>
-          <Link href="#">
+          <Link href="/normalCards">
             <li
               className={`flex gap-4 font-bold text-xs text-[#606C80] ${
-                isActive("#") ? "text-blue-500" : "text-gray-500"
+                isActive("/normalCards") ? "text-blue-500" : "text-gray-500"
               }`}
             >
-              <Cards color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
+              <Cards color={isActive("/normalCards") ? "#3B82F6" : "#6F6F6F"} />
               <span>کارت های گارانتی</span>
             </li>
           </Link>
