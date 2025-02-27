@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation"; // Corrected import for useRouter
 import React, { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { Dashboard } from "@/app/components/design/Icons";
 import IconLoader from "@/app/components/design/IconLoader";
 
 const SideMenu = () => {

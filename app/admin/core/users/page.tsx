@@ -66,11 +66,6 @@ export default function Users() {
               <ModeEditIcon />
             </IconButton>
           </a>
-          <Link
-            href={`/admin/ecommerce/totalOrders?phoneNumber=${row.original.phoneNumber}`}
-          >
-            <Button variant="outlined">سفارشات این کاربر</Button>
-          </Link>
         </>
       ),
     },

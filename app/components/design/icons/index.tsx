@@ -1,4 +1,9 @@
-export const DashboardIcon = ({ color }) => {
+interface IIconsProp {
+  color?: string;
+  checked: boolean;
+}
+
+export const DashboardIcon = ({ color }: IIconsProp) => {
   return (
     <svg
       width="20"
@@ -17,7 +22,7 @@ export const DashboardIcon = ({ color }) => {
   );
 };
 
-export const Payments = ({ color }) => {
+export const Payments = ({ color }: IIconsProp) => {
   return (
     <svg
       width="22"
@@ -41,7 +46,7 @@ export const Payments = ({ color }) => {
     </svg>
   );
 };
-export const Cards = ({ color }) => {
+export const Cards = ({ color }: IIconsProp) => {
   return (
     <svg
       width="24"
@@ -61,7 +66,7 @@ export const Cards = ({ color }) => {
     </svg>
   );
 };
-export const Requests = ({ color }) => {
+export const Requests = ({ color }: IIconsProp) => {
   return (
     <svg
       width="24"
@@ -81,7 +86,7 @@ export const Requests = ({ color }) => {
     </svg>
   );
 };
-export const Complaint = ({ color }) => {
+export const Complaint = ({ color }: IIconsProp) => {
   return (
     <svg
       width="22"
@@ -101,7 +106,7 @@ export const Complaint = ({ color }) => {
     </svg>
   );
 };
-export const Notifications = ({ color }) => {
+export const Notifications = ({ color }: IIconsProp) => {
   return (
     <svg
       width="20"
@@ -130,18 +135,18 @@ export const LeftAngle = () => {
       <path
         d="M6.37967 3.95337L2.33301 8.00004L6.37967 12.0467"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M13.6663 8H2.44629"
         stroke="#292D32"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -168,7 +173,7 @@ export const Cup = () => {
   );
 };
 
-export const CheckBox = ({ checked }) => {
+export const CheckBox = ({ checked }: IIconsProp) => {
   return checked ? (
     <svg
       width="25"
@@ -180,16 +185,16 @@ export const CheckBox = ({ checked }) => {
       <path
         d="M9.75 26.5H17.25C23.5 26.5 26 24 26 17.75V10.25C26 4 23.5 1.5 17.25 1.5H9.75C3.5 1.5 1 4 1 10.25V17.75C1 24 3.5 26.5 9.75 26.5Z"
         stroke="#0DB12B"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        stroke-minecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M8.1875 14.0001L11.725 17.5376L18.8125 10.4626"
         stroke="#0DB12B"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        stroke-minecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   ) : (
@@ -203,9 +208,9 @@ export const CheckBox = ({ checked }) => {
       <path
         d="M9.75 26H17.25C23.5 26 26 23.5 26 17.25V9.75C26 3.5 23.5 1 17.25 1H9.75C3.5 1 1 3.5 1 9.75V17.25C1 23.5 3.5 26 9.75 26Z"
         stroke="#6D6D6D"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        stroke-minecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

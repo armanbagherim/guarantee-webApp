@@ -2,10 +2,7 @@ import React from "react";
 
 interface ICard {
   cardName?: string;
-  price?: number;
-  expireDate: string;
-  cardNumber: string;
-  color: string;
+  data: any;
 }
 
 const Cart: React.FC<ICard> = (props) => {
@@ -36,14 +33,24 @@ const Cart: React.FC<ICard> = (props) => {
       </svg>
 
       <div className="flex items-center justify-between">
-        <span className="font-bold text-lg">{props.cardName}</span>
+        <span className="font-bold text-sm text-white">
+          {props.data.guaranteePeriod.title}
+        </span>
+        <span className="font-bold text-sm text-white">
+          برند: {props.data.brand.title}
+        </span>
       </div>
       <div className="text-center text-white font-bold my-6 text-xl">
-        کارت قابل استفاده می باشد
+        {props.data?.productType?.title}
       </div>
       <div className="flex items-center text-white justify-between">
-        <span>{props.expireDate}</span>
-        <span>{props.cardNumber}</span>
+        <span>
+          {new Date(props.data?.endDate).toLocaleDateString("fa-ir")}{" "}
+          <span className="text-xs font-bold">
+            {new Date(props?.data?.endDate) < new Date() && "منقضی شده"}
+          </span>
+        </span>
+        <span>{props?.data?.serialNumber}</span>
       </div>
     </div>
   );

@@ -1,16 +1,10 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { isRedirectError } from "next/dist/client/components/redirect";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         phoneNumber: {
           label: "phoneNumber",
@@ -25,7 +19,7 @@ export const authOptions = {
         if (phoneNumber && !verifyCode) {
           try {
             res = await fetch(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/ecommerce/user/login`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/client/login`,
               {
                 method: "POST",
                 headers: {
@@ -41,7 +35,7 @@ export const authOptions = {
           }
         } else if (verifyCode) {
           res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/ecommerce/user/login/verifyCode`,
+            `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/client/login/verifyCode`,
             {
               method: "POST",
               headers: {

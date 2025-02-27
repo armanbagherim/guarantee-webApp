@@ -26,7 +26,7 @@ export default function SignInForm({ session }) {
   const [number, setNumber] = useState();
   const [rule, setRule] = useState(false);
   const phoneNumberRegex = /^09\d{9}$/; // الگوی شماره موبایل ایران
-  const verificationCodeRegex = /^\d{6}$/; // الگوی دقیقاً 6 رقم
+  const verificationCodeRegex = /^\d{4}$/; // الگوی دقیقاً 6 رقم
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +66,7 @@ export default function SignInForm({ session }) {
       });
     } else {
       if (!verificationCodeRegex.test(verifyCode)) {
-        toast.error("لطفاً کد تایید 6 رقمی را وارد نمایید", {
+        toast.error("لطفاً کد تایید 4 رقمی را وارد نمایید", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -234,7 +234,7 @@ export default function SignInForm({ session }) {
                           inputProps={{
                             type: "tel",
                           }}
-                          length={6}
+                          length={4}
                           classNames={{
                             container:
                               "bg-[#f6f6f6] border border-gray-300 text-left rounded-2xl py-3 px-6 mb-4 w-full outline-none",

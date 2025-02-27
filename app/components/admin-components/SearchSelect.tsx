@@ -49,6 +49,7 @@ export default function SearchSelect({
     return (
       <div className="flex-1">
         <TextField
+          autoComplete="off"
           disabled
           id="first_name"
           label={label}
@@ -70,11 +71,13 @@ export default function SearchSelect({
       <Autocomplete
         disabled={disabled}
         id="first_name"
+        autoComplete="off"
         options={options}
         getOptionLabel={(option) => option.name}
         renderInput={(params) => (
           <TextField
             disabled={disabled}
+            autoComplete="off"
             {...params}
             label={label}
             variant="outlined"

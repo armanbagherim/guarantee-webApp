@@ -1,6 +1,6 @@
 "use client";
 import Address from "@/app/components/design/Address";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddressSection from "./AddressSection";
 import {
   FormControl,
@@ -9,22 +9,40 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { fetcher } from "@/app/components/admin-components/fetcher";
 
-export default function RequestForm({ addresses }) {
+export default function RequestForm() {
   const [address, setAddress] = useState(null);
+  const [allAddresess, setAllAddress] = useState(null);
   const [addressIsOpen, setIsAddressOpen] = useState(false);
+  const [addressLoading, setAddressLoading] = useState(false);
+  const getAddresses = async () => {
+    setAddressLoading(true);
+    const result = await fetcher({
+      url: "/v1/api/guarantee/client/addresses",
+      method: "GET",
+    });
+    setAllAddress(result?.result);
+    setAddressLoading(false);
+  };
+
+  useEffect(() => {
+    getAddresses();
+  }, []);
+
   return (
     <div className="bg-white p-6 rounded-[25px] request">
       <div className="grid grid-cols-3 gap-4 mb-4">
         <AddressSection
-          addresses={addresses}
+          refetch={getAddresses}
+          allAddresess={allAddresess}
           setIsAddressOpen={setIsAddressOpen}
           addressIsOpen={addressIsOpen}
           setAddress={setAddress}
           address={address}
+          addressLoading={addressLoading}
         />
         <div>
-          {" "}
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">نوع درخواست</InputLabel>
             <Select

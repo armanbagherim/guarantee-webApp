@@ -101,7 +101,7 @@ const LightDataGrid = ({ url, columns, triggered }) => {
     muiToolbarAlertBannerProps: isError
       ? {
           color: "error",
-          children: "Error loading data",
+          children: "خطا در بارگزاری اطلاعات",
         }
       : undefined,
     onGlobalFilterChange: setGlobalFilter,
