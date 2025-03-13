@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import MapClient from "../../admin-components/MapClient";
 
 export default function Map({ data }) {
+  console.log("bjjjjjjjjjjjjjjjjj", data.values.latitude);
   return (
     <div className="w-full relative block mb-8">
       <MapClient

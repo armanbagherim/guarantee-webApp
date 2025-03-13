@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../Modal";
 import Map from "./Map";
 import { DialogActions } from "@mui/material";
@@ -15,10 +15,11 @@ export default function NewAddress({
   handleClose,
   refetch,
   setIsNewAddressOpen,
+  edit,
 }) {
   const [step, setStep] = useState("location");
 
-  const data = useFormik({
+  const formik = useFormik({
     initialValues: {
       name: null,
       latitude: null,
@@ -38,8 +39,10 @@ export default function NewAddress({
       console.log(dataBody);
       try {
         let result = await fetcher({
-          url: `/v1/api/guarantee/client/addresses`,
-          method: "POST",
+          url: edit
+            ? `/v1/api/guarantee/client/addresses/${edit.id}`
+            : `/v1/api/guarantee/client/addresses`,
+          method: edit ? "PUT" : "POST",
           body: dataBody,
         });
 
@@ -54,6 +57,24 @@ export default function NewAddress({
     },
   });
 
+  useEffect(() => {
+    if (edit) {
+      formik.setValues({
+        name: edit.name,
+        latitude: edit.latitude,
+        longitude: edit.longitude,
+        provinceId: edit.provinceId,
+        cityId: edit.cityId,
+        neighborhoodId: edit.neighborhoodId,
+        street: edit.street,
+        alley: edit.alley,
+        plaque: edit.plaque,
+        floorNumber: edit.floorNumber,
+        postalCode: edit.postalCode,
+      });
+    }
+  }, [edit]); // Add edit as a dependency
+
   return (
     <Modal
       isOpen={isOpen}
@@ -62,14 +83,14 @@ export default function NewAddress({
         if (step === "location") {
           setStep("address");
         } else {
-          data.handleSubmit(); // Call Formik's handleSubmit
+          formik.handleSubmit(); // Call Formik's handleSubmit
         }
       }}
     >
       {step == "location" ? (
-        <Map data={data} />
+        <Map data={formik} />
       ) : (
-        <AdditionalData data={data} />
+        <AdditionalData data={formik} />
       )}
     </Modal>
   );
