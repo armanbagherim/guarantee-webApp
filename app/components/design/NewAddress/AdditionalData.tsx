@@ -3,11 +3,17 @@ import React, { useEffect, useState } from "react";
 import { fetcher } from "../../admin-components/fetcher";
 import SearchSelect from "../../admin-components/SearchSelect";
 
-export default function AdditionalData({ data }) {
+export default function AdditionalData({ data, isAdmin = false }) {
   const [provinces, setProvinces] = useState(null);
   const [cities, setCities] = useState(null);
   const [neighborhoods, setNeighborhoods] = useState(null);
 
+  // Helper function to get field name and value based on isAdmin
+  const getFieldValue = (field) => {
+    return isAdmin ? data.values.address?.[field] : data.values[field];
+  };
+
+  // Fetch provinces only once on mount
   useEffect(() => {
     const fetchProvinces = async () => {
       const res = await fetcher({
@@ -19,44 +25,60 @@ export default function AdditionalData({ data }) {
     fetchProvinces();
   }, []);
 
+  // Fetch cities when provinceId changes or is pre-filled in data
   useEffect(() => {
-    if (data.values.provinceId) {
+    const provinceId = getFieldValue("provinceId");
+    if (provinceId) {
       const fetchCities = async () => {
         const res = await fetcher({
-          url: `/v1/api/guarantee/client/cities?provinceId=${data.values.provinceId}`,
+          url: `/v1/api/guarantee/client/cities?provinceId=${provinceId}`,
           method: "GET",
         });
         setCities(res.result);
-        data.setFieldValue("cityId", null);
-        data.setFieldValue("neighborhoodId", null);
+
+        // If cityId exists in data, fetch neighborhoods
+        const cityId = getFieldValue("cityId");
+        if (cityId) {
+          const fetchNeighborhoods = async () => {
+            const res = await fetcher({
+              url: `/v1/api/guarantee/client/neighborhoods?cityId=${cityId}`,
+              method: "GET",
+            });
+            setNeighborhoods(res.result);
+          };
+          fetchNeighborhoods();
+        } else {
+          setNeighborhoods(null); // Reset neighborhoods if cityId is not available
+        }
       };
       fetchCities();
     } else {
       setCities(null);
       setNeighborhoods(null);
     }
-  }, [data.values.provinceId]);
+  }, [getFieldValue("provinceId")]);
 
+  // Fetch neighborhoods when cityId changes or is pre-filled in data
   useEffect(() => {
-    if (data.values.cityId) {
+    const cityId = getFieldValue("cityId");
+    if (cityId) {
       const fetchNeighborhoods = async () => {
         const res = await fetcher({
-          url: `/v1/api/guarantee/client/neighborhoods?cityId=${data.values.cityId}`,
+          url: `/v1/api/guarantee/client/neighborhoods?cityId=${cityId}`,
           method: "GET",
         });
         setNeighborhoods(res.result);
-        data.setFieldValue("neighborhoodId", null);
       };
       fetchNeighborhoods();
     } else {
-      setNeighborhoods(null);
+      setNeighborhoods(null); // Reset neighborhoods if cityId is not available
     }
-  }, [data.values.cityId]);
+  }, [getFieldValue("cityId")]);
 
   const handleSelectChange = (field, value) => {
-    data.setFieldValue(field, value?.id || null);
+    const fieldName = isAdmin ? `address.${field}` : field;
+    data.setFieldValue(fieldName, value?.id || null);
   };
-
   // Form fields configuration
   const formFields = [
     { name: "name", label: "نام آدرس" },
@@ -79,9 +101,12 @@ export default function AdditionalData({ data }) {
             nullable={true}
             onChange={(e) => handleSelectChange("provinceId", e)}
             data={provinces}
-            value={data.values.provinceId}
-            isDiff={true}
-            diffName="name"
+            value={
+              isAdmin ? data.values.address?.provinceId : data.values.provinceId
+            }
+            defaultValue={
+              isAdmin ? data.values.address?.provinceId : data.values.provinceId
+            }
             label="استان"
           />
         )}
@@ -92,40 +117,57 @@ export default function AdditionalData({ data }) {
             nullable={true}
             onChange={(e) => handleSelectChange("cityId", e)}
             data={cities}
-            value={data.values.cityId}
-            isDiff={true}
-            diffName="name"
+            value={isAdmin ? data.values.address?.cityId : data.values.cityId}
+            defaultValue={
+              isAdmin ? data.values.address?.cityId : data.values.cityId
+            }
             label="شهر"
           />
         )}
 
         {/* Neighborhood Select */}
-        {neighborhoods && (
+        {neighborhoods && neighborhoods.length > 0 && (
           <SearchSelect
             nullable={true}
             onChange={(e) => handleSelectChange("neighborhoodId", e)}
             data={neighborhoods}
-            value={data.values.neighborhoodId}
+            value={
+              isAdmin
+                ? data.values.address?.neighborhoodId
+                : data.values.neighborhoodId
+            }
+            defaultValue={
+              isAdmin
+                ? data.values.address?.neighborhoodId
+                : data.values.neighborhoodId
+            }
             label="محله"
           />
         )}
 
         {/* Render TextFields dynamically */}
-        {formFields.map((field) => (
-          <TextField
-            key={field.name}
-            id={field.name}
-            label={field.label}
-            variant="outlined"
-            fullWidth
-            name={field.name}
-            value={data.values[field.name] || ""}
-            onChange={data.handleChange}
-            onBlur={data.handleBlur}
-            error={!!(data.errors[field.name] && data.touched[field.name])}
-            helperText={data.touched[field.name] && data.errors[field.name]}
-          />
-        ))}
+        {formFields.map((field) => {
+          const fieldName = isAdmin ? `address.${field.name}` : field.name;
+          const value = isAdmin
+            ? data.values.address?.[field.name] || ""
+            : data.values[field.name] || "";
+
+          return (
+            <TextField
+              key={field.name}
+              id={fieldName}
+              label={field.label}
+              variant="outlined"
+              fullWidth
+              name={fieldName}
+              value={value}
+              onChange={data.handleChange}
+              onBlur={data.handleBlur}
+              error={!!(data.errors[fieldName] && data.touched[fieldName])}
+              helperText={data.touched[fieldName] && data.errors[fieldName]}
+            />
+          );
+        })}
       </form>
     </div>
   );

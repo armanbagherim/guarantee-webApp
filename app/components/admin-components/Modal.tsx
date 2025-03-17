@@ -21,6 +21,9 @@ interface IModal {
   closeText?: string;
   onClick?: () => void;
   hasAccept?: boolean;
+  hasBack?: boolean;
+  backText?: string;
+  handleBack?: () => void;
 }
 
 const Modal = (props: IModal) => {
@@ -36,6 +39,9 @@ const Modal = (props: IModal) => {
     closeText = "انصراف",
     onClick = null,
     hasAccept = true,
+    hasBack = false,
+    backText = null,
+    handleBack = null,
   } = props;
   const theme = useTheme();
   const mediaQuery = useMediaQuery(theme.breakpoints.down("md"));
@@ -78,24 +84,30 @@ const Modal = (props: IModal) => {
         </DialogContent>
         <DialogActions className="bg-gray-200">
           <div className="flex justify-between w-full">
-            <Button
-              autoFocus
-              color="error"
-              variant="contained"
-              onClick={handleClose}
-            >
+            <Button color="error" variant="contained" onClick={handleClose}>
               {closeText}
             </Button>
-            {hasAccept && (
-              <Button
-                color="success"
-                variant="contained"
-                onClick={handleAccept}
-                autoFocus
-              >
-                ثبت
-              </Button>
-            )}
+            <div className="flex gap-2">
+              {hasBack && (
+                <Button
+                  color="warning"
+                  variant="contained"
+                  onClick={handleBack}
+                >
+                  {backText}
+                </Button>
+              )}
+              {hasAccept && (
+                <Button
+                  color="success"
+                  variant="contained"
+                  onClick={handleAccept}
+                  autoFocus
+                >
+                  ثبت
+                </Button>
+              )}
+            </div>
           </div>
         </DialogActions>
       </Dialog>
