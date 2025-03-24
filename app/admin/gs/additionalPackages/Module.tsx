@@ -48,27 +48,8 @@ export default function EavTypesModule() {
     enableReinitialize: true,
     validateOnChange: false,
     initialValues: {
-      name: null,
-      isNationwide: true,
-      isOnlinePayment: true,
-      address: {
-        name: null,
-        latitude: null,
-        longitude: null,
-        provinceId: null,
-        cityId: null,
-        neighborhoodId: null,
-        street: null,
-        alley: null,
-        plaque: null,
-        floorNumber: null,
-        postalCode: null,
-      },
-      user: {
-        firstname: null,
-        lastname: null,
-        phoneNumber: null,
-      },
+      title: null,
+      value: null,
     },
     // validationSchema: formSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -76,7 +57,7 @@ export default function EavTypesModule() {
       console.log(dataBody);
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/admin/guaranteeOrganizations${
+          url: `/v1/api/guarantee/admin/additionalPackages${
             isEditEav.active ? `/${isEditEav.id}` : ""
           }`,
           method: isEditEav.active ? "PUT" : "POST",
@@ -106,17 +87,10 @@ export default function EavTypesModule() {
         formik={eavData}
         setIsEdit={setIsEditEav}
       />
-      
-      <ContractDataGrid
-        contractsModal={contractsModal}
-        setContractsModal={setContractsModal}
-        setFetchContracts={setFetchContracts}
-        fetchContracts={fetchContracts}
-      />
 
       <LightDataGrid
         triggered={triggered}
-        url={"/v1/api/guarantee/admin/guaranteeOrganizations"}
+        url={"/v1/api/guarantee/admin/additionalPackages"}
         columns={columns(
           isEditEav,
           setIsEditEav,

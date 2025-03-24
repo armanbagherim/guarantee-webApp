@@ -8,12 +8,26 @@ import Swal from "sweetalert2";
 import GavelIcon from "@mui/icons-material/Gavel";
 
 export function columns(
+  isEditEav,
+  setIsEditEav,
   triggered,
   setTriggered,
+  formik,
+  setContractsModal
 ) {
+  const getData = async (id: string) => {
+    try {
+      const res = await fetcher({
+        url: `/v1/api/guarantee/admin/additionalPackages/${id}`,
+        method: "GET",
+      });
+      return res.result;
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
-
-  const deleteItem = async (id) => {
+  const deleteEavType = async (id) => {
     try {
       const result = await Swal.fire({
         title: "مطمئن هستید؟",
@@ -28,7 +42,7 @@ export function columns(
 
       if (result.isConfirmed) {
         const req = await fetcher({
-          url: `/v1/api/guarantee/admin/guaranteeOrganizationContracts/${id}`,
+          url: `/v1/api/guarantee/admin/additionalPackages/${id}`,
           method: "DELETE",
         });
         toast.success("موفق");
@@ -40,26 +54,16 @@ export function columns(
   };
   return [
     {
-      accessorKey: "representativeShare",
-      header: "درصد نماینده",
+      accessorKey: "title",
+      header: "نام نماینده ",
     },
 
     {
-      accessorKey: "startDate",
-      header: "تاریخ شروع",
+      accessorKey: "price",
+      header: "قیمت",
       Cell: ({ row }) => (
         <span>
-          {new Date(row?.original?.startDate).toLocaleDateString('fa-IR')}
-        </span>
-      ),
-    },
-
-    {
-      accessorKey: "endDate",
-      header: "تاریخ پایان",
-      Cell: ({ row }) => (
-        <span>
-          {new Date(row?.original?.endDate).toLocaleDateString('fa-IR')}
+          {Number(row?.original?.price).toLocaleString()} ءتء
         </span>
       ),
     },
@@ -70,16 +74,35 @@ export function columns(
 
       Cell: ({ row }) => (
         <>
+          <IconButton
+            onClick={async (e) => {
+              const editData = await getData(row.original.id);
+
+              setIsEditEav({ active: true, id: row.original.id, open: true });
+
+              formik.setValues({
+                ...formik.values,
+                title: editData.title,
+                price: +editData.price,
+              });
+            }}
+            aria-label="delete"
+            color="primary"
+          >
+            <ModeEditIcon />
+          </IconButton>
 
           <IconButton
             onClick={async (e) => {
-              deleteItem(row.original.id)
+              deleteEavType(row.original.id)
             }}
             aria-label="delete"
             color="error"
           >
             <DeleteIcon />
           </IconButton>
+
+
         </>
       ),
     },

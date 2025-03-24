@@ -10,7 +10,6 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import { useFormik } from "formik";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 import { toast } from "react-toastify";
-import ContractDataGrid from "./Contracts/ContractDataGrid";
 
 export default function EavTypesModule() {
   const [title, setTitle] = useAtom(pageTitle);
@@ -44,31 +43,14 @@ export default function EavTypesModule() {
     });
   }, []);
 
-  const eavData = useFormik({
+  const data = useFormik({
     enableReinitialize: true,
     validateOnChange: false,
     initialValues: {
-      name: null,
-      isNationwide: true,
-      isOnlinePayment: true,
-      address: {
-        name: null,
-        latitude: null,
-        longitude: null,
-        provinceId: null,
-        cityId: null,
-        neighborhoodId: null,
-        street: null,
-        alley: null,
-        plaque: null,
-        floorNumber: null,
-        postalCode: null,
-      },
-      user: {
-        firstname: null,
-        lastname: null,
-        phoneNumber: null,
-      },
+      title: null,
+      fee: 0,
+      provinceSolutions: []
+
     },
     // validationSchema: formSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -76,9 +58,8 @@ export default function EavTypesModule() {
       console.log(dataBody);
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/admin/guaranteeOrganizations${
-            isEditEav.active ? `/${isEditEav.id}` : ""
-          }`,
+          url: `/v1/api/guarantee/admin/solutions${isEditEav.active ? `/${isEditEav.id}` : ""
+            }`,
           method: isEditEav.active ? "PUT" : "POST",
           body: dataBody,
         });
@@ -96,33 +77,28 @@ export default function EavTypesModule() {
     },
   });
 
-  
+
 
   return (
     <div>
       <DataHandler
         editData={isEditEav}
         loading={loading}
-        formik={eavData}
+        formik={data}
         setIsEdit={setIsEditEav}
       />
-      
-      <ContractDataGrid
-        contractsModal={contractsModal}
-        setContractsModal={setContractsModal}
-        setFetchContracts={setFetchContracts}
-        fetchContracts={fetchContracts}
-      />
+
+
 
       <LightDataGrid
         triggered={triggered}
-        url={"/v1/api/guarantee/admin/guaranteeOrganizations"}
+        url={"/v1/api/guarantee/admin/solutions"}
         columns={columns(
           isEditEav,
           setIsEditEav,
           triggered,
           setTriggered,
-          eavData,
+          data,
           setContractsModal
         )}
       />

@@ -20,6 +20,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 .swiper-button-prev:after {
   display: none;
 }
@@ -59,6 +60,7 @@ button#gcd-button-control {
 ul.gcd-gl-result {
   background: #fff;
   padding: 4em 0em 0;
+
   li {
     background: #f7f7f7;
     margin: 5px 0;
@@ -72,7 +74,7 @@ ul.gcd-gl-result {
   direction: rtl;
 }
 
-.Toastify__toast-body > div:last-child {
+.Toastify__toast-body>div:last-child {
   word-break: break-word;
   flex: 1;
   text-align: center;
@@ -259,7 +261,8 @@ body {
   background-color: #F0F4FF !important;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -279,11 +282,13 @@ html, body {
   strokewidth: 4.0071;
   stroke-miterlimit: 10;
 }
+
 .st1 {
   fill-rule: evenodd;
   clip-rule: evenodd;
   fill: none;
 }
+
 .st2 {
   fill-rule: evenodd;
   clip-rule: evenodd;
@@ -510,6 +515,7 @@ input[type="checkbox"]:checked::before {
     font-size: 24px;
     margin-bottom: 12px;
   }
+
   p {
     margin-bottom: 12px;
   }
@@ -519,10 +525,13 @@ input[type="checkbox"]:checked::before {
   height: auto !important;
   flex-wrap: wrap !important;
 }
+
 img {
   display: inline-block;
 }
+
 .pdf {
+
   table,
   tr,
   td {
@@ -634,6 +643,7 @@ img {
     margin-bottom: 20px !important;
   }
 }
+
 @media print {
   .no-print {
     display: none !important;
@@ -655,6 +665,7 @@ img {
 
 .SwiperThumbs {
   width: 100%;
+
   .swiper-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -668,15 +679,19 @@ img {
     flex-wrap: nowrap !important;
   }
 }
+
 .dial {
   transition: all 0.3s;
+
   .swiper-slide {
     img {
       border-radius: 28px;
     }
   }
+
   .swiper-slide.swiper-slide-visible.swiper-slide-thumb-active {
     transition: all 0.3s;
+
     img {
       border-radius: 28px;
       filter: grayscale(0) blur(0);
@@ -692,6 +707,7 @@ html {
   height: 5px;
   width: 5px;
 }
+
 .custom-scroll::-webkit-scrollbar-track {
   border-radius: 5px;
   background-color: #e9f4f6;
@@ -773,12 +789,14 @@ html {
   border-top: 1px solid #e2e2e2;
   padding: 1.5em 15px;
   margin-top: 3em;
+
   h2 {
     font-size: 24px;
     font-weight: 600;
     font-family: peyda;
     margin-bottom: 15px;
   }
+
   p {
     margin: 0 0 12px;
     text-align: justify !important;
@@ -812,11 +830,13 @@ html {
 .ck {
   direction: rtl !important;
 }
+
 .MuiDataGrid-root,
 .MuiButton-root,
 .MuiFormControl-root *,
 .base-Popper-root *,
-.MuiPaper-root *, .MuiTooltip-tooltip {
+.MuiPaper-root *,
+.MuiTooltip-tooltip {
   font-family: IRANSansX !important;
 }
 
@@ -862,8 +882,8 @@ html {
 }
 
 .specialInfos .flex:nth-child(even) {
-    background: #f7f7f7;
-    border-radius: 15px;
+  background: #f7f7f7;
+  border-radius: 15px;
 }
 
 
@@ -895,13 +915,13 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 }
 
 button.swal2-confirm.swal2-styled.swal2-default-outline {
-    border-radius: 15px !important;
-    padding: 15px 50px !important;
+  border-radius: 15px !important;
+  padding: 15px 50px !important;
 }
 
 button.swal2-cancel.swal2-styled.swal2-default-outline {
-    border-radius: 15px !important;
-    padding: 15px 50px !important;
+  border-radius: 15px !important;
+  padding: 15px 50px !important;
 }
 
 .marker {
@@ -920,11 +940,11 @@ button.swal2-cancel.swal2-styled.swal2-default-outline {
 }
 
 .MuiStepLabel-alternativeLabel {
-    font-family: inherit !important;
+  font-family: inherit !important;
 }
 
 .Mui-active {
-    color: #20ac73 !important;
+  color: #20ac73 !important;
 }
 
 .ql-editor * {
@@ -939,16 +959,33 @@ button.swal2-cancel.swal2-styled.swal2-default-outline {
 }
 
 .request {
-  .MuiSelect-root, .MuiFormControl-root {
+
+  .MuiSelect-root,
+  .MuiFormControl-root {
     fieldset {
       height: 80px !important;
       border-radius: 20px !important;
     }
   }
+
   .MuiInputLabel-outlined {
     top: 9px !important;
   }
-  .MuiSelect-outlined, .MuiOutlinedInput-input{
+
+  .MuiSelect-outlined,
+  .MuiOutlinedInput-input {
     min-height: 42px !important;
   }
+}
+
+
+
+input.rmdp-input {
+  width: 100%;
+  padding: 30px 15px;
+  border-radius: 15px;
+}
+
+.MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+  padding-top: 26px;
 }

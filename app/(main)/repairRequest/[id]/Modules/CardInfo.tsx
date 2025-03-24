@@ -9,7 +9,7 @@ interface ICardInfo {
 export default function CardInfo({
   cardNumber,
   product,
-  requester,
+
 }: ICardInfo) {
   return (
     <div className="bg-white flex flex-col gap-4 p-6 rounded-[25px]">
@@ -21,10 +21,7 @@ export default function CardInfo({
         <span className="text-xs">کالا</span>
         <span className="text-xs font-bold">{product}</span>
       </div>
-      <div className="flex justify-between">
-        <span className="text-xs">درخواست دهنده</span>
-        <span className="text-xs font-bold">{requester}</span>
-      </div>
+
     </div>
   );
 }

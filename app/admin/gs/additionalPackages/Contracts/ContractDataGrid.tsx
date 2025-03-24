@@ -15,7 +15,7 @@ const ContractDataGrid = ({
   setFetchContracts,
   fetchContracts,
 }) => {
-  const [isNewContractIsOpen, setIsNewContractIsOpen] = useState({ isOpen: false, id: null })
+  const [isNewContractIsOpen, setIsNewContractIsOpen] = useState({isOpen: false, id: null})
   const [loading, setLoading] = useState(false)
   const [triggered, setTriggered] = useState(false);
 
@@ -42,7 +42,7 @@ const ContractDataGrid = ({
         toast.success("موفق");
         setLoading(false);
         setTriggered(!triggered);
-        setIsNewContractIsOpen({ isOpen: false, id: null });
+        setIsNewContractIsOpen({ isOpen: false, id: null});
         resetForm();
       } catch (error) {
         setLoading(false);
@@ -54,22 +54,22 @@ const ContractDataGrid = ({
 
   return (
     <>
-      <ContactDataHandler isOpen={isNewContractIsOpen} setIsOpen={setIsNewContractIsOpen} formik={contractData} loading={loading} />
-      <Modal
-        onClick={(e) => setIsNewContractIsOpen({ isOpen: true, id: contractsModal.organizationId })}
-        title="افزودن / ویراش دسته بندی"
-        handleClose={() => {
-          setContractsModal({ open: false });
-        }}
-        maxSize="sm"
-        isOpen={contractsModal.open}
-      >
-        <LightDataGrid
-          triggered={triggered}
-          url={`/v1/api/guarantee/admin/guaranteeOrganizationContracts?organizationId=${contractsModal.organizationId}`}
-          columns={columns(triggered, setTriggered)}
-        />
-      </Modal></>
+    <ContactDataHandler isOpen={isNewContractIsOpen} setIsOpen={setIsNewContractIsOpen} formik={contractData} loading={loading} />
+    <Modal
+    onClick={(e) => setIsNewContractIsOpen({isOpen: true, id: contractsModal.organizationId})}
+    title="افزودن / ویراش دسته بندی"
+    handleClose={() => {
+      setContractsModal({ open: false });
+    }}
+    maxSize="sm"
+    isOpen={contractsModal.open}
+  >
+    <LightDataGrid
+      triggered={fetchContracts}
+      url={`/v1/api/guarantee/admin/guaranteeOrganizationContracts?organizationId=${contractsModal.organizationId}`}
+      columns={columns()}
+    />
+  </Modal></>
   );
 };
 

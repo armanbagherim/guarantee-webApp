@@ -37,11 +37,13 @@ export default function RootLayout({
     key: "muirtl",
     stylisPlugins: [prefixer, rtlPlugin],
   });
+
+  
   return (
     <Provider initialValues={pageTitle}>
       <CacheProvider value={cacheRtl}>
         <html lang="fa" dir="rtl">
-          <head>{/* <Script src="/tinymce.min.js"></Script> */}</head>
+          <head></head>
           <body>
             <QueryClientProvider client={queryClient}>
               <ToastContainer autoClose={1000} position="bottom-right" />
