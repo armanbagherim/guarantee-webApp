@@ -32,7 +32,7 @@ export default function EavTypesModule() {
 
   useEffect(() => {
     setTitle({
-      title: "مدل دستگاه ها",
+      title: "خدمات",
       buttonTitle: "افزودن",
       link: null,
       onClick: () =>
@@ -77,8 +77,6 @@ export default function EavTypesModule() {
     },
   });
 
-
-
   return (
     <div>
       <DataHandler
@@ -87,8 +85,6 @@ export default function EavTypesModule() {
         formik={data}
         setIsEdit={setIsEditEav}
       />
-
-
 
       <LightDataGrid
         triggered={triggered}

@@ -29,7 +29,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   return (
     <Modal
       loading={loading}
-      title="افزودن / ویراش دسته بندی"
+      title="افزودن / ویراش نماینده"
       handleClose={() => {
         formik.resetForm();
         setIsEdit({ active: false, id: null, open: false });

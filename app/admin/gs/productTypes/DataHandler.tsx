@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ModalSelect from "@/app/components/admin-components/ModalSelect";
-import { Autocomplete, Chip, CircularProgress, TextField } from "@mui/material";
+import { Autocomplete, Checkbox, Chip, CircularProgress, TextField } from "@mui/material";
 import Map from "@/app/components/admin-components/Map";
 import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
@@ -20,7 +20,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   return (
     <Modal
       loading={loading}
-      title="افزودن / ویراش دسته بندی"
+      title="افزودن / ویراش انواع محصول"
       handleClose={() => {
         formik.resetForm();
         setIsEdit({ active: false, id: null, open: false });
@@ -60,6 +60,12 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
             }
           />
         </div>
+
+        <Checkbox
+          checked={formik.values.mandatoryAttendance ?? false}
+          onClick={e => formik.setFieldValue("mandatoryAttendance", !formik.values.mandatoryAttendance)}
+          color="primary"
+        />
       </form>
     </Modal>
   );

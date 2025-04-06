@@ -50,7 +50,7 @@ export default function RequestForm({ requestTypes, guarantee }) {
     setSubmitLoading(true);
     try {
       const result = await fetcher({
-        url: `/v1/api/guarantee/client/requests/normalRequest`,
+        url: `/v1/api/guarantee/client/requests/outOfWarrantyRequest`,
         method: "POST",
         body: {
           description: description,
@@ -87,7 +87,7 @@ export default function RequestForm({ requestTypes, guarantee }) {
 
   return (
     <div className="bg-white p-6 rounded-[25px] request">
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <AddressSection
           refetch={getAddresses}
           allAddresess={allAddresess}

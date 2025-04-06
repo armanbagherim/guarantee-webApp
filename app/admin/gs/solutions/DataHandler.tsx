@@ -82,7 +82,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
 
       <Modal
         loading={loading}
-        title="افزودن / ویراش دسته بندی"
+        title="افزودن / ویراش خدمات"
         handleClose={() => {
           formik.resetForm();
           setIsEdit({ active: false, id: null, open: false });
@@ -163,10 +163,9 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                 <div key={index} className="flex gap-4 items-end mb-4">
                   {/* Province Name */}
                   <Typography variant="body1" style={{ flex: 1 }}>
-                    {province.name}
+                    {province.name ?? province.province.name}
                   </Typography>
 
-                  {/* Fee Input for Province */}
                   <Input
                     onChange={formik.handleChange}
                     variant="outlined"

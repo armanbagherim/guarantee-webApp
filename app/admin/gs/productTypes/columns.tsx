@@ -26,7 +26,7 @@ export function columns(
   const getData = async (id: string) => {
     try {
       const res = await fetcher({
-        url: `/v1/api/guarantee/admin/variants/${id}`,
+        url: `/v1/api/guarantee/admin/productTypes/${id}`,
         method: "GET",
       });
       return res.result;
@@ -73,6 +73,19 @@ export function columns(
       },
     },
     {
+      accessorKey: "mandatoryAttendance",
+      header: "حضور اجباری",
+      Cell: ({ row }) => {
+        return (
+          <>
+            <span className="mr-4">
+              {row?.original?.mandatoryAttendance ? "بله" : "خیر"}
+            </span>
+          </>
+        );
+      },
+    },
+    {
       accessorKey: "descriptin",
       header: "توضیحات",
     },
@@ -82,7 +95,7 @@ export function columns(
 
       Cell: ({ row }) => (
         <>
-          {/* <IconButton
+          <IconButton
             onClick={async (e) => {
               const editData = await getData(row.original.id);
               console.log(editData);
@@ -92,7 +105,7 @@ export function columns(
               formik.setValues({
                 ...formik.values,
                 title: editData.title,
-                providerId: editData.providerId,
+                mandatoryAttendance: editData.mandatoryAttendance ?? false,
                 description: editData.description,
               });
             }}
@@ -100,7 +113,7 @@ export function columns(
             color="primary"
           >
             <ModeEditIcon />
-          </IconButton> */}
+          </IconButton>
         </>
       ),
     },

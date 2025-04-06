@@ -33,7 +33,7 @@ export default function EavTypesModule() {
 
   useEffect(() => {
     setTitle({
-      title: "مدل دستگاه ها",
+      title: "شرایط مازاد گارانتی",
       buttonTitle: "افزودن",
       link: null,
       onClick: () =>
@@ -57,9 +57,8 @@ export default function EavTypesModule() {
       console.log(dataBody);
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/admin/additionalPackages${
-            isEditEav.active ? `/${isEditEav.id}` : ""
-          }`,
+          url: `/v1/api/guarantee/admin/additionalPackages${isEditEav.active ? `/${isEditEav.id}` : ""
+            }`,
           method: isEditEav.active ? "PUT" : "POST",
           body: dataBody,
         });
@@ -77,7 +76,7 @@ export default function EavTypesModule() {
     },
   });
 
-  
+
 
   return (
     <div>

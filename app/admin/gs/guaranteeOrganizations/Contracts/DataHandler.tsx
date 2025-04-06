@@ -23,10 +23,10 @@ const ContactDataHandler = ({ isOpen, loading, formik, setIsOpen }) => {
   return (
     <Modal
       loading={loading}
-      title="افزودن / ویراش دسته بندی"
+      title="افزودن / ویراش قرارداد"
       handleClose={() => {
         formik.resetForm();
-        setIsOpen({ isOpen: false, id: null});
+        setIsOpen({ isOpen: false, id: null });
         handleReset();
       }}
       closeText="انصراف"
@@ -35,8 +35,8 @@ const ContactDataHandler = ({ isOpen, loading, formik, setIsOpen }) => {
       handleAccept={formik.handleSubmit}
     >
       <form className="py-12`" onSubmit={formik.handleSubmit}>
-        <DatePickerPersian label="تاریخ شروع"  date={formik.values.startDate} onChange={e => formik.setFieldValue("startDate" ,new Date(e).toISOString())} />
-        <DatePickerPersian label="تاریخ پایان"  date={formik.values.endDate} onChange={e => formik.setFieldValue("endDate" ,new Date(e).toISOString())} />
+        <DatePickerPersian label="تاریخ شروع" date={formik.values.startDate} onChange={e => formik.setFieldValue("startDate", new Date(e).toISOString())} />
+        <DatePickerPersian label="تاریخ پایان" date={formik.values.endDate} onChange={e => formik.setFieldValue("endDate", new Date(e).toISOString())} />
         <Input
           onChange={e => formik.setFieldValue("representativeShare", +e.target.value)}
           variant="outlined"

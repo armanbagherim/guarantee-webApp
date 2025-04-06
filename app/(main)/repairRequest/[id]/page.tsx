@@ -35,7 +35,7 @@ export default async function RepairRequest({ params }) {
   const { result: requestTypes } = await getRequestTypes(session)
   console.log(data)
   return (
-    <div className="mt-8">
+    <div className="">
       <div className="mb-4">
         <CardInfo
           cardNumber={data?.id}

@@ -25,7 +25,7 @@ export default function EavTypesModule() {
 
   useEffect(() => {
     setTitle({
-      title: "مدل دستگاه ها",
+      title: "کارت های گارانتی عادی",
       buttonTitle: null,
       link: null,
       onClick: null,
@@ -44,9 +44,8 @@ export default function EavTypesModule() {
 
       try {
         let result = await fetcher({
-          url: `/v1/api/guarantee/admin/variants${
-            isEditEav.active ? `/${isEditEav.id}` : ""
-          }`,
+          url: `/v1/api/guarantee/admin/variants${isEditEav.active ? `/${isEditEav.id}` : ""
+            }`,
           method: isEditEav.active ? "PUT" : "POST",
           body: dataBody,
         });

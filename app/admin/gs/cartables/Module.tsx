@@ -23,7 +23,7 @@ export default function EavTypesModule({ session }) {
 
   useEffect(() => {
     setTitle({
-      title: "مدل دستگاه ها",
+      title: "کارتابل",
       buttonTitle: null,
       link: null,
     });
@@ -32,6 +32,7 @@ export default function EavTypesModule({ session }) {
 
   return (
     <div>
+
       <FormGen triggered={triggered} setTriggered={setTriggered} session={session} action={activeRequestActionModal} setAction={setActiveRequestActionModal} />
 
       <HistoryData historyOpen={historyOpen} setHistoryOpen={setHistoryOpen} />

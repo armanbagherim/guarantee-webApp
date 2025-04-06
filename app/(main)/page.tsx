@@ -1,38 +1,59 @@
+import { getServerSession } from "next-auth";
 import CustomerClubPoint from "../components/design/CustomerClubPoint";
 import { Cup, DashboardIcon } from "../components/design/icons";
 import LatestRequests from "../components/design/LatestRequests";
 import NeedToAction from "../components/design/NeedToAction";
 import { INeedtoAction } from "../interfaces/INeedtoAction";
 import type { IRequest } from "../interfaces/IRequest";
+import { authOptions } from "../api/auth/[...nextauth]/authOptions";
+
+
+
+async function getLaterstRequest(session) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/client/histories/latestRequest?limit=3&sortOrder=DESC`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
+    }
+  );
+
+  return res.json();
+}
+
+async function getNeedToActions(session) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/client/needActions`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
+    }
+  );
+
+  return res.json();
+}
+
 
 export default async function Home() {
-  const requestData: IRequest = {
-    title: "درخواست تعمیر کالای جارو رباتیک XIAOMI ",
-    history: [
-      { title: "درخواست توسط کارشناسات تایید شده است", status: "Success" },
-      { title: "دریافت وجه با مذاکره با مشتری انجام شد", status: "Success" },
-      {
-        title: "دستگاه در انتظار تعمیر توسط کارشناسان می باشد",
-        status: "Pending",
-      },
-    ],
-  };
+  const session = await getServerSession(authOptions);
+  const { result: latestRequest } = await getLaterstRequest(session);
+  const { result: needToActions } = await getNeedToActions(session);
 
-  const needToActions: INeedtoAction[] = [
-    {
-      title: "درخواست تعمیر کالای جارو رباتیک XIAOMI ",
-      actionType: "address",
-    },
-  ];
+
   return (
     <>
-      <div className="grid md:grid-cols-12 gap-6 mt-8 ">
+      <div className="grid md:grid-cols-12 gap-6 ">
         <div className="md:col-span-5">
           <CustomerClubPoint clubPoint={2} />
         </div>
         <div className="md:col-span-7">
-          <LatestRequests request={requestData} />
-          <NeedToAction needToActions={needToActions} />
+          <LatestRequests requestTitle="درخواست گارانتی دستگاه"
+            statusItems={latestRequest} />
+          <NeedToAction session={session} needToActions={needToActions} />
         </div>
       </div>
     </>

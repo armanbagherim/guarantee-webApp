@@ -1,40 +1,8 @@
 import React, { useState } from "react";
 import { CheckBox } from "@/app/components/design/icons";
 
-interface Item {
-  id: string;
-  title: string;
-  description: string;
-  price: string;
-}
 
-const items: Item[] = [
-  {
-    id: "1",
-    title: "گارانتی شکستگی کالا",
-    description:
-      "با خرید این آیتم هرگونه شکستگی که خارج از شرایط گارانتی باشد را می توانید رایگان انجام دهید",
-    price: "120000",
-  },
-  {
-    id: "2",
-    title: "گارانتی محصول اضافی",
-    description: "خدمات بیشتر برای محصول شما.",
-    price: "80000",
-  },
-  {
-    id: "3",
-    title: "گارانتی تعویض محصول",
-    description: "تعویض کالا در صورت خرابی.",
-    price: "150000",
-  },
-];
-
-export default function AdditionalItems() {
-  const [selectedItems, setSelectedItems] = useState<
-    { id: string; price: string }[]
-  >([]);
-
+export default function AdditionalItems({ packages, selectedItems, setSelectedItems }) {
   const handleCheck = (itemId: string, price: string) => {
     setSelectedItems((prevState) => {
       const updatedSelection = prevState.some((item) => item.id === itemId)
@@ -44,11 +12,9 @@ export default function AdditionalItems() {
     });
   };
 
-  console.log(selectedItems); // Log the selected items for debugging
-
   return (
     <div className="flex flex-col bg-[#F9F9F9] p-2 rounded-[30px] mb-2 gap-2">
-      {items.map((item) => (
+      {packages.map((item) => (
         <div
           key={item.id}
           onClick={() => handleCheck(item.id, item.price)} // Pass both id and price
@@ -66,7 +32,7 @@ export default function AdditionalItems() {
                   {item.title}
                 </span>
                 <span className="text-green-500 font-bold text-left">
-                  {item.price} <span className="price"> ءتء</span>
+                  {Number(item.price).toLocaleString()} <span className="price"> ءتء</span>
                 </span>
               </div>
               <span className="text-[#757575] text-xs">{item.description}</span>

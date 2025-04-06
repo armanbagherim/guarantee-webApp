@@ -4,13 +4,13 @@ import CardType from "./Modules/CardType";
 import CardNumber from "./Modules/CardNumber";
 import { toast } from "react-toastify";
 import { Skeleton } from "@mui/material";
-import Cart from "../components/design/Cart";
+import Cart from "../../components/design/Cart";
 import Success from "./Modules/Success";
-import { fetcher } from "../components/admin-components/fetcher";
+import { fetcher } from "../../components/admin-components/fetcher";
 
 const steps = ["cardType", "serialNumber", "accept", "success"];
 
-export default function SubmitCardMain() {
+export default function SubmitCardMain({ packages }) {
   const [state, setState] = useState<string>("cardType");
   const [cardTypeState, setCardTypeState] = useState("normal");
   const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ export default function SubmitCardMain() {
           </div>
         );
       case "success":
-        return <Success />;
+        return <Success guarantee={guarantee} packages={packages} />;
       default:
         return null;
     }
