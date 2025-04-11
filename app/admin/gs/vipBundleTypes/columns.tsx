@@ -55,9 +55,14 @@ export function columns(
   return [
     {
       accessorKey: "title",
-      header: "نام نماینده ",
+      header: "نوع کارت گارانتی وی آی پی",
     },
 
+
+    {
+      accessorKey: "monthPeriod",
+      header: "بازه ماهانه",
+    },
     {
       accessorKey: "fee",
       header: "مقدار اعتبار",
@@ -67,10 +72,6 @@ export function columns(
           تومان
         </span>
       ),
-    },
-    {
-      accessorKey: "monthPeriod",
-      header: "بازه ماهانه",
     },
     {
       accessorKey: "price",
@@ -117,19 +118,6 @@ export function columns(
             color="primary"
           >
             <ModeEditIcon />
-          </IconButton>
-
-          <IconButton
-            onClick={async (e) => {
-              setContractsModal({
-                organizationId: row.original.id,
-                open: true,
-              });
-            }}
-            aria-label="delete"
-            color="primary"
-          >
-            <GavelIcon />
           </IconButton>
         </>
       ),

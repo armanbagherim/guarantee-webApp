@@ -6,7 +6,7 @@ import {
 import { MRT_Localization_FA } from "material-react-table/locales/fa";
 import { useSession } from "next-auth/react";
 
-const LightDataGrid = ({ url, columns, triggered }) => {
+const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
   const { data: session } = useSession();
 
   //data and fetching state
@@ -86,23 +86,25 @@ const LightDataGrid = ({ url, columns, triggered }) => {
     columns,
     enableColumnPinning: true,
     initialState: {
-      expanded: true,
+      expanded: false,
       showColumnFilters: false,
       columnPinning: { right: ["Actions"] },
       density: "compact",
     },
     data: data || [],
     getRowId: (row) => row?.id,
-
+    renderDetailPanel: ({ row }) => (
+      detailPanel ? detailPanel(row) : false
+    ),
     // initialState: {  }, // Disable column filters
     manualFiltering: false, // Disable manual filtering
     manualPagination: true,
     manualSorting: true,
     muiToolbarAlertBannerProps: isError
       ? {
-          color: "error",
-          children: "خطا در بارگزاری اطلاعات",
-        }
+        color: "error",
+        children: "خطا در بارگزاری اطلاعات",
+      }
       : undefined,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,

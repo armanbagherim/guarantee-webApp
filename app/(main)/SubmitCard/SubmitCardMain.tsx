@@ -10,7 +10,7 @@ import { fetcher } from "../../components/admin-components/fetcher";
 
 const steps = ["cardType", "serialNumber", "accept", "success"];
 
-export default function SubmitCardMain({ packages }) {
+export default function SubmitCardMain({ packages, paymentGateways }) {
   const [state, setState] = useState<string>("cardType");
   const [cardTypeState, setCardTypeState] = useState("normal");
   const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ export default function SubmitCardMain({ packages }) {
           </div>
         );
       case "success":
-        return <Success guarantee={guarantee} packages={packages} />;
+        return <Success cardTypeState={cardTypeState} paymentGateways={paymentGateways} guarantee={guarantee} packages={packages} />;
       default:
         return null;
     }

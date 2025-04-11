@@ -50,7 +50,7 @@ export default function RequestForm({ requestTypes, guarantee }) {
     setSubmitLoading(true);
     try {
       const result = await fetcher({
-        url: `/v1/api/guarantee/client/requests/outOfWarrantyRequest`,
+        url: `/v1/api/guarantee/client/requests/normalRequest`,
         method: "POST",
         body: {
           description: description,

@@ -56,7 +56,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
                 }`}
             >
               <Payments color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
-              <span>پرداخت ها</span>
+              <span>فاکتور ها</span>
             </li>
           </Link>
           <Link onClick={(e) => setIsOpen(false)} href="/normalCards">
@@ -114,15 +114,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <span>اطلاع رسانی ها</span>
             </li>
           </Link>
-          <Link onClick={(e) => setIsOpen(false)} href="#">
-            <li
-              className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("#") ? "text-blue-500" : "text-gray-500"
-                }`}
-            >
-              <Complaint color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
-              <span>پشتیبانی</span>
-            </li>
-          </Link>
+
         </ul>
       </div>
     </>

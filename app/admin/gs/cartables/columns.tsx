@@ -54,6 +54,10 @@ export function columns(
   };
   return [
     {
+      accessorKey: "activity.requestId",
+      header: "شماره درخواست",
+    },
+    {
       accessorKey: "activity.name",
       header: "وضعیت",
     },
@@ -87,21 +91,7 @@ export function columns(
       accessorKey: "guaranteeRequest.guarantee.serialNumber",
       header: "شماره سریال",
     },
-    {
-      accessorKey: "address",
-      header: "آدرس",
-      Cell: ({ row }) => {
-        const address = row?.original?.guaranteeRequest?.address;
-        const fullAddress = `${concat(address)}`;
-        const limitedAddress = fullAddress.split(" ").slice(0, 4).join(" ") + "..."; // Limit to 4 words
 
-        return (
-          <Tooltip title={fullAddress} placement="top" arrow>
-            <span>{limitedAddress}</span>
-          </Tooltip>
-        );
-      },
-    },
     {
       accessorKey: "Actions",
       header: "عملیات",

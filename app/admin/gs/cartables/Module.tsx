@@ -7,6 +7,7 @@ import LightDataGrid from "@/app/components/admin-components/LightDataGrid/Light
 import { columns } from "./columns";
 import FormGen from "./FormsGen";
 import HistoryData from "./historyData";
+import DetailPanel from "./DetailPanel";
 
 export default function EavTypesModule({ session }) {
   const [title, setTitle] = useAtom(pageTitle);
@@ -47,6 +48,7 @@ export default function EavTypesModule({ session }) {
           historyOpen,
           setHistoryOpen
         )}
+        detailPanel={DetailPanel}
       />
     </div>
   );
