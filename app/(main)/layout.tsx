@@ -31,12 +31,17 @@ export default async function RootLayout({
         <div className="flex justify-between w-full items-center">
           <Image width={100} height={100} src="/logo.webp" />
           <div className="flex items-center gap-2">
-            <span>{session.result.firstname} {session.result.lastname}</span>
-            <span className="w-10 h-10 flex justify-center items-center bg-gray-200 rounded-full font-bold">{String(session.result.firstname).charAt(0)} {String(session.result.lastname).charAt(0)}</span>
+            <span>
+              {session.result.firstname} {session.result.lastname}
+            </span>
+            <span className="w-10 h-10 flex justify-center items-center bg-gray-200 rounded-full font-bold">
+              {String(session.result.firstname).charAt(0)}{" "}
+              {String(session.result.lastname).charAt(0)}
+            </span>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 h-full lg:grid-cols-12 md:px-8 px-4 md:gap-7">
+      <div className="grid grid-cols-1 h-auto lg:h-full lg:grid-cols-12 md:px-8 px-4 md:gap-7">
         <div className="col-span-3">
           <RightMenu notificationCount={0} requestsCount={0} />
         </div>

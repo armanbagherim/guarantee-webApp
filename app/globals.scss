@@ -887,10 +887,13 @@ html {
 }
 
 
-.MuiPaper-rounded {
-  border: 0 !important;
-  border-radius: 35px !important;
+@media (min-width: 767px) {
+  .MuiPaper-rounded {
+    border: 0 !important;
+    border-radius: 35px !important;
+  }
 }
+
 
 .MuiButton-root {
   font-size: 13px !important;
@@ -997,3 +1000,4 @@ input.rmdp-input {
 .adminSelect .MuiSelect-select {
   padding-top: 17px!important;
 }
+
