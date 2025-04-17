@@ -8,6 +8,7 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import { useRouter } from "next/navigation";
 
 export default function Success({ packages, guarantee, paymentGateways, cardTypeState }) {
+
   const [selectedItems, setSelectedItems] = useState<{ id: number, price: string }[]>([]);
   const [selectedGateway, setSelectedGateway] = useState<number | null>(null);
   const [displayPrice, setDisplayPrice] = useState(0);
@@ -146,13 +147,20 @@ export default function Success({ packages, guarantee, paymentGateways, cardType
         </p>
       </>}
 
-      <div className="flex justify-between gap-4 mt-6">
+      <div className="flex justify-between gap-4 my-6">
         <Link
           href={cardTypeState === 'vip' ? '/vipCards' : '/normalCards'}
           className="bg-gray-500 p-4 text-white rounded-2xl font-bold text-sm w-full hover:bg-gray-600 transition-colors"
         >
           مشاهده کارت ها
         </Link>
+        {cardTypeState === "vip" && <Link
+          href={`/vipCards/products/${guarantee?.id}`}
+          className="bg-green-600 p-4 text-white rounded-2xl font-bold text-sm w-full hover:bg-green-800 transition-colors"
+        >
+          افزودن محصولات
+        </Link>}
+
 
         {cardTypeState === 'normal' && <button
           onClick={paymentAdditionalPackage}

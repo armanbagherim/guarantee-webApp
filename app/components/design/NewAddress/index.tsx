@@ -79,6 +79,7 @@ export default function NewAddress({
     <Modal
       isOpen={isOpen}
       handleClose={handleClose}
+
       action={() => {
         if (step === "location") {
           setStep("address");

@@ -51,7 +51,7 @@ export default function EavTypesModule() {
       title: null,
       price: 0,
       fee: 0,
-      cardColor: null,
+      cardColor: "#000000",
       monthPeriod: 0
     },
     // validationSchema: formSchema,

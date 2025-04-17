@@ -7,6 +7,7 @@ import { Skeleton } from "@mui/material";
 import Cart from "../../components/design/Cart";
 import Success from "./Modules/Success";
 import { fetcher } from "../../components/admin-components/fetcher";
+import VipCard from "@/app/components/design/Cart/Vip";
 
 const steps = ["cardType", "serialNumber", "accept", "success"];
 
@@ -46,7 +47,7 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
     } else if (step === "serialNumber" && cardNumber) {
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/client/normalGuarantee/availability/${cardNumber}`,
+          url: cardTypeState === "normal" ? `/v1/api/guarantee/client/normalGuarantee/${cardNumber}` : `/v1/api/guarantee/client/vipGuarantees/availability/${cardNumber}`,
           method: "GET",
         });
         setGuarantee(result.result);
@@ -58,7 +59,7 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
     } else if (step === "accept" && guarantee !== null) {
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/client/normalGuarantee`,
+          url: cardTypeState == "noraml" ? `/v1/api/guarantee/client/normalGuarantee` : `/v1/api/guarantee/client/vipGuarantees`,
           method: "POST",
           body: {
             serialNumber: cardNumber,
@@ -87,7 +88,9 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
       case "accept":
         return (
           <div className="mb-8">
-            <Cart data={guarantee} color="#039a0b" />
+            {
+              cardTypeState === "normal" ? <Cart data={guarantee} color="#039a0b" /> : <VipCard data={guarantee} />
+            }
           </div>
         );
       case "success":

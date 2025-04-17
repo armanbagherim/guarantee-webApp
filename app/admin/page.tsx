@@ -87,15 +87,17 @@ export default function HomePage() {
           />
         </div>
       </div> */}
-      <section className="bg-white ">
+      <section className="">
         <div className="py-2 mx-auto">
-          <div className="bg-gray-50  border border-gray-200  rounded-3xl p-8 md:p-12 mb-8">
+          <div className="bg-white  border border-gray-200  rounded-3xl p-8 md:p-12 mb-8">
             <h1 className="text-gray-900 text-3xl md:text-2xl font-extrabold mb-4">
               به پنل مدیریت آریا کیش خوش آمدید
             </h1>
-            <p className="text-lg font-normal text-gray-500 ">
-              در این پنل می توانید به مدیریت محصولات، تخفیفات، حمل و نقل،
-              سفارشات، دسته بندی ها و تمامی امکانات سایت بپردازید
+            <p className="text-sm font-normal text-gray-500 ">
+              در اینجا می توانید به آمار و اطلاعات مربوط به گارانتی ها و درخواست های
+              تعمیرات دسترسی داشته باشید. همچنین می توانید  وضعیت درخواست ها را پیگیری کنید. برای شروع، از منوی
+              کناری استفاده کنید و به بخش های مختلف پنل مدیریت بروید. اگر سوالی
+              دارید یا به کمک نیاز دارید، لطفا با تیم پشتیبانی ما تماس بگیرید.
             </p>
           </div>
         </div>

@@ -114,7 +114,7 @@ const PreFactorInLocation = ({ currentOperation, nodeCommands, setAction, setTri
                     </svg>
                     <div>
                         <p className="text-amber-800 font-medium">روش پرداخت: حضوری</p>
-                        <p className="text-amber-600 text-sm mt-1">لطفاً مبلغ فاکتور را به صورت نقدی از مشتری محترم دریافت و رسید پرداخت را صادر فرمایید.</p>
+                        <p className="text-amber-600 text-sm mt-1">لطفاً مبلغ فاکتور را به صورت نقدی از مشتری محترم دریافت نمایید.</p>
                     </div>
                 </div>
             )}
@@ -174,7 +174,7 @@ const PreFactorInLocation = ({ currentOperation, nodeCommands, setAction, setTri
                             <Table>
                                 <TableHead>
                                     <TableRow className="bg-gray-100">
-                                        <TableCell className="font-bold">شناسه</TableCell>
+                                        <TableCell className="font-bold">نام قطعه</TableCell>
                                         <TableCell className="font-bold">نوع خدمات</TableCell>
                                         <TableCell className="font-bold">تعداد</TableCell>
                                         <TableCell className="font-bold">قیمت واحد</TableCell>
@@ -184,7 +184,7 @@ const PreFactorInLocation = ({ currentOperation, nodeCommands, setAction, setTri
                                 <TableBody>
                                     {factor.partServices.map((service) => (
                                         <TableRow key={service.id}>
-                                            <TableCell>{service.id}</TableCell>
+                                            <TableCell>{service.title}</TableCell>
                                             <TableCell>
                                                 <span className={`px-2 py-1 rounded-full text-xs ${service.warrantyServiceTypeId === 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                                     {service.warrantyServiceTypeTitle}
@@ -210,7 +210,6 @@ const PreFactorInLocation = ({ currentOperation, nodeCommands, setAction, setTri
                             <Table>
                                 <TableHead>
                                     <TableRow className="bg-gray-100">
-                                        <TableCell className="font-bold">شناسه</TableCell>
                                         <TableCell className="font-bold">عنوان خدمت</TableCell>
                                         <TableCell className="font-bold">نوع خدمات</TableCell>
                                         <TableCell className="font-bold">تعداد</TableCell>
@@ -220,7 +219,6 @@ const PreFactorInLocation = ({ currentOperation, nodeCommands, setAction, setTri
                                 <TableBody>
                                     {factor.solutionServices.map((service) => (
                                         <TableRow key={service.id}>
-                                            <TableCell>{service.id}</TableCell>
                                             <TableCell>{service.title || 'بدون عنوان'}</TableCell>
                                             <TableCell>
                                                 <span className={`px-2 py-1 rounded-full text-xs ${service.warrantyServiceTypeId === 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>

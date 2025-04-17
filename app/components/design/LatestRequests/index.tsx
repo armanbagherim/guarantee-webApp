@@ -20,6 +20,7 @@ interface LatestRequestsProps {
 }
 
 export default function LatestRequests({ requestTitle, statusItems }: LatestRequestsProps) {
+  console.log(statusItems)
   return (
     <div className="mb-4">
       <Card title="وضعیت آخرین درخواست گارانتی">
@@ -28,14 +29,14 @@ export default function LatestRequests({ requestTitle, statusItems }: LatestRequ
             <h2 className="text-sm font-bold">{requestTitle}</h2>
             <Link
               className="bg-primary text-sm px-4 py-2 text-white rounded-xl"
-              href="#"
+              href={`/requests/${statusItems?.requestId}`}
             >
               جزئیات
             </Link>
           </div>
           <ul className="relative">
             <span className="absolute right-[6px] top-0 h-full bg-[#F0F0F0] w-[1.5px] z-[0]"></span>
-            {statusItems?.map((item) => (
+            {statusItems?.histories?.map((item) => (
               <li key={item.id} className="flex items-center gap-2 mb-4">
                 <span
                   className="w-[13px] h-[13px] inline-flex rounded-full relative z-10"

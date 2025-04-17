@@ -9,6 +9,7 @@ import Input from "@/app/components/admin-components/Input";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import Map from "@/app/components/design/NewAddress/Map";
 import AdditionalData from "@/app/components/design/NewAddress/AdditionalData";
+import { HexColorPicker } from "react-colorful";
 
 const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
 
@@ -52,7 +53,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
               margin="normal"
             />
           </div>
-          <div className="flex gap-4 mb-4">
+          <div className="flex gap-4 mb-8">
             <Input
               variant="outlined"
               value={formik.values.fee || ""}
@@ -61,17 +62,6 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
               name="fee"
               error={formik.errors.fee && formik.touched.fee}
               helperText={formik.touched.fee && formik.errors.fee}
-              fullWidth
-              margin="normal"
-            />
-            <Input
-              onChange={formik.handleChange}
-              variant="outlined"
-              value={formik.values.cardColor || ""}
-              label="رنگ"
-              name="cardColor"
-              error={formik.errors.cardColor && formik.touched.cardColor}
-              helperText={formik.touched.cardColor && formik.errors.cardColor}
               fullWidth
               margin="normal"
             />
@@ -87,6 +77,9 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
             fullWidth
             margin="normal"
           />
+          <div className="mt-4">
+            <HexColorPicker className="!w-full" color={formik?.values?.cardColor} onChange={e => formik.setFieldValue("cardColor", e)} />
+          </div>
         </div>
       </form>
     </Modal>

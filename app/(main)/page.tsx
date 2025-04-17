@@ -3,8 +3,6 @@ import CustomerClubPoint from "../components/design/CustomerClubPoint";
 import { Cup, DashboardIcon } from "../components/design/icons";
 import LatestRequests from "../components/design/LatestRequests";
 import NeedToAction from "../components/design/NeedToAction";
-import { INeedtoAction } from "../interfaces/INeedtoAction";
-import type { IRequest } from "../interfaces/IRequest";
 import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 
 
@@ -42,7 +40,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const { result: latestRequest } = await getLaterstRequest(session);
   const { result: needToActions } = await getNeedToActions(session);
-
+  console.log(latestRequest)
 
   return (
     <>

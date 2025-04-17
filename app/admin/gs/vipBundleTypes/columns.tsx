@@ -90,7 +90,7 @@ export function columns(
       accessorKey: "cardColor",
       header: "رنگ کارت",
       Cell: ({ row }) => (
-        <span className="w-8 h-8 block rounded-full border-2 border-gray-300" style={{ background: `#${row?.original?.cardColor}` }}></span>
+        <span className="w-8 h-8 block rounded-full border-2 border-gray-300" style={{ background: `${row?.original?.cardColor}` }}></span>
       ),
     },
 

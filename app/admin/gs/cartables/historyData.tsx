@@ -7,11 +7,12 @@ export default function HistoryData({ historyOpen, setHistoryOpen }) {
     const [loading, setLoading] = useState(true);
 
     const getHistoryById = async (id) => {
-        if (historyOpen.requestId) {
+        if (id) {
             setLoading(true);
+            setData([]); // Clear previous data while loading
             try {
                 const res = await fetcher({
-                    url: `/v1/api/guarantee/cartable/histories/requestId/${id}?ignorePaging=true`,
+                    url: `/v1/api/guarantee/cartable/histories/requestId/${id}?ignorePaging=true&sortOrder=ASC`,
                     method: "GET"
                 });
                 setData(res.result || []);
@@ -25,8 +26,13 @@ export default function HistoryData({ historyOpen, setHistoryOpen }) {
     };
 
     useEffect(() => {
-        getHistoryById(historyOpen.requestId);
-    }, [historyOpen.requestId]);
+        if (historyOpen.isOpen && historyOpen.requestId) {
+            getHistoryById(historyOpen.requestId);
+        } else {
+            // Reset data when modal closes
+            setData([]);
+        }
+    }, [historyOpen.isOpen, historyOpen.requestId]); // Added historyOpen.isOpen to dependencies
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -63,19 +69,19 @@ export default function HistoryData({ historyOpen, setHistoryOpen }) {
                     <div className="space-y-4">
                         {data.map((item) => (
                             <div key={item.id} className="border rounded-lg p-4 bg-gray-50">
-                                <div className="flex justify-between mb-2">
+                                <div className="flex flex-col mb-2">
                                     <div className="text-sm text-gray-600">
                                         <span className="font-medium">از: </span>
-                                        {item.from}
+                                        <span className='text-green-700'>{item.from}</span>
                                     </div>
                                     <div className="text-sm text-gray-600">
                                         <span className="font-medium">به: </span>
-                                        {item.to}
+                                        <span className='text-primary'>{item.to}</span>
                                     </div>
                                 </div>
-                                <div className="text-sm mb-2">
+                                <div className="text-sm my-4">
                                     <span className="font-medium">عملیات: </span>
-                                    {item.nodeCommand}
+                                    <span className='py-1 px-2 rounded-lg bg-green-100 text-green-700'>{item.nodeCommand}</span>
                                 </div>
                                 <div className="text-sm mb-2 bg-white p-2 rounded border">
                                     <span className="font-medium">توضیحات: </span>

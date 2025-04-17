@@ -1,7 +1,8 @@
 import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import { formComponents } from "./Forms/formComponents";
-import { DialogContent, Tabs, Tab, Box } from "@mui/material";
+import { DialogContent, Tabs, Tab, Box, DialogTitle, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function FormGen({ action, setAction, session, triggered, setTriggered }) {
     const [activeTab, setActiveTab] = React.useState(0); // State to track the active tab
@@ -19,6 +20,14 @@ export default function FormGen({ action, setAction, session, triggered, setTrig
             maxWidth="md" // Adjust the width as needed
             fullWidth
         >
+            <DialogTitle>
+                <IconButton
+                    onClick={() => setAction((prev) => ({ ...prev, isOpen: false }))}
+                    sx={{ marginLeft: "auto" }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
             <DialogContent>
                 {/* Tabs for each form */}
                 <Tabs value={activeTab} centered onChange={handleTabChange}>

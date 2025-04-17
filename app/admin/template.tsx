@@ -11,9 +11,8 @@ export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <SideMenu />
-      {console.log(atom)}
       <div className=" sm:mr-72 print:p-0 print:m-0 print:w-full print:mr-0">
-        <div className="flex justify-between items-center h-20 bg-[#f8f8f8] px-4 no-print mx-8 rounded-2xl mt-12">
+        <div className="flex justify-between items-center h-20 bg-white px-4 no-print mx-8 rounded-2xl mt-12">
           <div className="text-lg font-bold text-blue-700">{atom.title}</div>
           {atom?.buttonTitle && atom.onClick ? (
             <button

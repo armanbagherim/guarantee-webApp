@@ -75,11 +75,10 @@ const SideMenu = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 xs:pt-14 right-0 z-40 w-72 h-screen transition-transform py-10  ${
-          !menuOpen
-            ? "-translate-x-full sm:translate-x-0 translate-x-full"
-            : "transform-none"
-        } `}
+        className={`fixed top-0 xs:pt-14 right-0 z-40 w-72 h-screen transition-transform py-10  ${!menuOpen
+          ? "-translate-x-full sm:translate-x-0 translate-x-full"
+          : "transform-none"
+          } `}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-8 bg-white border border-[#e5e5e5] !rounded-l-3xl flex justify-between flex-col overflow-y-auto custom-scroll">
@@ -104,11 +103,10 @@ const SideMenu = () => {
                 <li key={key}>
                   <button
                     type="button"
-                    className={`flex items-center w-full p-2 text-base transition duration-200 rounded-lg group ${
-                      isActive(menu.url)
-                        ? "text-blue-500 bg-gray-700"
-                        : "text-gray-900"
-                    }`}
+                    className={`flex items-center w-full p-2 text-base transition duration-200 rounded-lg group ${isActive(menu.url)
+                      ? "text-blue-500 bg-gray-700"
+                      : "text-gray-900"
+                      }`}
                     aria-controls={`dropdown-example-${menu.id}`}
                     data-collapse-toggle={`dropdown-example-${menu.id}`}
                     aria-expanded={subMenuVisibility[menu.id] || false}
@@ -135,19 +133,17 @@ const SideMenu = () => {
                     </svg>
                   </button>
                   <ul
-                    className={`py-2 space-y-2 overflow-hidden transition-all duration-300 ease-in-out ${
-                      subMenuVisibility[menu.id] ? "max-h-screen" : "max-h-0"
-                    }`}
+                    className={`py-2 space-y-2 overflow-hidden transition-all duration-300 ease-in-out ${subMenuVisibility[menu.id] ? "max-h-screen" : "max-h-0"
+                      }`}
                   >
                     {menu.subMenus.map((submenu, key) => (
                       <li key={key}>
                         <Link href={submenu.url}>
                           <p
-                            className={`flex items-center w-full px-4 py-3 text-white transition duration-300 rounded-xl pl-11 group ${
-                              isActive(submenu.url)
-                                ? "!text-[#20ac73] mr-2 bg-white"
-                                : "!text-black"
-                            }`}
+                            className={`flex items-center w-full px-4 py-3 text-white transition duration-300 rounded-xl pl-11 group ${isActive(submenu.url)
+                              ? "!text-[#20ac73] mr-2 bg-white"
+                              : "!text-black"
+                              }`}
                           >
                             {submenu.title}
                           </p>
@@ -160,9 +156,9 @@ const SideMenu = () => {
             </ul>
           </div>
           <div className="flex justify-between text-white items-center">
-            <span>
+            <span className="text-black">
               <span> سلام </span>
-              {session?.result?.firstname} {session?.result?.lastname}
+              {session?.result?.firstname}
             </span>
             <span className="cursor-pointer" onClick={() => signOut()}>
               <svg
@@ -174,21 +170,21 @@ const SideMenu = () => {
               >
                 <path
                   d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
-                  stroke="#fff"
+                  stroke="#000"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 ></path>
                 <path
                   d="M15 12H3.62"
-                  stroke="#fff"
+                  stroke="#000"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 ></path>
                 <path
                   d="M5.85 8.6499L2.5 11.9999L5.85 15.3499"
-                  stroke="#fff"
+                  stroke="#000"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"

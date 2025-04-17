@@ -3,6 +3,9 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import NewAddress from "@/app/components/design/NewAddress";
 import concat from "@/app/components/utils/AddressConcat";
 import React, { useEffect, useState } from "react";
+import { FaEdit, FaPencilAlt, FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 export default function UserAddressesModule() {
   const [address, setAddress] = useState(null);
@@ -21,6 +24,32 @@ export default function UserAddressesModule() {
     setAddressLoading(false);
   };
 
+  const deleteAddress = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "مطمئن هستید؟",
+        text: "با حذف این گزینه امکان بازگشت آن وجود ندارد",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "بله حذفش کن",
+        cancelButtonText: "لغو",
+      });
+
+      if (result.isConfirmed) {
+        const req = await fetcher({
+          url: `/v1/api/guarantee/client/addresses/${id}`,
+          method: "DELETE",
+        });
+        toast.success("موفق");
+        getAddresses()
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getAddresses();
   }, []);
@@ -35,9 +64,16 @@ export default function UserAddressesModule() {
           setIsNewAddressOpen={setIsNewAddressOpen}
           edit={activeAddress}
         />
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {addressLoading ? (
-            <div className="h-[110px] bg-white w-full animate-pulse rounded-3xl"></div>
+            <>
+              <div className="h-[110px] bg-gray-300 w-full animate-pulse rounded-3xl"></div>
+              <div className="h-[110px] bg-gray-300 w-full animate-pulse rounded-3xl"></div>
+              <div className="h-[110px] bg-gray-300 w-full animate-pulse rounded-3xl"></div>
+              <div className="h-[110px] bg-gray-300 w-full animate-pulse rounded-3xl"></div>
+              <div className="h-[110px] bg-gray-300 w-full animate-pulse rounded-3xl"></div>
+              <div className="h-[110px] bg-gray-300 w-full animate-pulse rounded-3xl"></div>
+            </>
           ) : (
             allAddresess?.map((address, index) => (
               <div
@@ -53,14 +89,15 @@ export default function UserAddressesModule() {
                   </h1>
                   <div className="flex gap-4">
                     <span
+                      className="cursor-pointer"
                       onClick={(e) => {
                         setActiveAddress(address);
                         setIsNewAddressOpen(true);
                       }}
                     >
-                      Edit
+                      <FaPencilAlt className="text-primary" />
                     </span>
-                    <span>Delete</span>
+                    <span className="cursor-pointer" onClick={(e) => deleteAddress(address.id)}><FaTrash className="text-red-600" /></span>
                   </div>
                 </div>
                 <p>{concat(address)}</p>

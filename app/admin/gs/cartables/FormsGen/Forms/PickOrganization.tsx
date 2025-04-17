@@ -98,7 +98,7 @@ const PickOrganization = ({ currentOperation, nodeCommands, setAction, setTrigge
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label="Search Organizations"
+                            label="انتخاب نماینده"
                             variant="outlined"
                             fullWidth
                         />

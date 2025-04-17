@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, useMediaQuery, useTheme } from "@mui/material";
 import React from "react";
 
 interface IModalProps {
@@ -13,18 +13,21 @@ export default function Modal({
   handleClose,
   action,
 }: IModalProps) {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <Dialog
       open={isOpen}
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
+      fullScreen={fullScreen}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
+        <Button onClick={handleClose}>لغو</Button>
 
         {action && (
           <Button onClick={action} autoFocus>

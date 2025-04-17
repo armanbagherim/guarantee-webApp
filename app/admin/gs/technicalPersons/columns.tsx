@@ -5,7 +5,6 @@ import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Swal from "sweetalert2";
-import GavelIcon from "@mui/icons-material/Gavel";
 
 export function columns(
   isEditEav,
@@ -18,7 +17,7 @@ export function columns(
   const getData = async (id: string) => {
     try {
       const res = await fetcher({
-        url: `/v1/api/guarantee/admin/guaranteeOrganizations/${id}`,
+        url: `/v1/api/guarantee/admin/technicalPersons/${id}`,
         method: "GET",
       });
       return res.result;
@@ -42,7 +41,7 @@ export function columns(
 
       if (result.isConfirmed) {
         const req = await fetcher({
-          url: `/v1/api/eav/admin/entityTypes/${id}`,
+          url: `/v1/api/guarantee/admin/technicalPersons/${id}`,
           method: "DELETE",
         });
         toast.success("موفق");
@@ -53,14 +52,11 @@ export function columns(
     }
   };
   return [
-    {
-      accessorKey: "organization.name",
-      header: "نام نماینده ",
-    },
+
 
     {
       accessorKey: "user",
-      header: "توضیحات",
+      header: "نام",
       Cell: ({ row }) => (
         <span>
           {row?.original?.user?.firstname} {row?.original?.user?.lastname}
@@ -68,6 +64,10 @@ export function columns(
       ),
     },
 
+    {
+      accessorKey: "user.phoneNumber",
+      header: "شماره موبایل  ",
+    },
     {
       accessorKey: "Actions",
       header: "عملیات",
@@ -83,29 +83,9 @@ export function columns(
 
               formik.setValues({
                 ...formik.values,
-                name: editData.organization.name,
-                isNationwide: editData.isNationwide,
-                isOnlinePayment: editData.isOnlinePayment,
-                address: {
-                  ...formik.values.address,
-                  name: editData.address.name,
-                  latitude: editData.address.latitude,
-                  longitude: editData.address.longitude,
-                  provinceId: editData.address.provinceId,
-                  cityId: editData.address.cityId,
-                  neighborhoodId: editData.address.neighborhoodId,
-                  street: editData.address.street,
-                  alley: editData.address.alley,
-                  plaque: editData.address.plaque,
-                  floorNumber: editData.address.floorNumber,
-                  postalCode: editData.address.postalCode,
-                },
-                user: {
-                  ...formik.values.user,
-                  firstname: editData.user.firstname,
-                  lastname: editData.user.lastname,
-                  phoneNumber: editData.user.phoneNumber,
-                },
+                firstname: editData.user.firstname,
+                lastname: editData.user.lastname,
+                phoneNumber: editData.user.phoneNumber,
               });
             }}
             aria-label="delete"
@@ -116,16 +96,14 @@ export function columns(
 
           <IconButton
             onClick={async (e) => {
-              setContractsModal({
-                organizationId: row.original.id,
-                open: true,
-              });
+              deleteEavType(row.original.id)
             }}
             aria-label="delete"
-            color="primary"
+            color="error"
           >
-            <GavelIcon />
+            <DeleteIcon />
           </IconButton>
+
         </>
       ),
     },
