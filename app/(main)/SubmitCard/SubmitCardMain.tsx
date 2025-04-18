@@ -58,8 +58,9 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
       }
     } else if (step === "accept" && guarantee !== null) {
       try {
+        console.log(cardTypeState)
         const result = await fetcher({
-          url: cardTypeState == "noraml" ? `/v1/api/guarantee/client/normalGuarantee` : `/v1/api/guarantee/client/vipGuarantees`,
+          url: cardTypeState === "normal" ? `/v1/api/guarantee/client/normalGuarantee` : `/v1/api/guarantee/client/vipGuarantees`,
           method: "POST",
           body: {
             serialNumber: cardNumber,
