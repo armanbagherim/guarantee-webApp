@@ -29,7 +29,7 @@ export default async function NormalCards() {
   return (
     <div className="">
       <div className="bg-white mb-4 p-4 rounded-2xl flex justify-between items-center">
-        <span className="font-bold text-gray-600">کارت های گارانتی عادی</span>
+        <span className="font-bold text-gray-600">کارت های گارانتی VIP</span>
         <Link className="bg-primary py-4 px-4 rounded-xl text-white text-sm" href="/SubmitCard">ثبت کارت گارانتی جدید</Link>
       </div>
       <div className="grid 2xl::grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">

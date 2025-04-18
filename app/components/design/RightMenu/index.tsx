@@ -68,7 +68,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <span>کارت های گارانتی</span>
             </li>
           </Link>
-          <Link onClick={(e) => setIsOpen(false)} href="#">
+          <Link onClick={(e) => setIsOpen(false)} href="/vipCards">
             <li
               className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("#") ? "text-blue-500" : "text-gray-500"
                 }`}
@@ -96,7 +96,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
             </li>
           </Link>
 
-          <Link onClick={(e) => setIsOpen(false)} href="#">
+          {/* <Link onClick={(e) => setIsOpen(false)} href="#">
             <li
               className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("#") ? "text-blue-500" : "text-gray-500"
                 }`}
@@ -113,7 +113,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <Notifications color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
               <span>اطلاع رسانی ها</span>
             </li>
-          </Link>
+          </Link> */}
 
         </ul>
       </div>

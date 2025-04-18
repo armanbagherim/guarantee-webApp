@@ -62,8 +62,12 @@ const VipCard: React.FC<VipCardProps> = ({ data, cardName }) => {
       </div>
 
       <div className="text-center text-white font-bold flex flex-col my-6 text-xl z-10">
-        <span className="text-sm">اعتبار</span>
-        {Number(data?.totalCredit).toLocaleString()} تومان
+        <div className="flex flex-col">
+          <div>
+            <span className="text-sm">اعتبار باقی مانده</span>
+            {Number(data?.availableCredit).toLocaleString()} ریال
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center text-white justify-between z-10">
