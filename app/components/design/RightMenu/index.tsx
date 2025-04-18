@@ -10,7 +10,7 @@ import {
   Notifications,
   Payments,
   Requests,
-} from "../icons";
+} from "../Icons";
 import Link from "next/link";
 
 export default function RightMenu({ requestsCount, notificationCount }) {
@@ -50,12 +50,12 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <span>داشبورد</span>
             </li>
           </Link>
-          <Link onClick={(e) => setIsOpen(false)} href="#">
+          <Link onClick={(e) => setIsOpen(false)} href="/factors">
             <li
-              className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("#") ? "text-blue-500" : "text-gray-500"
+              className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("/factors") ? "text-blue-500" : "text-gray-500"
                 }`}
             >
-              <Payments color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
+              <Payments color={isActive("/factors") ? "#3B82F6" : "#6F6F6F"} />
               <span>فاکتور ها</span>
             </li>
           </Link>
