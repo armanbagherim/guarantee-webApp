@@ -21,7 +21,7 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [pagination, setPagination] = useState({
-    pageIndex: 0,
+    pageIndex: -1,
     pageSize: 10,
   });
   const initialized = useRef(false);

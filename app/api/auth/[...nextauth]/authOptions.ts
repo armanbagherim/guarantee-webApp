@@ -13,7 +13,7 @@ export const authOptions = {
         },
       },
       async authorize(credentials, req) {
-        const { phoneNumber, verifyCode, firstName, lastName } = credentials;
+        const { phoneNumber, verifyCode, firstName, lastName, nationalCode } = credentials;
         let res;
 
         if (phoneNumber && !verifyCode) {
@@ -45,6 +45,7 @@ export const authOptions = {
                 code: verifyCode,
                 firstname: firstName || "",
                 lastname: lastName || "",
+                nationalCode: nationalCode || "",
                 phoneNumber,
               }),
             }

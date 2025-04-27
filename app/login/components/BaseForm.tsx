@@ -19,6 +19,7 @@ export default function SignInForm({ session }) {
   const [verifyCode, setVerifyCode] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [nationalCode, setNationalCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [signUp, setSignUp] = useState(false);
 
@@ -103,13 +104,13 @@ export default function SignInForm({ session }) {
         verifyCode: verifyCode,
         phoneNumber: phoneNumber,
         firstName: firstName,
+        nationalCode: nationalCode,
         lastName,
         redirect: false,
-        callbackUrl: `${
-          pathname.get("redirect_back_url")
-            ? pathname.get("redirect_back_url")
-            : "/"
-        }`,
+        callbackUrl: `${pathname.get("redirect_back_url")
+          ? pathname.get("redirect_back_url")
+          : "/"
+          }`,
       });
       if (result.status === 401) {
         toast.error(result.error);
@@ -150,9 +151,10 @@ export default function SignInForm({ session }) {
                   )}
                   {state == "verify" && (
                     <div className="text-right">
-                      <div className="flex gap-5">
-                        {signUp && (
-                          <>
+
+                      {signUp && (
+                        <div className="flex flex-col gap-5">
+                          <div className="flex gap-4">
                             <div className="w-full">
                               <h4 className="opacity-70 text-xs mb-3">نام</h4>
                               <input
@@ -173,9 +175,21 @@ export default function SignInForm({ session }) {
                                 onChange={(e) => setLastName(e.target.value)}
                               />
                             </div>
-                          </>
-                        )}
-                      </div>
+                          </div>
+                          <div className="w-full">
+                            <h4 className="opacity-70 text-xs mb-3">
+                              کد ملی
+                            </h4>
+                            <input
+                              className="bg-[#f6f6f6] border border-gray-300 text-right rounded-2xl py-4 px-6 w-full outline-none mb-4"
+                              type="text"
+                              label="Phone Number"
+                              onChange={(e) => setNationalCode(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      )}
+
                       <div className="flex justify-between mb-4">
                         <span className="opacity-70 font-bold text-sm">
                           شماره موبایل: {number}
