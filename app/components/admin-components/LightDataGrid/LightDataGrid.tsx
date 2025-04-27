@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -9,137 +9,144 @@ import { useSession } from "next-auth/react";
 const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
   const { data: session } = useSession();
 
-  //data and fetching state
+  // State variables
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const [rowCount, setRowCount] = useState(0);
 
-  //table state
+  // Table state
   const [columnFilters, setColumnFilters] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState();
+  const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
-  const addressInitialized = useRef(false);
+  const initialized = useRef(false);
+
+  const buildQueryParams = () => {
+    const params = new URLSearchParams();
+
+    // Pagination
+    params.set("offset", pagination.pageIndex + 1);
+    params.set("limit", pagination.pageSize);
+
+    // Sorting (single column sorting)
+    if (sorting.length > 0) {
+      const { id, desc } = sorting[0];
+      params.set("sortBy", id);
+      params.set("sortOrder", desc ? "desc" : "asc");
+    }
+
+    // Global search
+    if (globalFilter) {
+      params.set("search", globalFilter);
+    }
+
+    // Column filters
+    columnFilters.forEach((filter) => {
+      if (filter.value) {
+        params.set(filter.id, filter.value);
+      }
+    });
+
+    return params.toString();
+  };
 
   const fetchData = async () => {
-    if (!data?.length) {
+    if (!initialized.current && session) {
       setIsLoading(true);
+      initialized.current = true;
     } else {
       setIsRefetching(true);
     }
 
-    const urls = new URL(`${url}`, process.env.NEXT_PUBLIC_BASE_URL);
-    urls.searchParams.set(
-      "offset",
-      `${pagination.pageIndex * pagination.pageSize}`
-    );
-    urls.searchParams.set("limit", `${pagination.pageSize}`);
-    urls.searchParams.set("filters", JSON.stringify(columnFilters ?? []));
-    urls.searchParams.set("search", globalFilter ?? "");
-    urls.searchParams.set("sorting", JSON.stringify(sorting ?? []));
-
     try {
-      const response = await fetch(urls.href, {
+      const queryParams = buildQueryParams();
+      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${url}?${queryParams}`;
+
+      const response = await fetch(apiUrl, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.token}`,
         },
       });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
       const json = await response.json();
-      setData(json.result);
-      setRowCount(json.total);
+      setData(json.data || json.result || []);
+      setRowCount(json.total || json.rowCount || 0);
     } catch (error) {
       setIsError(true);
-      console.error(error);
-      return;
+      console.error("Fetch error:", error);
+    } finally {
+      setIsLoading(false);
+      setIsRefetching(false);
     }
-    setIsError(false);
-    setIsLoading(false);
-    setIsRefetching(false);
   };
 
-  //if you want to avoid useEffect, look at the React Query example instead
   useEffect(() => {
-    if (!addressInitialized.current && session) {
-      fetchData();
-      addressInitialized.current = true;
-    } else {
-      fetchData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchData();
   }, [
     columnFilters,
     globalFilter,
     pagination.pageIndex,
     pagination.pageSize,
     sorting,
-    // session,
     triggered,
+    session,
   ]);
 
   const table = useMaterialReactTable({
     columns,
-    enableColumnPinning: true,
+    data,
+    getRowId: (row) => row.id,
     initialState: {
-      expanded: false,
-      showColumnFilters: false,
-      columnPinning: { right: ["Actions"] },
       density: "compact",
+      columnPinning: { right: ["Actions"] },
     },
-    data: data || [],
-    getRowId: (row) => row?.id,
-    renderDetailPanel: ({ row }) => (
-      detailPanel ? detailPanel(row) : false
-    ),
-    // initialState: {  }, // Disable column filters
-    manualFiltering: false, // Disable manual filtering
-    manualPagination: true,
-    manualSorting: true,
-    muiToolbarAlertBannerProps: isError
-      ? {
-        color: "error",
-        children: "خطا در بارگزاری اطلاعات",
-      }
-      : undefined,
+    columnFilterDisplayMode: "popover",
+    manualFiltering: true, // Server-side filtering
+    manualPagination: true, // Server-side pagination
+    manualSorting: true, // Server-side sorting
+    onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     rowCount,
-    enableRowSelection: false,
     state: {
       columnFilters,
       globalFilter,
       isLoading,
       pagination,
       showAlertBanner: isError,
-      showProgressBars: false,
-      showSkeletons: isRefetching,
+      showProgressBars: isRefetching,
       sorting,
     },
-    muiBottomToolbarProps: {
-      className: "bottomToolbar",
+    renderDetailPanel: detailPanel,
+    localization: MRT_Localization_FA,
+    muiTableProps: {
+      sx: {
+        borderCollapse: "collapse",
+      },
     },
     muiTableBodyProps: {
       sx: {
-        //stripe the rows, make odd rows a darker color
         "& tr:nth-of-type(odd) > td": {
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#ffffff",
         },
       },
     },
-    localization: MRT_Localization_FA,
   });
 
   return <MaterialReactTable table={table} />;
 };
 
-const customComparator = (prevProps, nextProps) => {
+export default React.memo(LightDataGrid, (prevProps, nextProps) => {
   return nextProps.triggered === prevProps.triggered;
-};
-
-export default React.memo(LightDataGrid, customComparator);
+});

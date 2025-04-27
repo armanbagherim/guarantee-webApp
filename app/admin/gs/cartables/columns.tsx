@@ -54,23 +54,59 @@ export function columns(
   };
   return [
     {
-      accessorKey: "activity.requestId",
+      accessorKey: "requestId",
       header: "شماره درخواست",
+      size: 10, //small column
+      maxSize: 10,
     },
     {
       accessorKey: "activity.name",
       header: "وضعیت",
+      size: 40,
+      maxSize: 40,
+      Cell: ({ row }) => {
+        return (
+          <Tooltip title={row.original?.activity?.name}>
+            <span className="w-[150px] overflow-hidden truncate block">
+              {row.original?.activity?.name}
+            </span>
+          </Tooltip>
+        );
+      },
     },
     {
       accessorKey: "user",
       header: "کاربر",
+      size: 20,
+      maxSize: 20,
       Cell: ({ row }) => {
-        return `${row?.original?.guaranteeRequest?.user?.firstname} ${row?.original?.guaranteeRequest?.user?.lastname}`;
+        return (
+          <Tooltip
+            title={`${row?.original?.guaranteeRequest?.user?.firstname} ${row?.original?.guaranteeRequest?.user?.lastname}`}
+          >
+            <span className="w-[100px] overflow-hidden truncate block">
+              {row?.original?.guaranteeRequest?.user?.firstname}{" "}
+              {row?.original?.guaranteeRequest?.user?.lastname}
+            </span>
+          </Tooltip>
+        );
       },
     },
     {
-      accessorKey: "guaranteeRequest.phoneNumber",
+      accessorKey: "phoneNumber",
       header: "شماره موبایل",
+      size: 20,
+      maxSize: 20,
+      enableColumnFilter: true,
+      Cell: ({ row }) => {
+        return (
+          <Tooltip title={`${row?.original?.guaranteeRequest?.phoneNumber}`}>
+            <span className="w-[100px] font-bold overflow-hidden truncate block">
+              {row?.original?.guaranteeRequest?.phoneNumber}
+            </span>
+          </Tooltip>
+        );
+      },
     },
     {
       accessorKey: "product",
@@ -80,8 +116,26 @@ export function columns(
       },
     },
     {
-      accessorKey: "guaranteeRequest.requestType.title",
+      accessorKey: "requestTypeId",
       header: "نوع درخواست",
+      filterVariant: "select",
+      filterSelectOptions: [
+        { label: "نصب", value: "1" },
+        { label: "تعمیر", value: "2" },
+      ],
+      size: 20,
+      maxSize: 20,
+      Cell: ({ row }) => {
+        return (
+          <Tooltip
+            title={`${row?.original?.guaranteeRequest?.requestType?.title}`}
+          >
+            <span className="w-[60px] overflow-hidden truncate block">
+              {row?.original?.guaranteeRequest?.requestType?.title}
+            </span>
+          </Tooltip>
+        );
+      },
     },
     {
       accessorKey: "guaranteeRequest.requestCategory.title",
@@ -98,30 +152,28 @@ export function columns(
 
       Cell: ({ row }) => (
         <div className="flex gap-2">
-          <Button
+          <button
+            className="px-3 py-2 text-xs font-bold bg-primary/10 hover:bg-primary/20 transition-all text-primary rounded-lg"
             onClick={async (e) => {
               setActiveRequestActionModal({
                 currentOperation: row.original,
-                isOpen: true
-              })
+                isOpen: true,
+              });
             }}
-            variant="outlined"
-            color="primary"
           >
             اقدام
-          </Button>
-          <Button
+          </button>
+          <button
+            className="px-3 py-2 text-xs font-bold bg-primary/10 hover:bg-primary/20 transition-all text-primary rounded-lg"
             onClick={async (e) => {
               setHistoryOpen({
                 requestId: row.original.requestId,
-                isOpen: true
-              })
+                isOpen: true,
+              });
             }}
-            variant="outlined"
-            color="primary"
           >
             گردش درخواست
-          </Button>
+          </button>
         </div>
       ),
     },
