@@ -33,7 +33,7 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
     params.set("offset", pagination.pageIndex + 1);
     params.set("limit", pagination.pageSize);
 
-    // Sorting (single column sorting)
+    // Sorting
     if (sorting.length > 0) {
       const { id, desc } = sorting[0];
       params.set("sortBy", id);
@@ -65,7 +65,25 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
 
     try {
       const queryParams = buildQueryParams();
-      const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${url}?${queryParams}`;
+      let apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${url}`;
+
+      // بررسی وجود پارامترهای موجود در URL
+      const urlHasQuery = url.includes("?");
+      const existingParams = urlHasQuery ? url.split("?")[1] : "";
+
+      if (queryParams) {
+        if (urlHasQuery) {
+          // اگر URL اصلی پارامتر دارد و پارامترهای جدید هم داریم
+          if (existingParams) {
+            apiUrl += `&${queryParams}`;
+          } else {
+            // اگر URL اصلی فقط ? دارد بدون پارامتر
+            apiUrl += queryParams;
+          }
+        } else {
+          apiUrl += `?${queryParams}`;
+        }
+      }
 
       const response = await fetch(apiUrl, {
         headers: {
@@ -111,6 +129,7 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
       columnPinning: { right: ["Actions"] },
     },
     columnFilterDisplayMode: "popover",
+    enableSorting: false,
     manualFiltering: true, // Server-side filtering
     manualPagination: true, // Server-side pagination
     manualSorting: true, // Server-side sorting

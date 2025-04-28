@@ -51,6 +51,7 @@ export const authOptions = {
             }
           );
           if (res.status === 400) {
+            console.log(res);
             throw new Error("! کد تایید معتبر نیست");
           }
         }

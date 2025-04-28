@@ -2,9 +2,12 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, IconButton, Tooltip } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Swal from "sweetalert2";
+import GavelIcon from "@mui/icons-material/Gavel";
+import concat from "@/app/components/utils/AddressConcat";
 import HistoryIcon from "@mui/icons-material/History";
-import AdjustIcon from "@mui/icons-material/Adjust";
 export function columns(
   triggered,
   setTriggered,
@@ -55,15 +58,6 @@ export function columns(
       header: "شماره درخواست",
       size: 10, //small column
       maxSize: 10,
-      Cell: ({ row }) => {
-        return (
-          <Tooltip title={row.original?.requestId}>
-            <span className="w-[80px] overflow-hidden truncate block">
-              {row.original?.requestId}
-            </span>
-          </Tooltip>
-        );
-      },
     },
     {
       accessorKey: "activity.name",
@@ -173,22 +167,9 @@ export function columns(
       maxSize: 20,
       Cell: ({ row }) => (
         <div className="flex gap-2">
-          <Tooltip placement="top" title={`اقدام`}>
-            <button
-              className="px-2 py-2 text-xs font-bold bg-pink-100 hover:bg-pink-900 hover:text-white transition-all text-pink-600 rounded-lg"
-              onClick={async (e) => {
-                setActiveRequestActionModal({
-                  currentOperation: row.original,
-                  isOpen: true,
-                });
-              }}
-            >
-              <AdjustIcon />
-            </button>
-          </Tooltip>
           <Tooltip placement="top" title={`گردش درخواست`}>
             <button
-              className="px-2 py-2 text-xs font-bold bg-primary/10 hover:bg-primary/20 transition-all text-primary rounded-lg"
+              className="px-3 py-2 text-xs font-bold bg-primary/10 hover:bg-primary/20 transition-all text-primary rounded-lg"
               onClick={async (e) => {
                 setHistoryOpen({
                   requestId: row.original.requestId,

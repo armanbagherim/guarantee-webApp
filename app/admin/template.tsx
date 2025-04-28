@@ -12,7 +12,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     <div>
       <SideMenu />
       <div className=" sm:mr-72 print:p-0 print:m-0 print:w-full print:mr-0">
-        <div className="flex justify-between items-center h-20 bg-white px-4 no-print mx-8 rounded-2xl mt-12">
+        <div className="flex justify-between items-center h-20 bg-white px-4 no-print mx-4 md:mx-8 rounded-2xl mt-4 md:mt-12">
           <div className="text-lg font-bold text-blue-700">{atom.title}</div>
           {atom?.buttonTitle && atom.onClick ? (
             <button
@@ -31,7 +31,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
           ) : null}
         </div>
       </div>
-      <div className="px-10 py-6 pb-36 sm:mr-72 print:p-0 print:m-0 print:w-full print:mr-0 ">
+      <div className="px-4 md:px-10 py-6 pb-36 sm:mr-72 print:p-0 print:m-0 print:w-full print:mr-0 ">
         <div className="mb-16">{children}</div>
       </div>
     </div>

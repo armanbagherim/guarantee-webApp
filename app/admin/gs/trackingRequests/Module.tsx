@@ -15,12 +15,12 @@ export default function EavTypesModule({ session }) {
   const [activeRequestActionModal, setActiveRequestActionModal] = useState({
     currentOperation: null,
     isOpen: false,
-  });
+  })
 
   const [historyOpen, setHistoryOpen] = useState({
     requestId: null,
     isOpen: false,
-  });
+  })
 
   useEffect(() => {
     setTitle({
@@ -30,15 +30,11 @@ export default function EavTypesModule({ session }) {
     });
   }, []);
 
+
   return (
     <div>
-      <FormGen
-        triggered={triggered}
-        setTriggered={setTriggered}
-        session={session}
-        action={activeRequestActionModal}
-        setAction={setActiveRequestActionModal}
-      />
+
+      <FormGen triggered={triggered} setTriggered={setTriggered} session={session} action={activeRequestActionModal} setAction={setActiveRequestActionModal} />
 
       <HistoryData historyOpen={historyOpen} setHistoryOpen={setHistoryOpen} />
 
