@@ -60,11 +60,12 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
             }
           />
         </div>
-
+        <label htmlFor="mandatoryAttendance">نیازمند حضور نماینده</label>
         <Checkbox
           checked={formik.values.mandatoryAttendance ?? false}
           onClick={e => formik.setFieldValue("mandatoryAttendance", !formik.values.mandatoryAttendance)}
           color="primary"
+          id="mandatoryAttendance"
         />
       </form>
     </Modal>

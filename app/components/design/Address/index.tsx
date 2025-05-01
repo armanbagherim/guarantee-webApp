@@ -15,7 +15,8 @@ export default function Address({
   const [isNewAddressOpen, setIsNewAddressOpen] = useState(false);
   return (
     <>
-      <NewAddresstext-md font-bold text-primary
+      <NewAddress
+
         refetch={refetch}
         handleClose={(e) => setIsNewAddressOpen(false)}
         isOpen={isNewAddressOpen}

@@ -45,7 +45,7 @@ export const authOptions = {
                 code: verifyCode,
                 firstname: firstName || "",
                 lastname: lastName || "",
-                nationalCode: nationalCode || "",
+                // nationalCode: nationalCode || "",
                 phoneNumber,
               }),
             }
