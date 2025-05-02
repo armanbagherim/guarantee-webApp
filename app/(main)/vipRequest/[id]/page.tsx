@@ -54,7 +54,7 @@ export default async function RepairRequest({ params }) {
           product={`${data.productType?.title} ${data.variant?.title} ${data.guaranteePeriod?.title}`}
         /> */}
       </div>
-      <RequestForm products={products} guaranteeId={params.id} requestTypes={requestTypes} />
+      <RequestForm products={products} guaranteeId={params.id} requestTypes={requestTypes} session={session} />
     </div>
   );
 }

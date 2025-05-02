@@ -42,7 +42,7 @@ export default async function RepairRequest({ params }) {
           product={`${data.productType?.title} ${data.variant?.title} ${data.guaranteePeriod?.title}`}
         />
       </div>
-      <RequestForm guarantee={data} requestTypes={requestTypes} />
+      <RequestForm guarantee={data} requestTypes={requestTypes} session={session} />
     </div>
   );
 }

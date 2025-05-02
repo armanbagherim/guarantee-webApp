@@ -23,8 +23,9 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import LightDataGridClient from "@/app/components/admin-components/LightDataGrid/LightDataGridClient";
 import { LoadingIcon } from "@/app/components/design/icons";
+import Uploader from "@/app/components/design/Uploader";
 
-export default function RequestForm({ requestTypes, token }) {
+export default function RequestForm({ requestTypes, session }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [address, setAddress] = useState(null);
@@ -47,7 +48,7 @@ export default function RequestForm({ requestTypes, token }) {
   const [modalData, setModalData] = useState([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [endpoint, setEndpoint] = useState("");
-
+  const [photos, setPhotos] = useState([])
   // Store selected items' titles
   const [selectedProductTypeTitle, setSelectedProductTypeTitle] = useState("");
   const [selectedBrandTitle, setSelectedBrandTitle] = useState("");
@@ -93,6 +94,7 @@ export default function RequestForm({ requestTypes, token }) {
           productTypeId: +productType,
           brandId: +selectedBrand,
           variantId: +selectedVariant,
+          attachments: photos.map((photo) => ({ attachmentId: photo.id }))
         },
       });
       toast.success("درخواست با موفقیت ثبت شد.");
@@ -263,9 +265,20 @@ export default function RequestForm({ requestTypes, token }) {
           />
         </div>
       </div>
-
+      <div className="mb-4">
+        <span className="mb-3 text-bold block">اپلود تصویر محصول</span>
+        <Uploader
+          photos={photos}
+          setPhotos={setPhotos}
+          location={"v1/api/guarantee/client/requests/image"}
+          type={"image"}
+          isFull={true}
+          token={session}
+        />
+      </div>
+      <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰ در واتساپ یا ایتا ارسال نمایید.</div>
       <div className="relative">
-        <label className="absolute right-5 top-5 text-[#535353]">توضیحات</label>
+        <label className="absolute right-5 top-5 text-[#535353]">ایراد / اشکال به اظهار مشتری</label>
         <textarea
           className="w-full border border-[#eee] rounded-[20px] p-2 pt-14 pr-5 outline-none"
           placeholder="برای مثال مایکروویو من چراغ هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمیوفته"
@@ -307,8 +320,8 @@ export default function RequestForm({ requestTypes, token }) {
             {currentSelectType === "productType"
               ? "نوع محصول"
               : currentSelectType === "brand"
-              ? "برند"
-              : "مدل دستگاه"}
+                ? "برند"
+                : "مدل دستگاه"}
           </span>
           <IconButton
             onClick={() => setModalOpen(false)}
@@ -321,7 +334,7 @@ export default function RequestForm({ requestTypes, token }) {
           <LightDataGridClient
             url={`${endpoint}`}
             columns={modalColumns}
-            session={token}
+            session={session.token}
           />
         </DialogContent>
         <DialogActions>

@@ -83,7 +83,9 @@ const PickTechnicalUserWithVisitTime = ({ currentOperation, nodeCommands, setAct
             });
 
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                let jsonRes = await response.json()
+                let errorMessage = jsonRes.errors ? jsonRes.errors[0] : jsonRes.message;
+                throw new Error(errorMessage);
             }
 
             const result = await response.json();

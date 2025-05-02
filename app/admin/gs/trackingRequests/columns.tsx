@@ -2,18 +2,18 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, IconButton, Tooltip } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Swal from "sweetalert2";
-import GavelIcon from "@mui/icons-material/Gavel";
-import concat from "@/app/components/utils/AddressConcat";
 import HistoryIcon from "@mui/icons-material/History";
+import AdjustIcon from "@mui/icons-material/Adjust";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 export function columns(
   triggered,
   setTriggered,
   setActiveRequestActionModal,
   istoryOpen,
-  setHistoryOpen
+  setHistoryOpen,
+  attachementsOpen,
+  setAttachementsOpen
 ) {
   const getData = async (id: string) => {
     try {
@@ -58,6 +58,15 @@ export function columns(
       header: "شماره درخواست",
       size: 10, //small column
       maxSize: 10,
+      Cell: ({ row }) => {
+        return (
+          <Tooltip title={row.original?.requestId}>
+            <span className="w-[80px] overflow-hidden truncate block">
+              {row.original?.requestId}
+            </span>
+          </Tooltip>
+        );
+      },
     },
     {
       accessorKey: "activity.name",
@@ -169,7 +178,7 @@ export function columns(
         <div className="flex gap-2">
           <Tooltip placement="top" title={`گردش درخواست`}>
             <button
-              className="px-3 py-2 text-xs font-bold bg-primary/10 hover:bg-primary/20 transition-all text-primary rounded-lg"
+              className="px-2 py-2 text-xs font-bold bg-primary/10 hover:bg-primary/20 transition-all text-primary rounded-lg"
               onClick={async (e) => {
                 setHistoryOpen({
                   requestId: row.original.requestId,
@@ -178,6 +187,19 @@ export function columns(
               }}
             >
               <HistoryIcon />
+            </button>
+          </Tooltip>
+          <Tooltip placement="top" title={`تصاویر`}>
+            <button
+              className="px-2 py-2 text-xs font-bold bg-green-100 hover:bg-green-900 hover:text-white transition-all text-green-600 rounded-lg"
+              onClick={async (e) => {
+                setAttachementsOpen({
+                  requestId: row.original.requestId,
+                  isOpen: true,
+                });
+              }}
+            >
+              <AttachFileIcon />
             </button>
           </Tooltip>
         </div>

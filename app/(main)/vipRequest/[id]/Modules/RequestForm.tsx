@@ -12,8 +12,9 @@ import {
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Uploader from "@/app/components/design/Uploader";
 
-export default function RequestForm({ requestTypes, guaranteeId, products }) {
+export default function RequestForm({ requestTypes, guaranteeId, products, session }) {
   const [address, setAddress] = useState(null);
   const [allAddresess, setAllAddress] = useState(null);
   const [addressIsOpen, setIsAddressOpen] = useState(false);
@@ -24,7 +25,7 @@ export default function RequestForm({ requestTypes, guaranteeId, products }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [description, setDescription] = useState("");
   const router = useRouter()
-
+  const [photos, setPhotos] = useState([])
   const validateForm = () => {
     if (!phoneNumber || phoneNumber.length !== 11 || !phoneNumber.startsWith("09")) {
       toast.error("شماره موبایل باید 11 رقم و با 09 شروع شود.");
@@ -60,6 +61,7 @@ export default function RequestForm({ requestTypes, guaranteeId, products }) {
           addressId: +address.id,
           assignedProductAssignedGuaranteeId: +selectedProduct,
           guaranteeId: +guaranteeId,
+          attachments: photos.map((photo) => ({ attachmentId: photo.id }))
         },
       });
       toast.success("درخواست با موفقیت ثبت شد.");
@@ -146,8 +148,21 @@ export default function RequestForm({ requestTypes, guaranteeId, products }) {
         </div>
       </div>
 
+      <div className="mb-4">
+        <span className="mb-3 text-bold block">اپلود تصویر محصول</span>
+        <Uploader
+          photos={photos}
+          setPhotos={setPhotos}
+          location={"v1/api/guarantee/client/requests/image"}
+          type={"image"}
+          isFull={true}
+          token={session}
+        />
+      </div>
+      <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰ در واتساپ یا ایتا ارسال نمایید.</div>
+
       <div className="relative">
-        <label className="absolute right-5 top-5 text-[#535353]">توضیحات</label>
+        <label className="absolute right-5 top-5 text-[#535353]">ایراد / اشکال به اظهار مشتری</label>
         <textarea
           className="w-full border border-[#eee] rounded-[20px] p-2 pt-14 pr-5 outline-none"
           name=""

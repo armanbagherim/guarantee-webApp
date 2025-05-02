@@ -180,6 +180,8 @@ export default function AssignProducts({ token }) {
 
     return (
         <div className="bg-white p-6 rounded-[25px] request">
+            <div className="bg-red-100 mb-4 text-center text-red-700 py-2 px-4 rounded-lg">فقط محصولاتی که سال ساخت آن ها از سال ۱۳۸۵ به بعد باشد شامل شرایط گارانتی می باشد.</div>
+
             {/* Assign Product Form */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <TextField

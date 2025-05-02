@@ -23,6 +23,7 @@ interface IModal {
   hasAccept?: boolean;
   hasBack?: boolean;
   backText?: string;
+  acceptText?: string;
   handleBack?: () => void;
 }
 
@@ -42,6 +43,7 @@ const Modal = (props: IModal) => {
     hasBack = false,
     backText = null,
     handleBack = null,
+    acceptText
   } = props;
   const theme = useTheme();
   const mediaQuery = useMediaQuery(theme.breakpoints.down("md"));
@@ -104,7 +106,7 @@ const Modal = (props: IModal) => {
                   onClick={handleAccept}
                   autoFocus
                 >
-                  ثبت
+                  {acceptText ?? 'ثبت'}
                 </Button>
               )}
             </div>

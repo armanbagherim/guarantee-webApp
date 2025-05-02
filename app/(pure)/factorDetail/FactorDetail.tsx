@@ -5,7 +5,7 @@ import React from 'react'
 export default function FactorDetail({ factor }) {
     // Format price with commas
     const formatPrice = (price: string) => {
-        return new Intl.NumberFormat('fa-IR').format(Number(price)) + ' ءرء ';
+        return new Intl.NumberFormat('fa-IR').format(Number(price)) + ' ریال';
     };
 
     // Format date
@@ -30,6 +30,7 @@ export default function FactorDetail({ factor }) {
             window.print();
         }
     };
+
     return (
         <html dir='rtl' lang='fa'>
             <body>
@@ -52,6 +53,51 @@ export default function FactorDetail({ factor }) {
                         </div>
                     </div>
 
+                    {/* Company Information Header */}
+                    <div className="bg-white rounded-xl border p-6 mb-6 print-header">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="space-y-2">
+                                <h3 className="font-bold text-lg border-b pb-2">اطلاعات شرکت</h3>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-600">نام شرکت:</span>
+                                    <span className="font-medium">شرکت اریا کیش مهرداد</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-600">شناسه ملی:</span>
+                                    <span className="font-medium">10104086506</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-600">شماره ثبت:</span>
+                                    <span className="font-medium">361551</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h3 className="font-bold text-lg border-b pb-2">اطلاعات اقتصادی</h3>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-600">کد اقتصادی:</span>
+                                    <span className="font-medium">10104086506</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-600">کد پستی:</span>
+                                    <span className="font-medium">1415995673</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-600">تلفن:</span>
+                                    <span className="font-medium">1882</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h3 className="font-bold text-lg border-b pb-2">آدرس شرکت</h3>
+                                <div className="text-sm text-gray-700">
+                                    تهران، بلوار کشاورز، خیابان کبکانیان، پلاک 14، طبقه اول، واحد دو
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Factor Details */}
                     <div className="bg-white rounded-xl border p-6 mb-6">
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
                             <div className="space-y-2">
@@ -89,6 +135,10 @@ export default function FactorDetail({ factor }) {
                                         <span className="font-medium">{factor.fullName}</span>
                                     </div>
                                     <div className="flex justify-between gap-2 text-sm">
+                                        <span className="text-gray-600">کد ملی:</span>
+                                        <span className="font-medium">{factor.nationalCode ?? 'ثبت نشده'}</span>
+                                    </div>
+                                    <div className="flex justify-between gap-2 text-sm">
                                         <span className="text-gray-600">شماره درخواست:</span>
                                         <span className="font-medium">#{factor.requestId}</span>
                                     </div>
@@ -101,7 +151,6 @@ export default function FactorDetail({ factor }) {
                                     <span className="text-gray-600">مبلغ کل:</span>
                                     <span className="font-medium">{formatPrice(factor.totalPrice)}</span>
                                 </div>
-
                             </div>
                         </div>
 
@@ -162,6 +211,12 @@ export default function FactorDetail({ factor }) {
                         )}
                     </div>
 
+                    {/* Print-only footer */}
+                    <div className="hidden print:block text-center text-xs text-gray-500 mt-8">
+                        <p>مهر و امضای شرکت</p>
+                        <p className="mt-4">تهران، بلوار کشاورز، خیابان کبکانیان، پلاک 14، طبقه اول، واحد دو</p>
+                        <p>تلفن: 1882</p>
+                    </div>
                 </div>
             </body>
         </html>

@@ -94,31 +94,31 @@ export default async function PaymentStatus({ params }) {
                                     کد پیگیری: {transaction.id}
                                 </p>
                             </div>
-                            <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${status.color}`}>
-                                {status.icon}
-                                <span className="mr-2">{status.text}</span>
+                            <div className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${status?.color}`}>
+                                {status?.icon}
+                                <span className="mr-2">{status?.text}</span>
                             </div>
                         </div>
 
                         <div className="mt-8 space-y-4" dir="rtl">
                             <div className="flex justify-between">
                                 <span className="text-gray-600">مبلغ تراکنش:</span>
-                                <span className="font-bold">{formatPrice(transaction.totalPrice)}</span>
+                                <span className="font-bold">{formatPrice(transaction?.totalPrice)}</span>
                             </div>
 
                             <div className="flex justify-between">
                                 <span className="text-gray-600">شماره فاکتور:</span>
-                                <span className="font-medium">{transaction.factorId}</span>
+                                <span className="font-medium">{transaction?.factorId}</span>
                             </div>
 
                             <div className="flex justify-between">
                                 <span className="text-gray-600">تاریخ ایجاد:</span>
-                                <span>{formatDate(transaction.createdAt)}</span>
+                                <span>{formatDate(transaction?.createdAt)}</span>
                             </div>
 
                             <div className="flex justify-between">
                                 <span className="text-gray-600">آخرین بروزرسانی:</span>
-                                <span>{formatDate(transaction.updatedAt)}</span>
+                                <span>{formatDate(transaction?.updatedAt)}</span>
                             </div>
                         </div>
 
@@ -132,7 +132,7 @@ export default async function PaymentStatus({ params }) {
                 {/* Help section */}
                 <div className="mt-6 text-center text-sm text-gray-500">
                     <p>در صورت وجود مشکل با پشتیبانی تماس بگیرید</p>
-                    <p className="font-medium mt-1">021-86780</p>
+                    <p className="font-medium mt-1">021-86780 - 021-1882</p>
                 </div>
             </div>
         </div>

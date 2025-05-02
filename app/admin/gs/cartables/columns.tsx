@@ -5,12 +5,15 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import Swal from "sweetalert2";
 import HistoryIcon from "@mui/icons-material/History";
 import AdjustIcon from "@mui/icons-material/Adjust";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 export function columns(
   triggered,
   setTriggered,
   setActiveRequestActionModal,
   istoryOpen,
-  setHistoryOpen
+  setHistoryOpen,
+  attachementsOpen,
+  setAttachementsOpen
 ) {
   const getData = async (id: string) => {
     try {
@@ -197,6 +200,19 @@ export function columns(
               }}
             >
               <HistoryIcon />
+            </button>
+          </Tooltip>
+          <Tooltip placement="top" title={`تصاویر`}>
+            <button
+              className="px-2 py-2 text-xs font-bold bg-green-100 hover:bg-green-900 hover:text-white transition-all text-green-600 rounded-lg"
+              onClick={async (e) => {
+                setAttachementsOpen({
+                  requestId: row.original.requestId,
+                  isOpen: true,
+                });
+              }}
+            >
+              <AttachFileIcon />
             </button>
           </Tooltip>
         </div>

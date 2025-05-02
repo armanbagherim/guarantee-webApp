@@ -6,7 +6,17 @@ const nextConfig: NextConfig = {
  },
  typescript: {
   ignoreBuildErrors: true
- }
+ },
+ images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'clubapi.ariakish.com',
+        port: '',
+        search: '',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

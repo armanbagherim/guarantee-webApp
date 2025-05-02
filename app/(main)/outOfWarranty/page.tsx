@@ -37,7 +37,7 @@ export default async function RepairRequest({ params }) {
   return (
     <div className="">
 
-      <RequestForm token={session.token} requestTypes={requestTypes} />
+      <RequestForm session={session} requestTypes={requestTypes} />
     </div>
   );
 }

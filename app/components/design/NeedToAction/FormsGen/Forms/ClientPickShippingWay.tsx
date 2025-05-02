@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import concat from "@/app/components/utils/AddressConcat";
 import BusinessIcon from '@mui/icons-material/Business';
 
-const PickTechnicalUserWithVisitTime = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
+const ClientPickShippingWay = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
     const [shippingWays, setShippingWays] = useState([]);
     const [organizationAddress, setOrganizationAddress] = useState();
     const [selectedShippingWay, setSelectedShippingWay] = useState(null);
@@ -106,7 +106,9 @@ const PickTechnicalUserWithVisitTime = ({ currentOperation, nodeCommands, setAct
             });
 
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                let jsonRes = await response.json()
+                let errorMessage = jsonRes.errors ? jsonRes.errors[0] : jsonRes.message;
+                throw new Error(errorMessage);
             }
 
             const result = await response.json();
@@ -160,6 +162,7 @@ const PickTechnicalUserWithVisitTime = ({ currentOperation, nodeCommands, setAct
                     <div>در حال پردازش درخواست...</div>
                 </Box>
             </Backdrop>
+            <div className="bg-red-100 text-center text-red-700 py-2 px-4 rounded-lg">لطفا روی بسته خود حتما شماره رهگیری و نام و خانوادگی و به همراه شماره تماس را ثبت بفرمایید</div>
             <div className="bg-gray-100 p-4 rounded-lg">
                 <h4 className="flex items-center gap-4 mb-4">
                     <div className="flex items-center gap-2">
@@ -246,4 +249,4 @@ const PickTechnicalUserWithVisitTime = ({ currentOperation, nodeCommands, setAct
     );
 };
 
-export default PickTechnicalUserWithVisitTime;
+export default ClientPickShippingWay;

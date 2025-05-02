@@ -6,12 +6,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, Box } from "@mui/material";
 import Map from "@/app/components/design/NewAddress/Map";
 import AdditionalData from "@/app/components/design/NewAddress/AdditionalData";
 
 const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
-  const steps = ["Step 1", "Step 2", "Step 3"];
+  const steps = ["اطلاعات اصلی", "مشخصات مکانی", "اطلاعات کاربر", "نقشه"];
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -26,6 +26,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   const handleReset = () => {
     setActiveStep(0);
   };
+
   return (
     <Modal
       loading={loading}
@@ -35,13 +36,14 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
         setIsEdit({ active: false, id: null, open: false });
         handleReset();
       }}
-      hasBack={true}
+      hasBack={activeStep > 0}
       handleBack={handleBack}
       backText="قبلی"
       closeText="انصراف"
       maxSize="sm"
       isOpen={editData.open}
-      handleAccept={activeStep === 3 ? formik.handleSubmit : handleNext}
+      acceptText={activeStep === steps.length - 1 ? "ثبت نهایی" : "مرحله بعد"}
+      handleAccept={activeStep === steps.length - 1 ? formik.handleSubmit : handleNext}
     >
       <form className="pt-4" onSubmit={formik.handleSubmit}>
         <div style={{ width: "100%" }}>
@@ -75,41 +77,43 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                       fullWidth
                       margin="normal"
                     />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formik.values.isNationwide}
-                          onChange={(e) =>
-                            formik.setFieldValue(
-                              "isNationwide",
-                              e.target.checked
-                            )
-                          }
-                          name="isNationwide"
-                          color="primary"
-                        />
-                      }
-                      label="سراسری"
-                    />
-
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formik.values.isOnlinePayment}
-                          onChange={formik.handleChange}
-                          name="isOnlinePayment"
-                          color="primary"
-                        />
-                      }
-                      label="پرداخت آنلاین"
-                    />
+                    <Box mt={2}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formik.values.isNationwide}
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "isNationwide",
+                                e.target.checked
+                              )
+                            }
+                            name="isNationwide"
+                            color="primary"
+                          />
+                        }
+                        label="مرکزی"
+                      />
+                    </Box>
+                    <Box mt={2}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formik.values.isOnlinePayment}
+                            onChange={formik.handleChange}
+                            name="isOnlinePayment"
+                            color="primary"
+                          />
+                        }
+                        label="پرداخت آنلاین"
+                      />
+                    </Box>
                   </div>
                 )}
 
-                {/* Step 2: آدرس */}
+                {/* Step 2: مشخصات مکانی */}
                 {activeStep === 1 && (
                   <div className="py-8">
-                    <Map isAdmin={true} data={formik} />
                     <AdditionalData isAdmin={true} data={formik} />
                   </div>
                 )}
@@ -117,57 +121,67 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                 {/* Step 3: اطلاعات کاربر */}
                 {activeStep === 2 && (
                   <div className="py-8">
-                    <Input
-                      onChange={formik.handleChange}
-                      variant="outlined"
-                      value={formik.values.user.firstname || ""}
-                      label="نام"
-                      name="user.firstname"
-                      error={
-                        formik.errors.user?.firstname &&
-                        formik.touched.user?.firstname
-                      }
-                      helperText={
-                        formik.touched.user?.firstname &&
-                        formik.errors.user?.firstname
-                      }
-                      fullWidth
-                      margin="normal"
-                    />
-                    <Input
-                      onChange={formik.handleChange}
-                      variant="outlined"
-                      value={formik.values.user.lastname || ""}
-                      label="نام خانوادگی"
-                      name="user.lastname"
-                      error={
-                        formik.errors.user?.lastname &&
-                        formik.touched.user?.lastname
-                      }
-                      helperText={
-                        formik.touched.user?.lastname &&
-                        formik.errors.user?.lastname
-                      }
-                      fullWidth
-                      margin="normal"
-                    />
-                    <Input
-                      onChange={formik.handleChange}
-                      variant="outlined"
-                      value={formik.values.user.phoneNumber || ""}
-                      label="شماره تلفن"
-                      name="user.phoneNumber"
-                      error={
-                        formik.errors.user?.phoneNumber &&
-                        formik.touched.user?.phoneNumber
-                      }
-                      helperText={
-                        formik.touched.user?.phoneNumber &&
-                        formik.errors.user?.phoneNumber
-                      }
-                      fullWidth
-                      margin="normal"
-                    />
+                    <Box mb={3}>
+                      <Input
+                        onChange={formik.handleChange}
+                        variant="outlined"
+                        value={formik.values.user.firstname || ""}
+                        label="نام"
+                        name="user.firstname"
+                        error={
+                          formik.errors.user?.firstname &&
+                          formik.touched.user?.firstname
+                        }
+                        helperText={
+                          formik.touched.user?.firstname &&
+                          formik.errors.user?.firstname
+                        }
+                        fullWidth
+                      />
+                    </Box>
+                    <Box mb={3}>
+                      <Input
+                        onChange={formik.handleChange}
+                        variant="outlined"
+                        value={formik.values.user.lastname || ""}
+                        label="نام خانوادگی"
+                        name="user.lastname"
+                        error={
+                          formik.errors.user?.lastname &&
+                          formik.touched.user?.lastname
+                        }
+                        helperText={
+                          formik.touched.user?.lastname &&
+                          formik.errors.user?.lastname
+                        }
+                        fullWidth
+                      />
+                    </Box>
+                    <Box mb={3}>
+                      <Input
+                        onChange={formik.handleChange}
+                        variant="outlined"
+                        value={formik.values.user.phoneNumber || ""}
+                        label="شماره تلفن"
+                        name="user.phoneNumber"
+                        error={
+                          formik.errors.user?.phoneNumber &&
+                          formik.touched.user?.phoneNumber
+                        }
+                        helperText={
+                          formik.touched.user?.phoneNumber &&
+                          formik.errors.user?.phoneNumber
+                        }
+                        fullWidth
+                      />
+                    </Box>
+                  </div>
+                )}
+
+                {/* Step 4: نقشه */}
+                {activeStep === 3 && (
+                  <div className="py-8" style={{ height: "400px" }}>
+                    <Map isAdmin={true} data={formik} />
                   </div>
                 )}
               </div>

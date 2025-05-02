@@ -7,9 +7,11 @@ export const metadata: Metadata = {
   title: "کارتابل",
 };
 
-const EntityTypes = async () => {
+const EntityTypes = async ({ searchParams }) => {
   const session = await getServerSession(authOptions)
-  return <EavTypesModule session={session} />;
+  console.log(searchParams)
+  const awaited = await searchParams
+  return <EavTypesModule session={session} searchParams={awaited} />;
 };
 
 export default EntityTypes;
