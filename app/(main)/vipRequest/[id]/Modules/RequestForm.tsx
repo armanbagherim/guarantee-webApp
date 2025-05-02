@@ -156,7 +156,7 @@ export default function RequestForm({ requestTypes, guaranteeId, products, sessi
           location={"v1/api/guarantee/client/requests/image"}
           type={"image"}
           isFull={true}
-          token={session}
+          token={session.token}
         />
       </div>
       <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰ در واتساپ یا ایتا ارسال نمایید.</div>

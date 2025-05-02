@@ -42,7 +42,7 @@ export function columns(
 
 			if (result.isConfirmed) {
 				const req = await fetcher({
-					url: `/v1/api/eav/admin/entityTypes/${id}`,
+					url: `/v1/api/guarantee/admin/solutions/${id}`,
 					method: "DELETE",
 				});
 				toast.success("موفق");
@@ -94,15 +94,12 @@ export function columns(
 
 					<IconButton
 						onClick={async (e) => {
-							setContractsModal({
-								organizationId: row.original.id,
-								open: true,
-							});
+							deleteEavType(row.original.id);
 						}}
 						aria-label="delete"
-						color="primary"
+						color="error"
 					>
-						<RemoveRedEyeIcon />
+						<DeleteIcon />
 					</IconButton>
 				</>
 			),
