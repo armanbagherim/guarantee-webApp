@@ -86,6 +86,8 @@ export function columns(
                 name: editData.organization.name,
                 isNationwide: editData.isNationwide,
                 isOnlinePayment: editData.isOnlinePayment,
+                code: editData.code,
+                licenseDate: editData.licenseDate,
                 address: {
                   ...formik.values.address,
                   name: editData.address.name,

@@ -57,11 +57,11 @@ const ContractDataGrid = ({
       <ContactDataHandler isOpen={isNewContractIsOpen} setIsOpen={setIsNewContractIsOpen} formik={contractData} loading={loading} />
       <Modal
         onClick={(e) => setIsNewContractIsOpen({ isOpen: true, id: contractsModal.organizationId })}
-        title="افزودن / ویراش دسته بندی"
+        title="افزودن / ویراش قرارداد"
         handleClose={() => {
           setContractsModal({ open: false });
         }}
-        maxSize="sm"
+        maxSize="lg"
         isOpen={contractsModal.open}
       >
         <LightDataGrid

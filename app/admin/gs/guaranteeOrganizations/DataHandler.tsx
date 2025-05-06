@@ -9,6 +9,7 @@ import Input from "@/app/components/admin-components/Input";
 import { Checkbox, FormControlLabel, Box } from "@mui/material";
 import Map from "@/app/components/design/NewAddress/Map";
 import AdditionalData from "@/app/components/design/NewAddress/AdditionalData";
+import DatePickerPersian from "@/app/components/utils/DatePicker";
 
 const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   const steps = ["اطلاعات اصلی", "مشخصات مکانی", "اطلاعات کاربر", "نقشه"];
@@ -74,6 +75,18 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                       name="name"
                       error={formik.errors.name && formik.touched.name}
                       helperText={formik.touched.name && formik.errors.name}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <DatePickerPersian label="تاریخ مجوز" date={formik.values.licenseDate} onChange={e => formik.setFieldValue("licenseDate", new Date(e).toISOString())} />
+                    <Input
+                      onChange={formik.handleChange}
+                      variant="outlined"
+                      value={formik.values.code || ""}
+                      label="کد"
+                      name="code"
+                      error={formik.errors.code && formik.touched.code}
+                      helperText={formik.touched.code && formik.errors.code}
                       fullWidth
                       margin="normal"
                     />

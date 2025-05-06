@@ -30,24 +30,26 @@ const ContactDataHandler = ({ isOpen, loading, formik, setIsOpen }) => {
         handleReset();
       }}
       closeText="انصراف"
-      maxSize="sm"
+      maxSize="lg"
       isOpen={isOpen.isOpen}
       handleAccept={formik.handleSubmit}
     >
       <form className="py-12`" onSubmit={formik.handleSubmit}>
-        <DatePickerPersian label="تاریخ شروع" date={formik.values.startDate} onChange={e => formik.setFieldValue("startDate", new Date(e).toISOString())} />
-        <DatePickerPersian label="تاریخ پایان" date={formik.values.endDate} onChange={e => formik.setFieldValue("endDate", new Date(e).toISOString())} />
-        <Input
-          onChange={e => formik.setFieldValue("representativeShare", +e.target.value)}
-          variant="outlined"
-          value={formik.values.representativeShare || ""}
-          label="درصد سهم"
-          name="representativeShare"
-          error={formik.errors.representativeShare && formik.touched.representativeShare}
-          helperText={formik.touched.representativeShare && formik.errors.representativeShare}
-          fullWidth
-          margin="normal"
-        />
+        <div className="min-h-96 mb-18">
+          <DatePickerPersian label="تاریخ شروع" date={formik.values.startDate} onChange={e => formik.setFieldValue("startDate", new Date(e).toISOString())} />
+          <DatePickerPersian label="تاریخ پایان" date={formik.values.endDate} onChange={e => formik.setFieldValue("endDate", new Date(e).toISOString())} />
+          <Input
+            onChange={e => formik.setFieldValue("representativeShare", +e.target.value)}
+            variant="outlined"
+            value={formik.values.representativeShare || ""}
+            label="درصد سهم"
+            name="representativeShare"
+            error={formik.errors.representativeShare && formik.touched.representativeShare}
+            helperText={formik.touched.representativeShare && formik.errors.representativeShare}
+            fullWidth
+            margin="normal"
+          />
+        </div>
       </form>
     </Modal>
   );

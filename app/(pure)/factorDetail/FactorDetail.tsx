@@ -175,7 +175,7 @@ export default function FactorDetail({ factor }) {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.qty}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.price)}</td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {formatPrice((Number(item.price) * item.qty).toString())}
+                                                    {formatPrice(Number(item.price).toString())}
                                                 </td>
                                             </tr>
                                         ))}
