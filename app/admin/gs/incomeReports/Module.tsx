@@ -171,7 +171,7 @@ export default function EavTypesModule({ session }) {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <label className="mt-4 font-bold text-sm mb-4 block" htmlFor="">
-              انتخاب سازمان
+              انتخاب نماینده
             </label>
             <Autocomplete
               options={organizations}
@@ -187,7 +187,7 @@ export default function EavTypesModule({ session }) {
                 }));
               }}
               renderInput={(params) => (
-                <TextField {...params} label="سازمان" size="small" />
+                <TextField {...params} label="نماینده" size="small" />
               )}
             />
           </Grid>
@@ -277,19 +277,19 @@ export default function EavTypesModule({ session }) {
               ءرء
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <strong>پرداخت سازمان به شرکت:</strong>{" "}
+              <strong>پرداخت نماینده به شرکت:</strong>{" "}
               {Number(totals.organizationToCompany).toLocaleString()} ءرء
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <strong>پرداخت شرکت به سازمان:</strong>{" "}
+              <strong>پرداخت شرکت به نماینده:</strong>{" "}
               {Number(totals.companyToOrganization).toLocaleString()} ءرء
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <strong>مجموع پرداخت سازمان به شرکت:</strong>{" "}
+              <strong>مجموع پرداخت نماینده به شرکت:</strong>{" "}
               {Number(totals.sumOfOrganizationToCompany).toLocaleString()} ءرء
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <strong>مجموع پرداخت شرکت به سازمان:</strong>{" "}
+              <strong>مجموع پرداخت شرکت به نماینده:</strong>{" "}
               {Number(totals.sumOfCompanyToOrganization).toLocaleString()} ءرء
             </Grid>
           </Grid>

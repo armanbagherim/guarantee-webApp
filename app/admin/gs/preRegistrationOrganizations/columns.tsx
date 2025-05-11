@@ -23,17 +23,23 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
     {
       accessorKey: "firstname",
       header: "نام",
-      Cell: ({ row }) => <span className="mr-4">{row?.original?.firstname}</span>,
+      Cell: ({ row }) => (
+        <span className="mr-4">{row?.original?.firstname}</span>
+      ),
     },
     {
       accessorKey: "lastname",
       header: "نام خانوادگی",
-      Cell: ({ row }) => <span className="mr-4">{row?.original?.lastname}</span>,
+      Cell: ({ row }) => (
+        <span className="mr-4">{row?.original?.lastname}</span>
+      ),
     },
     {
       accessorKey: "phoneNumber",
       header: "شماره تماس",
-      Cell: ({ row }) => <span className="mr-4">{row?.original?.phoneNumber}</span>,
+      Cell: ({ row }) => (
+        <span className="mr-4">{row?.original?.phoneNumber}</span>
+      ),
     },
     {
       accessorKey: "Actions",
@@ -112,11 +118,16 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
 
         return (
           <>
-            {!row.original.isConfirm && <Button onClick={() => setOpenConfirmModal(true)} color="primary">
-              تایید
-            </Button>}
+            {!row.original.isConfirm && (
+              <Button onClick={() => setOpenConfirmModal(true)} color="primary">
+                تایید
+              </Button>
+            )}
 
-            <Button onClick={() => deleteEavType(row.original.id)} color="error">
+            <Button
+              onClick={() => deleteEavType(row.original.id)}
+              color="error"
+            >
               حذف
             </Button>
             <Button onClick={() => setOpenImageModal(true)} color="info">
@@ -124,13 +135,20 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
             </Button>
 
             {/* Image Modal */}
-            <Modal open={openImageModal} onClose={() => setOpenImageModal(false)}>
+            <Modal
+              open={openImageModal}
+              onClose={() => setOpenImageModal(false)}
+            >
               <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white p-6 rounded-2xl shadow-lg max-h-[80vh] overflow-y-auto">
-                <div className="text-lg font-semibold mb-4">فایل‌های پیوست شده</div>
+                <div className="text-lg font-semibold mb-4">
+                  فایل‌های پیوست شده
+                </div>
                 {Object.entries(attachments).map(([key, fileName]) =>
                   fileName ? (
                     <div key={key} className="mb-4">
-                      <div className="text-gray-700 mb-1">{attachmentLabels[key]}</div>
+                      <div className="text-gray-700 mb-1">
+                        {attachmentLabels[key]}
+                      </div>
                       <Image
                         width={100}
                         height={100}
@@ -145,9 +163,14 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
             </Modal>
 
             {/* Confirm Modal */}
-            <Modal open={openConfirmModal} onClose={() => setOpenConfirmModal(false)}>
+            <Modal
+              open={openConfirmModal}
+              onClose={() => setOpenConfirmModal(false)}
+            >
               <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white p-6 rounded-2xl shadow-lg max-h-[80vh] overflow-y-auto space-y-4">
-                <div className="text-lg font-semibold mb-4">اطلاعات تایید نمایندگی</div>
+                <div className="text-lg font-semibold mb-4">
+                  اطلاعات تایید نمایندگی
+                </div>
 
                 <DatePickerPersian
                   label="تاریخ شروع"
@@ -161,8 +184,6 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
                   onChange={(e) => setEndDate(new Date(e).toISOString())}
                 />
 
-
-
                 <TextField
                   fullWidth
                   label="سهم نماینده"
@@ -172,16 +193,23 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
 
                 <TextField
                   fullWidth
-                  label="کد سازمان"
+                  label="کد نماینده"
                   value={organizationCode}
                   onChange={(e) => setOrganizationCode(e.target.value)}
                 />
 
                 <div className="flex justify-end gap-2">
-                  <Button onClick={() => setOpenConfirmModal(false)} variant="outlined">
+                  <Button
+                    onClick={() => setOpenConfirmModal(false)}
+                    variant="outlined"
+                  >
                     لغو
                   </Button>
-                  <Button onClick={handleSaveConfirmation} variant="contained" color="primary">
+                  <Button
+                    onClick={handleSaveConfirmation}
+                    variant="contained"
+                    color="primary"
+                  >
                     ذخیره
                   </Button>
                 </div>

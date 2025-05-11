@@ -160,13 +160,15 @@ const Uploader = ({
   return (
     <>
       {isFull ? (
-        <Button
-          fullWidth={isFull}
-          onClick={() => setOpen(true)}
-          className="bg-primary text-white px-6 py-3 rounded-lg"
-        >
-          {text}
-        </Button>
+        <div className="wrapper">
+          <Button
+            fullWidth={isFull}
+            onClick={() => setOpen(true)}
+            className="bg-primary text-white px-6 py-3 rounded-lg"
+          >
+            {text}
+          </Button>
+        </div>
       ) : (
         <Tooltip className="IranSans" arrow placement="top" title="آپلود تصویر">
           <IconButton>

@@ -48,7 +48,7 @@ export default function RequestForm({ requestTypes, session }) {
   const [modalData, setModalData] = useState([]);
   const [modalLoading, setModalLoading] = useState(false);
   const [endpoint, setEndpoint] = useState("");
-  const [photos, setPhotos] = useState([])
+  const [photos, setPhotos] = useState([]);
   // Store selected items' titles
   const [selectedProductTypeTitle, setSelectedProductTypeTitle] = useState("");
   const [selectedBrandTitle, setSelectedBrandTitle] = useState("");
@@ -75,6 +75,10 @@ export default function RequestForm({ requestTypes, session }) {
       toast.error("لطفا توضیحات را وارد کنید.");
       return false;
     }
+    if (photos.length === 0) {
+      toast.error("لطفا حداقل یک تصویر محصول آپلود کنید.");
+      return false;
+    }
     return true;
   };
 
@@ -94,7 +98,7 @@ export default function RequestForm({ requestTypes, session }) {
           productTypeId: +productType,
           brandId: +selectedBrand,
           variantId: +selectedVariant,
-          attachments: photos.map((photo) => ({ attachmentId: photo.id }))
+          attachments: photos.map((photo) => ({ attachmentId: photo.id })),
         },
       });
       toast.success("درخواست با موفقیت ثبت شد.");
@@ -276,9 +280,14 @@ export default function RequestForm({ requestTypes, session }) {
           token={session.token}
         />
       </div>
-      <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰ در واتساپ یا ایتا ارسال نمایید.</div>
+      <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">
+        درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰
+        در واتساپ یا ایتا ارسال نمایید.
+      </div>
       <div className="relative">
-        <label className="absolute right-5 top-5 text-[#535353]">ایراد / اشکال به اظهار مشتری</label>
+        <label className="absolute right-5 top-5 text-[#535353]">
+          ایراد / اشکال به اظهار مشتری
+        </label>
         <textarea
           className="w-full border border-[#eee] rounded-[20px] p-2 pt-14 pr-5 outline-none"
           placeholder="برای مثال مایکروویو من چراغ هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمیوفته"
@@ -320,8 +329,8 @@ export default function RequestForm({ requestTypes, session }) {
             {currentSelectType === "productType"
               ? "نوع محصول"
               : currentSelectType === "brand"
-                ? "برند"
-                : "مدل دستگاه"}
+              ? "برند"
+              : "مدل دستگاه"}
           </span>
           <IconButton
             onClick={() => setModalOpen(false)}
