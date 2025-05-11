@@ -86,6 +86,7 @@ export function columns(
                 firstname: editData.user.firstname,
                 lastname: editData.user.lastname,
                 phoneNumber: editData.user.phoneNumber,
+                nationalCode: editData.user.nationalCode,
               });
             }}
             aria-label="delete"

@@ -51,7 +51,7 @@ export default function EavTypesModule() {
       firstname: null,
       lastname: null,
       phoneNumber: null,
-
+      nationalCode: null,
     },
     // validationSchema: formSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -88,8 +88,6 @@ export default function EavTypesModule() {
         formik={eavData}
         setIsEdit={setIsEditEav}
       />
-
-
 
       <LightDataGrid
         triggered={triggered}

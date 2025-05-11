@@ -77,15 +77,13 @@ export function columns(
           <IconButton
             onClick={async (e) => {
               const editData = await getData(row.original.id);
-              console.log(editData);
-
               setIsEditEav({ active: true, id: row.original.id, open: true });
-
               formik.setValues({
                 ...formik.values,
                 firstname: editData.user.firstname,
                 lastname: editData.user.lastname,
                 phoneNumber: editData.user.phoneNumber,
+                nationalCode: editData.user.nationalCode,
               });
             }}
             aria-label="delete"

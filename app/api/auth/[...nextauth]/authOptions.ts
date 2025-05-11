@@ -25,15 +25,23 @@ export const authOptions = {
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                  phoneNumber,
-                }),
+                body: JSON.stringify({ phoneNumber }),
               }
             );
           } catch (error) {
             throw Error(error);
           }
         } else if (verifyCode) {
+          const payload = Object.fromEntries(
+            Object.entries({
+              code: verifyCode,
+              firstname: firstName,
+              lastname: lastName,
+              nationalCode,
+              phoneNumber,
+            }).filter(([_, value]) => value !== null && value !== "")
+          );
+
           res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/client/login/verifyCode`,
             {
@@ -41,21 +49,18 @@ export const authOptions = {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({
-                code: verifyCode,
-                firstname: firstName || "",
-                lastname: lastName || "",
-                // nationalCode: nationalCode || "",
-                phoneNumber,
-              }),
+              body: JSON.stringify(payload),
             }
           );
+
           if (res.status === 400) {
-            console.log(res);
+            const errors = await res.json();
+            console.log(nationalCode);
+            console.log('herererere', errors);
             throw new Error("! کد تایید معتبر نیست");
           }
         }
-        //
+
         const user = await res.json();
         if (res.ok && user) {
           return user;
@@ -79,8 +84,7 @@ export const authOptions = {
       }
       return { ...token, ...user };
     },
-
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       session = token;
       return session;
     },

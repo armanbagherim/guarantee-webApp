@@ -62,6 +62,17 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
             fullWidth
             margin="normal"
           />
+          <Input
+            onChange={formik.handleChange}
+            variant="outlined"
+            value={formik.values.nationalCode || ""}
+            label="کد ملی"
+            name="nationalCode"
+            error={formik.errors.nationalCode && formik.touched.nationalCode}
+            helperText={formik.touched.nationalCode && formik.errors.nationalCode}
+            fullWidth
+            margin="normal"
+          />
         </div>
       </form>
     </Modal>
