@@ -7,11 +7,12 @@ import LightDataGrid from "@/app/components/admin-components/LightDataGrid/Light
 import { columns } from "./columns";
 import FormGen from "./FormsGen";
 import DetailPanel from "./DetailPanel";
-import { TextField, Button, Grid, Paper, Autocomplete } from "@mui/material";
+import { TextField, Button, Grid, Paper, Autocomplete, Dialog } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ClearIcon from "@mui/icons-material/Clear";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 import { fetcher } from "@/app/components/admin-components/fetcher";
+import PickOrganizationModal from "./Organization";
 
 export default function EavTypesModule({ session }) {
   const [title, setTitle] = useAtom(pageTitle);
@@ -83,20 +84,8 @@ export default function EavTypesModule({ session }) {
       }
     };
 
-    const fetchOrganizations = async () => {
-      try {
-        const res = await fetcher({
-          method: "GET",
-          url: `/v1/api/guarantee/admin/guaranteeOrganizations`,
-        });
-        setOrganizations(res.result || []);
-      } catch (error) {
-        console.error("Error fetching initial organizations:", error);
-      }
-    };
 
     fetchRequestTypes();
-    fetchOrganizations();
   }, []);
 
   const handleFilterChange = (e) => {
@@ -130,6 +119,10 @@ export default function EavTypesModule({ session }) {
       setTotals(null);
     }
   };
+  const [organOpen, setOrganOpen] = useState({
+    isOpen: false,
+    value: null,
+  });
 
   const applyFilters = () => {
     setTriggered(!triggered);
@@ -148,6 +141,10 @@ export default function EavTypesModule({ session }) {
       endDate: getInitialEndDate(),
       organizationId: "",
     });
+    setOrganOpen({
+      isOpen: false,
+      value: null
+    })
     setSelectedOrg(null);
     setTriggered(!triggered);
     fetchTotals();
@@ -186,26 +183,22 @@ export default function EavTypesModule({ session }) {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <label className="mt-4 font-bold text-sm mb-4 block" htmlFor="">
-              انتخاب نماینده
-            </label>
-            <Autocomplete
-              options={organizations}
-              getOptionLabel={(option) =>
-                `${option.user.firstname} ${option.user.lastname}` || ""
+            <h4 className="mb-4 font-bold">انتخاب نماینده</h4>
+            <button className="bg-gray-100 p-4 font-bold text-md w-full rounded-xl text-right" onClick={e => setOrganOpen({
+              ...organOpen,
+              isOpen: true,
+            })}>{organOpen.value ?? "نماینده"}</button>
+            <Dialog open={organOpen.isOpen} onClose={() => setOrganOpen(
+              {
+                ...organOpen,
+                isOpen: false,
               }
-              value={selectedOrg}
-              onChange={(event, newValue) => {
-                setSelectedOrg(newValue);
-                setFilters((prev) => ({
-                  ...prev,
-                  organizationId: newValue?.id || "",
-                }));
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="نماینده" size="small" />
-              )}
-            />
+            )} fullWidth maxWidth="sm">
+              <div className="p-4">
+                <h2 className="text-lg font-bold mb-4">انتخاب سازمان</h2>
+                <PickOrganizationModal setOrganId={setFilters} url={`/v1/api/guarantee/admin/guaranteeOrganizations`} setOrganOpen={setOrganOpen} />
+              </div>
+            </Dialog>
           </Grid>
           <Grid
             item
