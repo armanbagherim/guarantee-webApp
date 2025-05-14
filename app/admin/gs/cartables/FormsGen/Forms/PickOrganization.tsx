@@ -1,56 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, Autocomplete } from "@mui/material";
+import { Button, TextField, Autocomplete, Dialog } from "@mui/material";
 import { toast } from "react-toastify";
 import { fetcher } from "@/app/components/admin-components/fetcher";
+import PickOrganizationModal from "./PickModals/Organization";
+import { validateYupSchema } from "formik";
 
 const PickOrganization = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
     const [organs, setOrgans] = useState([]); // State for organizations
     const [organId, setOrganId] = useState(null); // State for selected organization ID
     const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [description, setDescription] = useState("");
-
-    // Fetch initial organizations on component mount
-    useEffect(() => {
-        const fetchInitialOrganizations = async () => {
-            try {
-                const res = await fetcher({
-                    method: "GET",
-                    url: `/v1/api/guarantee/cartable/organizations/request/${currentOperation.requestId}`,
-                });
-                setOrgans(res.result); // Update organizations state with initial data
-            } catch (error) {
-                console.error("Error fetching initial organizations:", error);
-            }
-        };
-
-        fetchInitialOrganizations();
-    }, [currentOperation.requestId]);
-
-    // Fetch organizations based on search query
-    const fetchOrganizations = async (query) => {
-        try {
-            const res = await fetcher({
-                method: "GET",
-                url: `/v1/api/guarantee/cartable/organizations/request/${currentOperation.requestId}?search=${query}`,
-            });
-            setOrgans(res.result); // Update organizations state
-        } catch (error) {
-            console.error("Error fetching organizations:", error);
-        }
-    };
-
-    // Handle search input change
-    const handleSearchChange = (event, value) => {
-        setSearchQuery(value); // Update search query state
-        if (value) {
-            fetchOrganizations(value); // Fetch organizations only if there's a search query
-        }
-    };
-
-    // Handle organization selection
-    const handleOrganSelect = (event, value) => {
-        setOrganId(value?.id || null); // Update selected organization ID
-    };
+    const [organOpen, setOrganOpen] = useState({
+        isOpen: false,
+        value: null,
+    }); // State for organization selection open/close
 
     // Handle button click (submit form)
     const handleButtonClick = async (command) => {
@@ -87,25 +50,25 @@ const PickOrganization = ({ currentOperation, nodeCommands, setAction, setTrigge
             console.error("Error:", error);
         }
     };
-
     return (
         <div className="flex flex-col justify-between">
             <div className="block mt-8">
                 {/* Autocomplete for organizations */}
-                <Autocomplete
-                    options={organs}
-                    getOptionLabel={(option) => option.name} // Display organization name
-                    onInputChange={handleSearchChange} // Handle search input change
-                    onChange={handleOrganSelect} // Handle organization selection
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="انتخاب نماینده"
-                            variant="outlined"
-                            fullWidth
-                        />
-                    )}
-                />
+                <button className="bg-gray-100 p-4 font-bold text-md w-full rounded-xl text-right" onClick={e => setOrganOpen({
+                    ...organOpen,
+                    isOpen: true,
+                })}>{organOpen.value ?? "انتخاب نماینده"}</button>
+                <Dialog open={organOpen.isOpen} onClose={() => setOrganOpen(
+                    {
+                        ...organOpen,
+                        isOpen: false,
+                    }
+                )} fullWidth maxWidth="sm">
+                    <div className="p-4">
+                        <h2 className="text-lg font-bold mb-4">انتخاب سازمان</h2>
+                        <PickOrganizationModal setOrganId={setOrganId} url={`/v1/api/guarantee/cartable/organizations/request/${currentOperation.requestId}`} setOrganOpen={setOrganOpen} />
+                    </div>
+                </Dialog>
 
                 {/* Description textarea */}
                 <textarea

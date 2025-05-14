@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, Autocomplete } from "@mui/material";
+import { Button, TextField, Autocomplete, Dialog } from "@mui/material";
 import { toast } from "react-toastify";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
@@ -9,6 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import 'dayjs/locale/fa';
 import dayjs from "dayjs";
+import PickTechUserModal from "./PickModals/TechUser";
 
 const PickTechnicalUser = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
     const [technicalUser, setTechnicalUser] = useState([]);
@@ -17,48 +18,11 @@ const PickTechnicalUser = ({ currentOperation, nodeCommands, setAction, setTrigg
     const [description, setDescription] = useState("");
     const [startDate, setStartDate] = useState(null);
     const [time, setTime] = useState(null);
+    const [organOpen, setOrganOpen] = useState({
+        isOpen: false,
+        value: null,
+    });
     // Fetch initial organizations on component mount
-    useEffect(() => {
-        const fetchInitialOrganizations = async () => {
-            try {
-                const res = await fetcher({
-                    method: "GET",
-                    url: `/v1/api/guarantee/cartable/technicalUsers/request/${currentOperation.requestId}`,
-                });
-                setTechnicalUser(res.result); // Update organizations state with initial data
-            } catch (error) {
-                console.error("Error fetching initial organizations:", error);
-            }
-        };
-
-        fetchInitialOrganizations();
-    }, [currentOperation.requestId]);
-
-    // Fetch organizations based on search query
-    const fetchTechnicalUser = async (query) => {
-        try {
-            const res = await fetcher({
-                method: "GET",
-                url: `/v1/api/guarantee/cartable/technicalUsers/request/${currentOperation.requestId}?search=${query}`,
-            });
-            setTechnicalUser(res.result); // Update organizations state
-        } catch (error) {
-            console.error("Error fetching organizations:", error);
-        }
-    };
-
-    // Handle search input change
-    const handleSearchChange = (event, value) => {
-        setSearchQuery(value); // Update search query state
-        if (value) {
-            fetchTechnicalUser(value); // Fetch organizations only if there's a search query
-        }
-    };
-
-    // Handle organization selection
-    const handleOrganSelect = (event, value) => {
-        setTechnicalId(value?.id || null); // Update selected organization ID
-    };
 
     // Handle button click (submit form)
     const handleButtonClick = async (command) => {
@@ -99,21 +63,23 @@ const PickTechnicalUser = ({ currentOperation, nodeCommands, setAction, setTrigg
     return (
         <div className="flex flex-col justify-between">
             <div className="block mt-8">
-                {/* Autocomplete for organizations */}
-                <Autocomplete
-                    options={technicalUser}
-                    getOptionLabel={(option) => option.fullName} // Display organization name
-                    onInputChange={handleSearchChange} // Handle search input change
-                    onChange={handleOrganSelect} // Handle organization selection
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="تکنسین"
-                            variant="outlined"
-                            fullWidth
-                        />
-                    )}
-                />
+
+                <button className="bg-gray-100 p-4 font-bold text-md w-full rounded-xl text-right" onClick={e => setOrganOpen({
+                    ...organOpen,
+                    isOpen: true,
+                })}>{organOpen.value ?? "انتخاب تکنسین"}</button>
+
+                <Dialog open={organOpen.isOpen} onClose={() => setOrganOpen(
+                    {
+                        ...organOpen,
+                        isOpen: false,
+                    }
+                )} fullWidth maxWidth="sm">
+                    <div className="p-4">
+                        <h2 className="text-lg font-bold mb-4">انتخاب تکنسین</h2>
+                        <PickTechUserModal setOrganId={setTechnicalId} url={`/v1/api/guarantee/cartable/technicalUsers/request/${currentOperation.requestId}`} setOrganOpen={setOrganOpen} />
+                    </div>
+                </Dialog>
 
                 <textarea
                     rows={12}
