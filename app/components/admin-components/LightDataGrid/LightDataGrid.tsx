@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -21,16 +21,17 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [pagination, setPagination] = useState({
-    pageIndex: -1,
+    pageIndex: 0,
     pageSize: 10,
   });
   const initialized = useRef(false);
+  const isFetching = useRef(false); // Prevent concurrent fetches
 
-  const buildQueryParams = () => {
+  const buildQueryParams = useCallback(() => {
     const params = new URLSearchParams();
 
     // Pagination
-    params.set("offset", pagination.pageIndex + 1);
+    params.set("offset", `${pagination.pageIndex * pagination.pageSize}`);
     params.set("limit", pagination.pageSize);
 
     // Sorting
@@ -53,10 +54,13 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
     });
 
     return params.toString();
-  };
+  }, [columnFilters, globalFilter, pagination, sorting]);
 
-  const fetchData = async () => {
-    if (!initialized.current && session) {
+  const fetchData = useCallback(async () => {
+    if (isFetching.current || !session?.token) return; // Skip if already fetching or no token
+    isFetching.current = true;
+
+    if (!initialized.current) {
       setIsLoading(true);
       initialized.current = true;
     } else {
@@ -66,29 +70,21 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
     try {
       const queryParams = buildQueryParams();
       let apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${url}`;
-
-      // بررسی وجود پارامترهای موجود در URL
       const urlHasQuery = url.includes("?");
       const existingParams = urlHasQuery ? url.split("?")[1] : "";
 
       if (queryParams) {
-        if (urlHasQuery) {
-          // اگر URL اصلی پارامتر دارد و پارامترهای جدید هم داریم
-          if (existingParams) {
-            apiUrl += `&${queryParams}`;
-          } else {
-            // اگر URL اصلی فقط ? دارد بدون پارامتر
-            apiUrl += queryParams;
-          }
-        } else {
-          apiUrl += `?${queryParams}`;
-        }
+        apiUrl += urlHasQuery
+          ? existingParams
+            ? `&${queryParams}`
+            : queryParams
+          : `?${queryParams}`;
       }
 
       const response = await fetch(apiUrl, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.token}`,
+          Authorization: `Bearer ${session.token}`,
         },
       });
 
@@ -105,20 +101,13 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
     } finally {
       setIsLoading(false);
       setIsRefetching(false);
+      isFetching.current = false;
     }
-  };
+  }, [session?.token, url, buildQueryParams]);
 
   useEffect(() => {
     fetchData();
-  }, [
-    columnFilters,
-    globalFilter,
-    pagination.pageIndex,
-    pagination.pageSize,
-    sorting,
-    triggered,
-    session,
-  ]);
+  }, [fetchData, triggered]);
 
   const table = useMaterialReactTable({
     columns,
@@ -130,9 +119,9 @@ const LightDataGrid = ({ url, columns, triggered, detailPanel }) => {
     },
     columnFilterDisplayMode: "popover",
     enableSorting: false,
-    manualFiltering: true, // Server-side filtering
-    manualPagination: true, // Server-side pagination
-    manualSorting: true, // Server-side sorting
+    manualFiltering: true,
+    manualPagination: true,
+    manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,

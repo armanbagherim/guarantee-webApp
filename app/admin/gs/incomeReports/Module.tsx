@@ -29,6 +29,19 @@ export default function EavTypesModule({ session }) {
     isOpen: false,
   });
 
+  // Initialize dates with specific times
+  const getInitialBeginDate = () => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date.toISOString();
+  };
+
+  const getInitialEndDate = () => {
+    const date = new Date();
+    date.setHours(23, 59, 59, 999);
+    return date.toISOString();
+  };
+
   const [filters, setFilters] = useState({
     requestId: "",
     nationalCode: "",
@@ -36,16 +49,15 @@ export default function EavTypesModule({ session }) {
     firstname: "",
     lastname: "",
     requestTypeId: "",
-    beginDate: new Date().toISOString(),
-    endDate: new Date().toISOString(),
+    beginDate: getInitialBeginDate(),
+    endDate: getInitialEndDate(),
     organizationId: "",
   });
 
   const [requestTypes, setRequestTypes] = useState([]);
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrg, setSelectedOrg] = useState(null);
-
-  const [totals, setTotals] = useState(null); // مجموع جدید
+  const [totals, setTotals] = useState(null);
 
   useEffect(() => {
     setTitle({
@@ -132,8 +144,8 @@ export default function EavTypesModule({ session }) {
       firstname: "",
       lastname: "",
       requestTypeId: "",
-      beginDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
+      beginDate: getInitialBeginDate(),
+      endDate: getInitialEndDate(),
       organizationId: "",
     });
     setSelectedOrg(null);
@@ -149,24 +161,28 @@ export default function EavTypesModule({ session }) {
             <DatePickerPersian
               label="از تاریخ"
               date={filters.beginDate}
-              onChange={(e) =>
+              onChange={(e) => {
+                const date = new Date(e);
+                date.setHours(0, 0, 0, 0);
                 setFilters((prev) => ({
                   ...prev,
-                  beginDate: new Date(e).toISOString(),
-                }))
-              }
+                  beginDate: date.toISOString(),
+                }));
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
               label="تا تاریخ"
               date={filters.endDate}
-              onChange={(e) =>
+              onChange={(e) => {
+                const date = new Date(e);
+                date.setHours(23, 59, 59, 999);
                 setFilters((prev) => ({
                   ...prev,
-                  endDate: new Date(e).toISOString(),
-                }))
-              }
+                  endDate: date.toISOString(),
+                }));
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -224,76 +240,84 @@ export default function EavTypesModule({ session }) {
 
       {/* Totals Summary */}
       {totals && (
-        <Paper elevation={3} sx={{ p: 3, mb: 4, backgroundColor: "#f9fafb" }}>
-          <h3 style={{ marginBottom: "1rem", color: "#374151" }}>
-            خلاصه مبالغ
-          </h3>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>سهم نماینده (%):</strong>{" "}
-              {totals.representativeSharePercent}
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>اجرت داخل گارانتی:</strong>{" "}
-              <span style={{ color: "#059669", fontWeight: "bold" }}>
-                {Number(totals.sumOfSolutionIncludeWarranty).toLocaleString()}{" "}
-                ءرء
-              </span>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>اجرت خارج از گارانتی:</strong>{" "}
-              <span style={{ color: "#f59e0b", fontWeight: "bold" }}>
+        <div className="bg-gray-50 p-6 mb-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">خلاصه مبالغ</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                جمع مبلغ خدمات شامل گارانتی:
+              </div>
+              <div className="text-base font-bold text-emerald-600">
+                {Number(totals.sumOfSolutionIncludeWarranty).toLocaleString()} ءرء
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                جمع مبلغ خدمات خارج گارانتی:
+              </div>
+              <div className="text-base font-bold text-amber-600">
                 {Number(totals.sumOfSolutionOutOfWarranty).toLocaleString()} ءرء
-              </span>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>قطعه داخل گارانتی:</strong>{" "}
-              <span style={{ color: "#10b981", fontWeight: "bold" }}>
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                جمع مبلغ قطعات دارای شرایط گارانتی:
+              </div>
+              <div className="text-base font-bold text-emerald-500">
                 {Number(totals.sumOfPartIncludeWarranty).toLocaleString()} ءرء
-              </span>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>قطعه خارج از گارانتی:</strong>{" "}
-              <span style={{ color: "#f97316", fontWeight: "bold" }}>
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                جمع مبلغ قطعات خارج شرایط گارانتی:
+              </div>
+              <div className="text-base font-bold text-orange-500">
                 {Number(totals.sumOfPartOutOfWarranty).toLocaleString()} ءرء
-              </span>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>حداقل پرداخت مشتری:</strong>{" "}
-              {Number(
-                totals.atLeastPayFromCustomerForOutOfWarranty
-              ).toLocaleString()}{" "}
-              ءرء
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>پرداخت نقدی گرفته‌شده:</strong>{" "}
-              {Number(totals.givenCashPayment).toLocaleString()} ءرء
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>پرداخت اضافه VIP:</strong>{" "}
-              {Number(
-                totals.extraCashPaymentForUnavailableVip
-              ).toLocaleString()}{" "}
-              ءرء
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>پرداخت نماینده به شرکت:</strong>{" "}
-              {Number(totals.organizationToCompany).toLocaleString()} ءرء
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>پرداخت شرکت به نماینده:</strong>{" "}
-              {Number(totals.companyToOrganization).toLocaleString()} ءرء
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>مجموع پرداخت نماینده به شرکت:</strong>{" "}
-              {Number(totals.sumOfOrganizationToCompany).toLocaleString()} ءرء
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <strong>مجموع پرداخت شرکت به نماینده:</strong>{" "}
-              {Number(totals.sumOfCompanyToOrganization).toLocaleString()} ءرء
-            </Grid>
-          </Grid>
-        </Paper>
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                حداقل مبلغ دریافت از مشتری برای موارد خارج شرایط گارانتی:
+              </div>
+              <div className="text-base font-bold text-gray-600">
+                {Number(totals.atLeastPayFromCustomerForOutOfWarranty).toLocaleString()}{" "}
+                ءرء
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                پرداخت نقدی دریافت شده از مشتری:
+              </div>
+              <div className="text-base font-bold text-gray-600">
+                {Number(totals.givenCashPayment).toLocaleString()} ءرء
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                پرداخت نقدی مشتری در صورت نداشتن اعتبار VIP:
+              </div>
+              <div className="text-base font-bold text-gray-600">
+                {Number(totals.extraCashPaymentForUnavailableVip).toLocaleString()} ءرء
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                پرداخت نماینده به شرکت:
+              </div>
+              <div className="text-base font-bold text-gray-600">
+                {Number(totals.sumOfOrganizationToCompany).toLocaleString()} ءرء
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                مجموع پرداخت شرکت به نماینده:
+              </div>
+              <div className="text-base font-bold text-gray-600">
+                {Number(totals.sumOfCompanyToOrganization).toLocaleString()} ءرء
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Data Grid */}

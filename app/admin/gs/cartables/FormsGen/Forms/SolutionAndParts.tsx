@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Select, MenuItem } from "@mui/material";
 import { toast } from "react-toastify";
@@ -7,13 +8,13 @@ import LightDataGrid from "@/app/components/admin-components/LightDataGrid/Light
 import { columns } from "./columns";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
+import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 
 const SolutionAndParts = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
     const [selectedSolutions, setSelectedSolutions] = useState([]);
     const [currentSolution, setCurrentSolution] = useState({
         solutionName: null,
         serviceTypeId: null,
-        solutionId: null,
         serviceTypeName: null,
         fee: null
     });
@@ -82,9 +83,13 @@ const SolutionAndParts = ({ currentOperation, nodeCommands, setAction, setTrigge
 
     const handlePartChange = (e) => {
         const { name, value } = e.target;
+        // Normalize numeric fields (price and qty) using ConvertToNull
+        const normalizedValue = (name === 'price' || name === 'qty')
+            ? ConvertToNull({ value }).value || ''
+            : value;
         setCurrentPart(prev => ({
             ...prev,
-            [name]: value
+            [name]: normalizedValue
         }));
     };
 

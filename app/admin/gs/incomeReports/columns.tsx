@@ -21,7 +21,7 @@ export function columns() {
     },
     {
       accessorKey: "sumOfSolutionIncludeWarranty",
-      header: "خدمات در گارانتی",
+      header: "جمع خدمات شامل گارانتی",
       Cell: ({ row }) => (
         <Chip
           label={`${Number(
@@ -34,7 +34,7 @@ export function columns() {
     },
     {
       accessorKey: "sumOfSolutionOutOfWarranty",
-      header: "خدمات خارج از گارانتی",
+      header: "جمع خدمات خارج از گارانتی",
       Cell: ({ row }) => (
         <Chip
           label={`${Number(
@@ -47,7 +47,7 @@ export function columns() {
     },
     {
       accessorKey: "sumOfPartIncludeWarranty",
-      header: "قطعات در گارانتی",
+      header: "جمع قطعات شامل گارانتی",
       Cell: ({ row }) => (
         <Chip
           label={`${Number(
@@ -60,11 +60,24 @@ export function columns() {
     },
     {
       accessorKey: "sumOfPartOutOfWarranty",
-      header: "قطعات خارج از گارانتی",
+      header: "جمع قطعات خارج از گارانتی",
       Cell: ({ row }) => (
         <Chip
           label={`${Number(
             row.original?.sumOfPartOutOfWarranty || 0
+          ).toLocaleString("fa-IR")} ءرء`}
+          color="secondary"
+          size="small"
+        />
+      ),
+    },
+    {
+      accessorKey: "representiveSharePerson",
+      header: "درصد نماینده از خدمات",
+      Cell: ({ row }) => (
+        <Chip
+          label={`${Number(
+            row.original?.representiveSharePerson || 0
           ).toLocaleString("fa-IR")} ءرء`}
           color="secondary"
           size="small"
@@ -86,8 +99,35 @@ export function columns() {
       ),
     },
 
+
     {
-      accessorKey: "companyToOrganization",
+      accessorKey: "atleastPayFromCustomerForOutOfWarranty",
+      header: "حداقل پرداخت از مشتری برای خدمات خارج از گارانتی",
+      Cell: ({ row }) => (
+        <Chip
+          label={`${Number(
+            row.original?.atleastPayFromCustomerForOutOfWarranty || 0
+          ).toLocaleString("fa-IR")} ءرء`}
+          color="info"
+          size="small"
+        />
+      ),
+    },
+    {
+      accessorKey: "extraCachPaymentForUnavailableVip",
+      header: "مبلغ نقدی دریافتی بابت خدمات خارج از اعتبار VIP",
+      Cell: ({ row }) => (
+        <Chip
+          label={`${Number(
+            row.original?.atleastPayFromCustomerForOutOfWarranty || 0
+          ).toLocaleString("fa-IR")} ءرء`}
+          color="info"
+          size="small"
+        />
+      ),
+    },
+    {
+      accessorKey: "someOfCompanyToOrganization",
       header: "از شرکت به نمایندگی",
       Cell: ({ row }) => (
         <Chip
@@ -100,7 +140,7 @@ export function columns() {
       ),
     },
     {
-      accessorKey: "organizationToCompany",
+      accessorKey: "someOfOrganizationToCompany",
       header: "از نمایندگی به شرکت",
       Cell: ({ row }) => (
         <Chip
@@ -126,19 +166,7 @@ export function columns() {
         );
       },
     },
-    {
-      accessorKey: "technicalUserVisit",
-      header: "تاریخ و ساعت حضور",
-      Cell: ({ row }) => {
-        const date = row.original?.guaranteeRequest?.technicalUserVisitDate;
-        const time = row.original?.guaranteeRequest?.technicalUserVisitTime;
-        const visit =
-          date && time
-            ? `${new Date(date).toLocaleDateString("fa-IR")} - ${time}`
-            : "-";
-        return <Chip label={visit} color="default" size="small" />;
-      },
-    },
+
     {
       accessorKey: "Actions",
       header: "عملیات",

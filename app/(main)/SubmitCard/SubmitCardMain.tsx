@@ -8,16 +8,24 @@ import Cart from "../../components/design/Cart";
 import Success from "./Modules/Success";
 import { fetcher } from "../../components/admin-components/fetcher";
 import VipCard from "@/app/components/design/Cart/Vip";
+import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 
 const steps = ["cardType", "serialNumber", "accept", "success"];
 
 export default function SubmitCardMain({ packages, paymentGateways }) {
-  const [state, setState] = useState<string>("cardType");
+  const [state, setState] = useState("cardType");
   const [cardTypeState, setCardTypeState] = useState("normal");
   const [loading, setLoading] = useState(true);
   const [cardNumber, setCardNumber] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
   const [guarantee, setGuarantee] = useState(null);
+
+  const handleCardNumberChange = (value) => {
+    // Convert Persian/Arabic numbers to English
+    const normalized = ConvertToNull({ value }).value || "";
+    setCardNumber(normalized);
+  };
+
   const handleNextStep = async () => {
     if (!(await validateStep(state))) {
       return;
@@ -38,7 +46,7 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
     }
   };
 
-  const validateStep = async (step: string) => {
+  const validateStep = async (step) => {
     let result = true;
     setSubmitLoading(true);
     if (step === "serialNumber" && !cardNumber) {
@@ -47,20 +55,24 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
     } else if (step === "serialNumber" && cardNumber) {
       try {
         const result = await fetcher({
-          url: cardTypeState === "normal" ? `/v1/api/guarantee/client/normalGuarantee/availability/${cardNumber}` : `/v1/api/guarantee/client/vipGuarantees/availability/${cardNumber}`,
+          url:
+            cardTypeState === "normal"
+              ? `/v1/api/guarantee/client/normalGuarantee/availability/${cardNumber}`
+              : `/v1/api/guarantee/client/vipGuarantees/availability/${cardNumber}`,
           method: "GET",
         });
         setGuarantee(result.result);
       } catch (err) {
         toast.error(err.message);
-
         result = false;
       }
     } else if (step === "accept" && guarantee !== null) {
       try {
-        console.log(cardTypeState)
         const result = await fetcher({
-          url: cardTypeState === "normal" ? `/v1/api/guarantee/client/normalGuarantee` : `/v1/api/guarantee/client/vipGuarantees`,
+          url:
+            cardTypeState === "normal"
+              ? `/v1/api/guarantee/client/normalGuarantee`
+              : `/v1/api/guarantee/client/vipGuarantees`,
           method: "POST",
           body: {
             serialNumber: cardNumber,
@@ -84,18 +96,30 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
         );
       case "serialNumber":
         return (
-          <CardNumber cardNumber={guarantee} setCardNumber={setCardNumber} />
+          <CardNumber
+            cardNumber={guarantee}
+            setCardNumber={handleCardNumberChange}
+          />
         );
       case "accept":
         return (
           <div className="mb-8">
-            {
-              cardTypeState === "normal" ? <Cart data={guarantee} color="#039a0b" /> : <VipCard data={guarantee} />
-            }
+            {cardTypeState === "normal" ? (
+              <Cart data={guarantee} color="#039a0b" />
+            ) : (
+              <VipCard data={guarantee} />
+            )}
           </div>
         );
       case "success":
-        return <Success cardTypeState={cardTypeState} paymentGateways={paymentGateways} guarantee={guarantee} packages={packages} />;
+        return (
+          <Success
+            cardTypeState={cardTypeState}
+            paymentGateways={paymentGateways}
+            guarantee={guarantee}
+            packages={packages}
+          />
+        );
       default:
         return null;
     }
@@ -117,10 +141,8 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
           )}
           {submitLoading ? (
             <button
-              onClick={(e) => async () => {
-                await handleNextStep();
-              }}
               className="bg-primary p-4 text-white rounded-2xl font-bold text-sm w-full"
+              disabled
             >
               <svg
                 aria-hidden="true"
@@ -144,7 +166,7 @@ export default function SubmitCardMain({ packages, paymentGateways }) {
               onClick={handleNextStep}
               className="bg-primary p-4 text-white rounded-2xl font-bold text-sm w-full"
             >
-              {state === "success" ? "تمام" : "مرحله بعد"}
+              {state === "accept" ? "تایید و ادامه" : "مرحله بعد"}
             </button>
           )}
         </div>

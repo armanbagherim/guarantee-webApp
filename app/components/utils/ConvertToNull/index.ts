@@ -21,15 +21,15 @@ const normalizePhoneNumber = (value: string): string => {
 
 const normalizeNumbers = (value: any): any => {
   if (typeof value === 'string') {
-    // Special handling for phone numbers
-    if (value.startsWith('۰۹') || value.startsWith('09')) {
-      return normalizePhoneNumber(value);
-    }
+    // Convert Persian/Arabic numbers to English for all strings
+    const normalizedValue = normalizePhoneNumber(value);
     
     // Convert empty string to null
-    if (value.trim() === '') {
+    if (normalizedValue.trim() === '') {
       return null;
     }
+    
+    return normalizedValue;
   }
   return value;
 };
@@ -58,10 +58,10 @@ export const ConvertToNull = (
   
   const result = processNestedObject(values);
   
-  // Additional pass for keys to ignore (if needed)
+  // Restore original values for keys to ignore
   for (const key of keysToIgnore) {
     if (key in result) {
-      result[key] = values[key]; // Restore original value
+      result[key] = values[key];
     }
   }
   

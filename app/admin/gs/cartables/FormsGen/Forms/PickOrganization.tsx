@@ -13,7 +13,7 @@ const PickOrganization = ({ currentOperation, nodeCommands, setAction, setTrigge
     const [organOpen, setOrganOpen] = useState({
         isOpen: false,
         value: null,
-    }); // State for organization selection open/close
+    });
 
     // Handle button click (submit form)
     const handleButtonClick = async (command) => {

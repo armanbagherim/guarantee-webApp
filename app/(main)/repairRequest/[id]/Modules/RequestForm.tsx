@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Uploader from "@/app/components/design/Uploader";
 import React, { useEffect, useState } from "react";
+import { ConvertToNull } from "./ConvertToNull"; // Adjust the import path as needed
 
 export default function RequestForm({ requestTypes, guarantee, session }) {
   const [address, setAddress] = useState(null);
@@ -26,6 +27,12 @@ export default function RequestForm({ requestTypes, guarantee, session }) {
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState([]);
   const router = useRouter();
+
+  const handlePhoneNumberChange = (value) => {
+    // Convert Persian/Arabic numbers to English
+    const normalized = ConvertToNull({ value }).value || "";
+    setPhoneNumber(normalized);
+  };
 
   const validateForm = () => {
     if (
@@ -142,7 +149,7 @@ export default function RequestForm({ requestTypes, guarantee, session }) {
             variant="outlined"
             fullWidth
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) => handlePhoneNumberChange(e.target.value)}
           />
         </div>
       </div>
@@ -167,7 +174,7 @@ export default function RequestForm({ requestTypes, guarantee, session }) {
       </div>
 
       <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">
-        درصورت نیاز به ارسال ویدیو می‌توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰
+        درصورت نیاز به ارسال ویدیو می‌توانید ویدیو خود را به شماره 09202186780
         در واتساپ یا ایتا ارسال نمایید.
       </div>
 
@@ -177,7 +184,7 @@ export default function RequestForm({ requestTypes, guarantee, session }) {
         </label>
         <textarea
           className="w-full border border-[#eee] rounded-[20px] p-2 pt-14 pr-5 outline-none"
-          placeholder="برای مثال مایکروویو من چراغ هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمیوفته"
+          placeholder="برای مثال مایکروویو من چراغ‌هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمی‌افته"
           rows={5}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -203,7 +210,7 @@ export default function RequestForm({ requestTypes, guarantee, session }) {
                 fill="currentColor"
               />
               <path
-                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539..."
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
                 fill="currentFill"
               />
             </svg>

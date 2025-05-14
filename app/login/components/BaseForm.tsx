@@ -1,4 +1,5 @@
 "use client";
+import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 import { getSession, signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import {
@@ -15,7 +16,7 @@ export default function SignInForm({ session }) {
   const router = useRouter();
   const pathname = useSearchParams();
 
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [verifyCode, setVerifyCode] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -26,8 +27,20 @@ export default function SignInForm({ session }) {
   const [state, setState] = useState("phone");
   const [number, setNumber] = useState();
   const [rule, setRule] = useState(false);
-  const phoneNumberRegex = /^09\d{9}$/; // الگوی شماره موبایل ایران
-  const verificationCodeRegex = /^\d{4}$/; // الگوی دقیقاً 6 رقم
+  const phoneNumberRegex = /^09\d{9}$/; // Iranian mobile number pattern
+  const verificationCodeRegex = /^\d{4}$/; // Exactly 4 digits
+
+  const handlePhoneNumberChange = (value) => {
+    // Convert Persian/Arabic numbers to English
+    const normalized = ConvertToNull({ value }).value || "";
+    setPhoneNumber(normalized);
+  };
+
+  const handleNationalCodeChange = (value) => {
+    // Convert Persian/Arabic numbers to English
+    const normalized = ConvertToNull({ value }).value || "";
+    setNationalCode(normalized);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -46,19 +59,19 @@ export default function SignInForm({ session }) {
     }
     setLoading(true);
 
-    if (state == "phone") {
+    if (state === "phone") {
       const result = await signIn("credentials", {
-        phoneNumber: phoneNumber,
+        phoneNumber,
         redirect: false,
         callbackUrl: "/verify",
       }).then(async (res) => {
         const session = await getSession();
 
-        if (res.ok && session.signupStatus == true) {
+        if (res.ok && session.signupStatus === true) {
           setState("verify");
           setNumber(phoneNumber);
           setLoading(false);
-        } else if (res.ok && session.signupStatus == false) {
+        } else if (res.ok && session.signupStatus === false) {
           setState("verify");
           setNumber(phoneNumber);
           setLoading(false);
@@ -96,21 +109,16 @@ export default function SignInForm({ session }) {
         return;
       }
 
-      const redirectUrl = pathname.get("redirect_back_url")
-        ? pathname.get("redirect_back_url")
-        : "/";
+      const redirectUrl = pathname.get("redirect_back_url") || "/";
 
       const result = await signIn("credentials", {
-        verifyCode: verifyCode,
-        phoneNumber: phoneNumber,
-        firstName: firstName,
-        nationalCode: nationalCode,
+        verifyCode,
+        phoneNumber,
+        firstName,
+        nationalCode,
         lastName,
         redirect: false,
-        callbackUrl: `${pathname.get("redirect_back_url")
-          ? pathname.get("redirect_back_url")
-          : "/"
-          }`,
+        callbackUrl: redirectUrl,
       });
       if (result.status === 401) {
         toast.error(result.error);
@@ -128,7 +136,7 @@ export default function SignInForm({ session }) {
         <ToastContainer />
 
         <div className="mb-10 md:mb-0">
-          <div className="h-full md:flex lg:flex xl:flex 2xl:flex  shadow-none md:shadow-shadowCustom border-none md:border justify-center border border-[#F1F1F1] rounded-[30px]">
+          <div className="h-full md:flex lg:flex xl:flex 2xl:flex shadow-none md:shadow-shadowCustom border-none md:border justify-center border border-[#F1F1F1] rounded-[30px]">
             <div className="flex-1 flex justify-center items-center py-2 md:py-40 lg:py-40 xl:py-40 2xl:py-40 bg-white">
               <div className="text-center w-full px-4 md:px-16">
                 <h4 className="text-3xl mb-2 peyda font-bold">
@@ -136,31 +144,29 @@ export default function SignInForm({ session }) {
                 </h4>
 
                 <form onSubmit={onSubmit}>
-                  {state == "phone" && (
+                  {state === "phone" && (
                     <div className="text-right md:m-0 lg:m-0 xl:m-0 2xl:m-0">
                       <h4 className="text-xs mb-3 font-bold">شماره موبایل</h4>
                       <input
                         autoFocus
                         className="bg-[#f6f6f6] tracking-[4px] text-center rounded-2xl py-4 w-full md:w-full lg:w-full xl:full px-6 outline-none mb-4"
                         type="tel"
-                        label="Phone Number"
-                        pattern="/^(\{?(09)([1-3]){2}-([0-9]){7,7}\}?)$/"
-                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        value={phoneNumber}
+                        onChange={(e) => handlePhoneNumberChange(e.target.value)}
                       />
                     </div>
                   )}
-                  {state == "verify" && (
+                  {state === "verify" && (
                     <div className="text-right">
-
                       {signUp && (
                         <div className="flex flex-col gap-5">
                           <div className="flex gap-4">
                             <div className="w-full">
                               <h4 className="opacity-70 text-xs mb-3">نام</h4>
                               <input
-                                className="bg-[#f6f6f6]  border border-gray-300 text-right rounded-2xl py-4 px-6 w-full outline-none mb-4"
+                                className="bg-[#f6f6f6] border border-gray-300 text-right rounded-2xl py-4 px-6 w-full outline-none mb-4"
                                 type="text"
-                                label="Phone Number"
+                                value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                               />
                             </div>
@@ -171,20 +177,20 @@ export default function SignInForm({ session }) {
                               <input
                                 className="bg-[#f6f6f6] border border-gray-300 text-right rounded-2xl py-4 px-6 w-full outline-none mb-4"
                                 type="text"
-                                label="Phone Number"
+                                value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                               />
                             </div>
                           </div>
                           <div className="w-full">
-                            <h4 className="opacity-70 text-xs mb-3">
-                              کد ملی
-                            </h4>
+                            <h4 className="opacity-70 text-xs mb-3">کد ملی</h4>
                             <input
                               className="bg-[#f6f6f6] border border-gray-300 text-right rounded-2xl py-4 px-6 w-full outline-none mb-4"
                               type="text"
-                              label="Phone Number"
-                              onChange={(e) => setNationalCode(e.target.value)}
+                              value={nationalCode}
+                              onChange={(e) =>
+                                handleNationalCodeChange(e.target.value)
+                              }
                             />
                           </div>
                         </div>
@@ -253,7 +259,7 @@ export default function SignInForm({ session }) {
                             container:
                               "bg-[#f6f6f6] border border-gray-300 text-left rounded-2xl py-3 px-6 mb-4 w-full outline-none",
                             character:
-                              "border-0 bg-transparent p-0 text-lg  outline-none",
+                              "border-0 bg-transparent p-0 text-lg outline-none",
                             characterInactive: "character--inactive",
                             characterSelected: "character--selected",
                             characterFilled: "character--filled",
@@ -265,15 +271,16 @@ export default function SignInForm({ session }) {
                   <button
                     className="bg-primary justify-center w-full text-white py-4 px-6 outline-0 rounded-2xl text-center flex items-center mb-4"
                     onClick={onSubmit}
+                    disabled={loading}
                   >
-                    <span>{state == "phone" ? "دریافت کد تایید" : "ورود"}</span>
+                    <span>{state === "phone" ? "دریافت کد تایید" : "ورود"}</span>
                     <span
                       role="status"
                       className={`pr-4 ${loading !== true && "hidden"}`}
                     >
                       <svg
                         aria-hidden="true"
-                        className="w-6 h-6 text-primary animate-spin  fill-white"
+                        className="w-6 h-6 text-primary animate-spin fill-white"
                         viewBox="0 0 100 101"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -283,7 +290,7 @@ export default function SignInForm({ session }) {
                           fill="currentColor"
                         />
                         <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C385.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
                           fill="currentFill"
                         />
                       </svg>

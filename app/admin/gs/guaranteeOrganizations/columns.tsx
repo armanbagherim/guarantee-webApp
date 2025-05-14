@@ -27,7 +27,7 @@ export function columns(
     }
   };
 
-  const deleteEavType = async (id) => {
+  const deleteItem = async (id) => {
     try {
       const result = await Swal.fire({
         title: "مطمئن هستید؟",
@@ -42,7 +42,7 @@ export function columns(
 
       if (result.isConfirmed) {
         const req = await fetcher({
-          url: `/v1/api/eav/admin/entityTypes/${id}`,
+          url: `/v1/api/guarantee/admin/guaranteeOrganizations/${id}`,
           method: "DELETE",
         });
         toast.success("موفق");
@@ -128,6 +128,11 @@ export function columns(
           >
             <GavelIcon />
           </IconButton>
+
+          <IconButton onClick={(e) => deleteItem(row.id)} aria-label="delete" color="error">
+            <DeleteIcon />
+          </IconButton>
+
         </>
       ),
     },

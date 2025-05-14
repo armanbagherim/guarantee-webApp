@@ -101,7 +101,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
                 }`}
             >
               <Requests color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
-              <span>درخواست ها</span>
+              <span>پیگیری درخواست ها</span>
             </li>
           </Link>
 

@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import LightDataGridClient from "@/app/components/admin-components/LightDataGrid/LightDataGridClient";
 import { LoadingIcon } from "@/app/components/design/icons";
 import Uploader from "@/app/components/design/Uploader";
+import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 
 export default function RequestForm({ requestTypes, session }) {
   const theme = useTheme();
@@ -53,6 +54,12 @@ export default function RequestForm({ requestTypes, session }) {
   const [selectedProductTypeTitle, setSelectedProductTypeTitle] = useState("");
   const [selectedBrandTitle, setSelectedBrandTitle] = useState("");
   const [selectedVariantTitle, setSelectedVariantTitle] = useState("");
+
+  const handlePhoneNumberChange = (value) => {
+    // Convert Persian/Arabic numbers to English
+    const normalized = ConvertToNull({ value }).value || "";
+    setPhoneNumber(normalized);
+  };
 
   const validateForm = () => {
     if (
@@ -265,12 +272,13 @@ export default function RequestForm({ requestTypes, session }) {
             label="شماره موبایل"
             variant="outlined"
             fullWidth
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            value={phoneNumber}
+            onChange={(e) => handlePhoneNumberChange(e.target.value)}
           />
         </div>
       </div>
       <div className="mb-4">
-        <span className="mb-3 text-bold block">اپلود تصویر محصول</span>
+        <span className="mb-3 text-bold block">آپلود تصویر محصول</span>
         <Uploader
           photos={photos}
           setPhotos={setPhotos}
@@ -281,7 +289,7 @@ export default function RequestForm({ requestTypes, session }) {
         />
       </div>
       <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">
-        درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰
+        درصورت نیاز به ارسال ویدیو می‌توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰
         در واتساپ یا ایتا ارسال نمایید.
       </div>
       <div className="relative">
@@ -290,13 +298,13 @@ export default function RequestForm({ requestTypes, session }) {
         </label>
         <textarea
           className="w-full border border-[#eee] rounded-[20px] p-2 pt-14 pr-5 outline-none"
-          placeholder="برای مثال مایکروویو من چراغ هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمیوفته"
+          placeholder="برای مثال مایکروویو من چراغ‌هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمی‌افته"
           rows={5}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
 
         {submitLoading ? (
-          <button className="bg-primary p-4 text-white rounded-2xl font-bold text-sm w-full">
+          <button className="bg-primary p-4 text-white rounded-2xl font-bold text-sm w-full" disabled>
             <LoadingIcon />
           </button>
         ) : (
@@ -329,8 +337,8 @@ export default function RequestForm({ requestTypes, session }) {
             {currentSelectType === "productType"
               ? "نوع محصول"
               : currentSelectType === "brand"
-              ? "برند"
-              : "مدل دستگاه"}
+                ? "برند"
+                : "مدل دستگاه"}
           </span>
           <IconButton
             onClick={() => setModalOpen(false)}

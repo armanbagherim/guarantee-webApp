@@ -14,6 +14,7 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Uploader from "@/app/components/design/Uploader";
+import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 
 export default function RequestForm({
   requestTypes,
@@ -34,6 +35,12 @@ export default function RequestForm({
   const [photos, setPhotos] = useState([]);
 
   const router = useRouter();
+
+  const handlePhoneNumberChange = (value) => {
+    // Convert Persian/Arabic numbers to English
+    const normalized = ConvertToNull({ value }).value || "";
+    setPhoneNumber(normalized);
+  };
 
   const validateForm = () => {
     if (
@@ -174,13 +181,14 @@ export default function RequestForm({
               label="شماره موبایل"
               variant="outlined"
               fullWidth
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={phoneNumber}
+              onChange={(e) => handlePhoneNumberChange(e.target.value)}
             />
           </div>
         </div>
 
         <div className="mb-4">
-          <span className="mb-3 text-bold block">اپلود تصویر محصول</span>
+          <span className="mb-3 text-bold block">آپلود تصویر محصول</span>
           <Uploader
             photos={photos}
             setPhotos={setPhotos}
@@ -191,7 +199,7 @@ export default function RequestForm({
           />
         </div>
         <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">
-          درصورت نیاز به ارسال ویدیو می توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰
+          درصورت نیاز به ارسال ویدیو می‌توانید ویدیو خود را به شماره 09202186780
           در واتساپ یا ایتا ارسال نمایید.
         </div>
 
@@ -201,13 +209,14 @@ export default function RequestForm({
           </label>
           <textarea
             className="w-full border border-[#eee] rounded-[20px] p-2 pt-14 pr-5 outline-none"
-            placeholder="برای مثال مایکروویو من چراغ هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمیوفته"
+            placeholder="برای مثال مایکروویو من چراغ‌هاش روشن میشه ولی وقتی روی دکمه کلیک میکنیم اتفاقی نمی‌افته"
             rows={5}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           <button
             onClick={saveData}
             className="bg-primary mt-4 p-4 text-white rounded-2xl font-bold text-sm w-full"
+            disabled={submitLoading || redirecting}
           >
             ثبت درخواست
           </button>

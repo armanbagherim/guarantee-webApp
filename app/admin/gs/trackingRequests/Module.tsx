@@ -18,6 +18,7 @@ import {
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ClearIcon from "@mui/icons-material/Clear";
 import Attachements from "./attachements";
+import CurrentState from "./currentState";
 
 export default function EavTypesModule({ session, searchParams }) {
   const [title, setTitle] = useAtom(pageTitle);
@@ -28,6 +29,10 @@ export default function EavTypesModule({ session, searchParams }) {
     isOpen: false,
   });
   const [historyOpen, setHistoryOpen] = useState({
+    requestId: null,
+    isOpen: false,
+  });
+  const [currentOpen, setCurrentOpen] = useState({
     requestId: null,
     isOpen: false,
   });
@@ -147,6 +152,7 @@ export default function EavTypesModule({ session, searchParams }) {
       />
 
       <HistoryData historyOpen={historyOpen} setHistoryOpen={setHistoryOpen} />
+      <CurrentState historyOpen={currentOpen} setHistoryOpen={setCurrentOpen} />
       <Attachements
         historyOpen={attachementsOpen}
         setHistoryOpen={setAttachementsOpen}
@@ -260,7 +266,9 @@ export default function EavTypesModule({ session, searchParams }) {
             historyOpen,
             setHistoryOpen,
             attachementsOpen,
-            setAttachementsOpen
+            setAttachementsOpen,
+            currentOpen,
+            setCurrentOpen
           )}
           detailPanel={DetailPanel}
         />
