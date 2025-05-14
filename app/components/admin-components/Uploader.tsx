@@ -7,7 +7,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import { toast } from "react-toastify";
-import { useDropzone } from "react-dropzone";
 import { IconButton, Tooltip } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
@@ -28,56 +27,70 @@ const Uploader = ({
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isDragActive, setIsDragActive] = useState(false);
 
   const statusRef = useRef();
   const loadTotalRef = useRef();
+  const inputRef = useRef();
 
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      acceptedFiles.forEach((file) => {
-        console.log(`File: ${file.name}, Type: ${file.type}`);
-      });
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(true);
+  }, []);
 
-      const validFiles = acceptedFiles.filter((file) => {
-        const isValidImage =
-          type === "image" && /^image\/(jpeg|png|gif|webp)$/.test(file.type);
-        const isValidVideo =
-          type === "video" && /^video\/(mp4|avi|mov)$/.test(file.type);
-        return isValidImage || isValidVideo;
-      });
+  const handleDragLeave = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+  }, []);
 
-      if (validFiles.length === 0) {
-        toast.error("No valid files were uploaded.");
-        return;
-      }
+  const handleDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragActive(false);
 
-      setFiles(
-        validFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      processFiles(droppedFiles);
     },
     [type]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept:
-      type === "image"
-        ? {
-            "image/jpeg": [],
-            "image/png": [],
-            "image/gif": [],
-            "image/webp": [],
-          }
-        : {
-            "video/mp4": [],
-            "video/avi": [],
-            "video/mov": [],
-          },
-  });
+  const handleFileChange = useCallback(
+    (e) => {
+      const selectedFiles = Array.from(e.target.files);
+      processFiles(selectedFiles);
+    },
+    [type]
+  );
+
+  const processFiles = (acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      console.log(`File: ${file.name}, Type: ${file.type}`);
+    });
+
+    const validFiles = acceptedFiles.filter((file) => {
+      const isValidImage =
+        type === "image" && /^image\/(jpeg|png|gif|webp)$/.test(file.type);
+      const isValidVideo =
+        type === "video" && /^video\/(mp4|avi|mov)$/.test(file.type);
+      return isValidImage || isValidVideo;
+    });
+
+    if (validFiles.length === 0) {
+      toast.error("No valid files were uploaded.");
+      return;
+    }
+
+    setFiles(
+      validFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      )
+    );
+  };
 
   const uploadFile = (file) => {
     return new Promise((resolve, reject) => {
@@ -183,10 +196,24 @@ const Uploader = ({
         <DialogTitle>{"آپلود فایل"}</DialogTitle>
         <DialogContent>
           <div
-            {...getRootProps()}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             className="dropzone border border-dashed border-gray-200 p-4 mb-4"
+            onClick={() => inputRef.current.click()}
           >
-            <input {...getInputProps()} />
+            <input
+              type="file"
+              ref={inputRef}
+              style={{ display: "none" }}
+              accept={
+                type === "image"
+                  ? "image/jpeg,image/png,image/gif,image/webp"
+                  : "video/mp4,video/avi,video/mov"
+              }
+              multiple
+              onChange={handleFileChange}
+            />
             {isDragActive ? (
               <p>فایل‌ها را اینجا رها کنید ...</p>
             ) : (
