@@ -7,10 +7,10 @@ import Image from "next/image";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 
 const attachmentLabels = {
-  license: "جواز کسب",
-  national: "کارت ملی",
-  estate: "سند ملک",
-  postal: "کد پستی",
+  license: "تصویر پروانه کسب",
+  national: "تصویر کارت ملی",
+  estate: "تصویر نمای بیرون واحد صنفی",
+  postal: "تصویر نمای داخل واحد صنفی",
 };
 
 export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
