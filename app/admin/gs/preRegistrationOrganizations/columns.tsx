@@ -21,6 +21,10 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
       Cell: ({ row }) => <span className="mr-4">{row?.original?.title}</span>,
     },
     {
+      accessorKey: "licenseCode",
+      header: "شناسه جواز کسب",
+    },
+    {
       accessorKey: "firstname",
       header: "نام",
       Cell: ({ row }) => (
