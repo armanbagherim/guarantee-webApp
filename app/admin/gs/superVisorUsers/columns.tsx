@@ -51,9 +51,8 @@ export function columns(
       toast.error(error.message);
     }
   };
+
   return [
-
-
     {
       accessorKey: "user",
       header: "نام",
@@ -94,14 +93,13 @@ export function columns(
 
           <IconButton
             onClick={async (e) => {
-              deleteEavType(row.original.id)
+              deleteEavType(row.original.id);
             }}
             aria-label="delete"
             color="error"
           >
             <DeleteIcon />
           </IconButton>
-
         </>
       ),
     },

@@ -5,8 +5,9 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import Swal from "sweetalert2";
 import HistoryIcon from "@mui/icons-material/History";
 import AdjustIcon from "@mui/icons-material/Adjust";
-import Person2Icon from '@mui/icons-material/Person2';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import Person2Icon from "@mui/icons-material/Person2";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 export function columns(
   triggered,
   setTriggered,
@@ -30,23 +31,26 @@ export function columns(
     }
   };
 
-  const deleteEavType = async (id) => {
+  const revertRequest = async (id) => {
     try {
       const result = await Swal.fire({
         title: "مطمئن هستید؟",
-        text: "با حذف این گزینه امکان بازگشت آن وجود ندارد",
+        text: "شما در حال انتقال درخواست به ناظر می باشید.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "بله حذفش کن",
+        confirmButtonText: "بازگشت به ناظر",
         cancelButtonText: "لغو",
       });
 
       if (result.isConfirmed) {
         const req = await fetcher({
-          url: `/v1/api/eav/admin/entityTypes/${id}`,
-          method: "DELETE",
+          url: `/v1/api/guarantee/cartable/revert-request`,
+          method: "POST",
+          body: {
+            requestId: +id,
+          },
         });
         toast.success("موفق");
         setTriggered(!triggered);
@@ -55,6 +59,7 @@ export function columns(
       toast.error(error.message);
     }
   };
+
   return [
     {
       accessorKey: "requestId",
@@ -216,6 +221,17 @@ export function columns(
               }}
             >
               <Person2Icon />
+            </button>
+          </Tooltip>
+          <Tooltip placement="top" title={`بازگشت به ناظر`}>
+            <button
+              className="px-2 py-2 text-xs font-bold bg-yellow-100 hover:bg-yellow-900 hover:text-white transition-all text-yellow-600 rounded-lg"
+              onClick={async (e) => {
+                // console.log(row.original.requestId);
+                revertRequest(row.original.requestId);
+              }}
+            >
+              <RestartAltIcon />
             </button>
           </Tooltip>
         </div>
