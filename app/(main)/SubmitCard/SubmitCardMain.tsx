@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import CardType from "./Modules/CardType";
 import CardNumber from "./Modules/CardNumber";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Skeleton } from "@mui/material";
 import Cart from "../../components/design/Cart";
 import Success from "./Modules/Success";

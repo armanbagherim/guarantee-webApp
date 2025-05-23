@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Typography, div, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider } from "@mui/material";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Uploader from "@/app/components/design/Uploader";
 

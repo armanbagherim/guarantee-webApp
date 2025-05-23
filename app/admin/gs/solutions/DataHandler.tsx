@@ -6,8 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import { fetcher } from "@/app/components/admin-components/fetcher";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast, Toaster } from "react-hot-toast";
+import "react-hot-toast/dist/ReactToastify.css";
 
 const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   const [selectedProvince, setSelectedProvince] = useState("");
@@ -68,16 +68,9 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   return (
     <>
       {/* Toast Container for displaying notifications */}
-      <ToastContainer
+      <Toaster
         position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
+
       />
 
       <Modal

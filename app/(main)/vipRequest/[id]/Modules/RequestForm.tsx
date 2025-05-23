@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import { fetcher } from "@/app/components/admin-components/fetcher";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Uploader from "@/app/components/design/Uploader";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";

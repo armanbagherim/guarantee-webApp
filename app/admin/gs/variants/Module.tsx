@@ -9,7 +9,7 @@ import DataHandler from "./DataHandler";
 import { fetcher, useFetcher } from "@/app/components/admin-components/fetcher";
 import { useFormik } from "formik";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 export default function EavTypesModule() {
   const [title, setTitle] = useAtom(pageTitle);
@@ -44,9 +44,8 @@ export default function EavTypesModule() {
 
       try {
         let result = await fetcher({
-          url: `/v1/api/guarantee/admin/variants${
-            isEditEav.active ? `/${isEditEav.id}` : ""
-          }`,
+          url: `/v1/api/guarantee/admin/variants${isEditEav.active ? `/${isEditEav.id}` : ""
+            }`,
           method: isEditEav.active ? "PUT" : "POST",
           body: dataBody,
         });

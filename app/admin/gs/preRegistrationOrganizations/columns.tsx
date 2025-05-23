@@ -1,5 +1,13 @@
-import { Modal, Box, Button, TextField } from "@mui/material";
-import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Box,
+  Button,
+  TextField,
+} from "@mui/material";
+import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { fetcher } from "@/app/components/admin-components/fetcher";
@@ -44,6 +52,28 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
       Cell: ({ row }) => (
         <span className="mr-4">{row?.original?.phoneNumber}</span>
       ),
+    },
+    {
+      accessorKey: "address",
+      header: "آدرس کامل",
+      Cell: ({ row }) => {
+        const addr = row?.original?.address;
+        if (!addr) return "—";
+
+        const { province, city, neighborhood, street, alley, plaque, floorNumber, postalCode } = addr;
+
+        return (
+          <div className="text-right text-sm leading-6">
+            {province?.name}، {city?.name}، {neighborhood?.name}
+            <br />
+            {street && `خیابان ${street}`}
+            {alley && `، کوچه ${alley}`}
+            {plaque && `، پلاک ${plaque}`}
+            {floorNumber && `، طبقه ${floorNumber}`}
+            {postalCode && <div>کد پستی: {postalCode}</div>}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "Actions",
@@ -138,18 +168,18 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
               مشاهده فایل‌ها
             </Button>
 
-            {/* Image Modal */}
-            <Modal
+            {/* Image Dialog */}
+            <Dialog
               open={openImageModal}
               onClose={() => setOpenImageModal(false)}
+              maxWidth="md"
+              fullWidth
             >
-              <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white p-6 rounded-2xl shadow-lg max-h-[80vh] overflow-y-auto">
-                <div className="text-lg font-semibold mb-4">
-                  فایل‌های پیوست شده
-                </div>
+              <DialogTitle>فایل‌های پیوست شده</DialogTitle>
+              <DialogContent dividers className="space-y-4">
                 {Object.entries(attachments).map(([key, fileName]) =>
                   fileName ? (
-                    <div key={key} className="mb-4">
+                    <div key={key}>
                       <div className="text-gray-700 mb-1">
                         {attachmentLabels[key]}
                       </div>
@@ -163,19 +193,18 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
                     </div>
                   ) : null
                 )}
-              </Box>
-            </Modal>
+              </DialogContent>
+            </Dialog>
 
-            {/* Confirm Modal */}
-            <Modal
+            {/* Confirm Dialog */}
+            <Dialog
               open={openConfirmModal}
               onClose={() => setOpenConfirmModal(false)}
+              maxWidth="md"
+              fullWidth
             >
-              <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white p-6 rounded-2xl shadow-lg max-h-[80vh] overflow-y-auto space-y-4">
-                <div className="text-lg font-semibold mb-4">
-                  اطلاعات تایید نمایندگی
-                </div>
-
+              <DialogTitle>اطلاعات تایید نمایندگی</DialogTitle>
+              <DialogContent dividers className="space-y-4 mb-12">
                 <DatePickerPersian
                   label="تاریخ شروع"
                   date={startDate}
@@ -201,24 +230,20 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
                   value={organizationCode}
                   onChange={(e) => setOrganizationCode(e.target.value)}
                 />
-
-                <div className="flex justify-end gap-2">
-                  <Button
-                    onClick={() => setOpenConfirmModal(false)}
-                    variant="outlined"
-                  >
-                    لغو
-                  </Button>
-                  <Button
-                    onClick={handleSaveConfirmation}
-                    variant="contained"
-                    color="primary"
-                  >
-                    ذخیره
-                  </Button>
-                </div>
-              </Box>
-            </Modal>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpenConfirmModal(false)}>
+                  لغو
+                </Button>
+                <Button
+                  onClick={handleSaveConfirmation}
+                  variant="contained"
+                  color="primary"
+                >
+                  ذخیره
+                </Button>
+              </DialogActions>
+            </Dialog>
           </>
         );
       },

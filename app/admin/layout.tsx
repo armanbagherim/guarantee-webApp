@@ -2,8 +2,8 @@
 import { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import localFont from "next/font/local";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
+import "react-hot-toast/dist/ReactToastify.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 import { Provider, atom } from "jotai";
@@ -38,7 +38,7 @@ export default function RootLayout({
     stylisPlugins: [prefixer, rtlPlugin],
   });
 
-  
+
   return (
     <Provider initialValues={pageTitle}>
       <CacheProvider value={cacheRtl}>
@@ -46,7 +46,7 @@ export default function RootLayout({
           <head></head>
           <body>
             <QueryClientProvider client={queryClient}>
-              <ToastContainer autoClose={1000} position="bottom-right" />
+              <Toaster position="bottom-right" />
               <SessionProvider>
                 <NextTopLoader />
                 <RouteGuard>{children}</RouteGuard>

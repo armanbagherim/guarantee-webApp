@@ -13,7 +13,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Image from "next/image";
 import "dayjs/locale/fa";
@@ -224,9 +224,8 @@ const RequestFactorPay = ({
           </Typography>
         </div>
         <div
-          className={`p-4 rounded-xl ${
-            factor?.remainingAmount < 0 ? "bg-red-50" : "bg-green-50"
-          }`}
+          className={`p-4 rounded-xl ${factor?.remainingAmount < 0 ? "bg-red-50" : "bg-green-50"
+            }`}
         >
           <Typography
             variant="subtitle1"
@@ -238,9 +237,8 @@ const RequestFactorPay = ({
           </Typography>
           <Typography
             variant="h6"
-            className={`mt-2 font-bold ${
-              factor?.remainingAmount < 0 ? "text-red-600" : "text-green-600"
-            }`}
+            className={`mt-2 font-bold ${factor?.remainingAmount < 0 ? "text-red-600" : "text-green-600"
+              }`}
           >
             {formatPrice(Math.abs(factor?.remainingAmount))}
           </Typography>
@@ -308,11 +306,10 @@ const RequestFactorPay = ({
                       <TableCell>{service.title}</TableCell>
                       <TableCell>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs ${
-                            service.warrantyServiceTypeId === 1
+                          className={`px-2 py-1 rounded-full text-xs ${service.warrantyServiceTypeId === 1
                               ? "bg-green-100 text-green-800"
                               : "bg-red-100 text-red-800"
-                          }`}
+                            }`}
                         >
                           {service.warrantyServiceTypeTitle}
                         </span>
@@ -352,11 +349,10 @@ const RequestFactorPay = ({
                       <TableCell>{service.title || "بدون عنوان"}</TableCell>
                       <TableCell>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs ${
-                            service.warrantyServiceTypeId === 1
+                          className={`px-2 py-1 rounded-full text-xs ${service.warrantyServiceTypeId === 1
                               ? "bg-green-100 text-green-800"
                               : "bg-red-100 text-red-800"
-                          }`}
+                            }`}
                         >
                           {service.warrantyServiceTypeTitle}
                         </span>
@@ -378,11 +374,10 @@ const RequestFactorPay = ({
           <button
             key={gateWay.id}
             onClick={() => handleTabChange(index)}
-            className={`flex-shrink-0 flex flex-row items-center p-2 rounded-lg transition-all ${
-              activeTab === index
+            className={`flex-shrink-0 flex flex-row items-center p-2 rounded-lg transition-all ${activeTab === index
                 ? "border-2 border-blue-600 bg-blue-50"
                 : "border-2 border-transparent hover:border-gray-300"
-            }`}
+              }`}
             disabled={isSubmitting}
           >
             <div className="relative w-12 h-12">

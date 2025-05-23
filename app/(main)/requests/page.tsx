@@ -1,8 +1,10 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import concat from "@/app/components/utils/AddressConcat";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
+import ClientRequestCard from "./ClientRequestCard";
 
 async function getData(session, offset = 0, limit = 10) {
   const res = await fetch(
@@ -20,11 +22,15 @@ async function getData(session, offset = 0, limit = 10) {
   const data = await res.json();
   return {
     requests: data.result,
-    total: data.total // Make sure your API returns total count
+    total: data.total,
   };
 }
 
-export default async function UserRequestsList({ searchParams }: { searchParams: { page?: string } }) {
+export default async function UserRequestsList({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
   const session = await getServerSession(authOptions);
   const currentPage = Number(searchParams?.page) || 1;
   const limit = 10;
@@ -34,82 +40,40 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="">
-      <h1 className="text-2xl font-bold mb-6">لیست درخواست‌های شما</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">لیست درخواست‌های شما</h1>
 
+      {/* Requests List */}
       <div className="space-y-4">
         {requests.map((request) => (
-          <div key={request.id} className="bg-white rounded-xl shadow p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Request Info */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">اطلاعات درخواست</h3>
-                <div className="mt-2 space-y-2 text-sm">
-                  <p><span className="font-medium">شناسه:</span> {request.id}</p>
-                  <p><span className="font-medium">نوع:</span> {request.requestType.title}</p>
-                  <p><span className="font-medium">دسته‌بندی:</span> {request.requestCategory.title}</p>
-                  <p><span className="font-medium">تاریخ ایجاد:</span> {new Date(request.createdAt).toLocaleDateString('fa-IR')}</p>
-                </div>
-              </div>
-
-              {/* Product Info */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">اطلاعات محصول</h3>
-                <div className="mt-2 space-y-2 text-sm">
-                  <p><span className="font-medium">برند:</span> {request.brand.title}</p>
-                  <p><span className="font-medium">نوع محصول:</span> {request.productType.title}</p>
-                  <p><span className="font-medium">مدل:</span> {request.variant.title}</p>
-                  <p><span className="font-medium">کد گارانتی:</span> {request.guaranteeId}</p>
-                </div>
-              </div>
-
-              {/* Contact Info */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">اطلاعات تماس</h3>
-                <div className="mt-2 space-y-2 text-sm">
-                  <p><span className="font-medium">شماره تماس:</span> {request.phoneNumber}</p>
-                  <p><span className="font-medium">آدرس:</span> {request.address.name}</p>
-                  <p className="truncate"><span className="font-medium">محله:</span> {request.address.neighborhood.name}</p>
-                  <p><span className="font-medium">شهر:</span> {request.address.city.name}</p>
-                </div>
-              </div>
-
-              {/* Status & Actions */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">وضعیت و عملیات</h3>
-                <div className="mt-2 space-y-3">
-                  <div>
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${request.organizationId ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                      {request.organizationId ? 'تایید شده' : 'در انتظار بررسی'}
-                    </span>
-                  </div>
-
-                  <Link
-                    href={`/requests/${request.id}`}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                  >
-                    مشاهده تاریخچه درخواست
-                  </Link>
-
-                  <div className="text-xs text-gray-500">
-                    آخرین بروزرسانی: {new Date(request.updatedAt).toLocaleString('fa-IR')}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ClientRequestCard key={request.id} request={request} />
         ))}
       </div>
 
+      {/* Empty State */}
       {requests.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <p className="text-gray-500">هنوز هیچ درخواستی ثبت نکرده‌اید</p>
-          <Link
-            href="/new-request"
-            className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            ثبت درخواست جدید
-          </Link>
+        <div className="text-center py-12 bg-white rounded-lg shadow-md">
+          <p className="text-gray-500 text-lg">هنوز هیچ درخواستی ثبت نکرده‌اید</p>
+          <div className="flex flex-wrap gap-2 justify-center">
+            <Link
+              href="/normalCards"
+              className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"
+            >
+              ثبت درخواست خارج از گارانتی
+            </Link>
+            <Link
+              href="/outOfWarranty"
+              className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"
+            >
+              ثبت درخواست تعمیر
+            </Link>
+            <Link
+              href="/vipCards"
+              className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"
+            >
+              ثبت درخواست VIP
+            </Link>
+          </div>
         </div>
       )}
 
@@ -120,11 +84,8 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
             {currentPage > 1 && (
               <Link
                 href={`?page=${currentPage - 1}`}
-                className="px-4 py-2 border rounded-md hover:bg-gray-100 flex items-center gap-1"
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-1"
               >
-
-                <span className="relative top-[3px]">→</span>
-
                 <span>قبلی</span>
               </Link>
             )}
@@ -145,7 +106,10 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
                 <Link
                   key={pageNum}
                   href={`?page=${pageNum}`}
-                  className={`px-4 py-2 border rounded-md ${currentPage === pageNum ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                  className={`px-4 py-2 border rounded-md text-sm font-medium ${currentPage === pageNum
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                    } transition-colors duration-200`}
                 >
                   {pageNum}
                 </Link>
@@ -155,19 +119,21 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
             {currentPage < totalPages && (
               <Link
                 href={`?page=${currentPage + 1}`}
-                className="px-4 py-2 border rounded-md hover:bg-gray-100 flex items-center gap-1"
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-1"
               >
                 <span>بعدی</span>
-                <span className="relative top-[3px]">←</span>
               </Link>
             )}
           </nav>
         </div>
       )}
 
-      <div className="mt-4 text-center text-sm text-gray-500">
-        نمایش {offset + 1} تا {Math.min(offset + limit, total)} از {total} درخواست
-      </div>
+      {/* Pagination Summary */}
+      {total > 0 && (
+        <div className="mt-4 text-center text-sm text-gray-500">
+          نمایش {offset + 1} تا {Math.min(offset + limit, total)} از {total} درخواست
+        </div>
+      )}
     </div>
   );
 }

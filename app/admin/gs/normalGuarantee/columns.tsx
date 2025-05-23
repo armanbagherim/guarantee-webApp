@@ -7,7 +7,7 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import Loading from "@/app/components/admin-components/loading";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";

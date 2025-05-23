@@ -32,6 +32,7 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
   const offset = (currentPage - 1) * limit;
 
   const { factors, total } = await getData(session, offset, limit);
+  console.log(factors)
   const totalPages = Math.ceil(total / limit);
 
   // Format price with commas
@@ -98,6 +99,10 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
               <div className="space-y-1">
                 <p className="text-gray-500 text-sm">تعداد آیتم ها</p>
                 <p className="font-medium">{factor.factorItems.length}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-gray-500 text-sm">شماره درخواست</p>
+                <p className="font-medium">{factor.requestId}</p>
               </div>
             </div>
 

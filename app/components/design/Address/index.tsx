@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Modal from "../Modal";
 import NewAddress from "../NewAddress";
 import concat from "../../utils/AddressConcat";
+import { DialogActions } from "@mui/material";
 
 export default function Address({
   setAddress,
@@ -58,6 +59,17 @@ export default function Address({
             )}
           </div>
         </div>
+        <DialogActions>
+          <button
+            onClick={() => {
+              setIsOpen(false);
+            }
+            }
+            className="bg-red-500 text-white p-2 rounded-2xl w-full block text-sm py-4"
+          >
+            بستن
+          </button>
+        </DialogActions>
       </Modal>
     </>
   );

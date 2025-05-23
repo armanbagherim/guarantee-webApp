@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import LightDataGridClient from "@/app/components/admin-components/LightDataGrid/LightDataGridClient";
 import { LoadingIcon } from "@/app/components/design/icons";
@@ -344,8 +344,8 @@ export default function AssignProducts({ token }) {
             {currentSelectType === "productType"
               ? "نوع محصول"
               : currentSelectType === "brand"
-              ? "برند"
-              : "مدل دستگاه"}
+                ? "برند"
+                : "مدل دستگاه"}
           </span>
           <IconButton
             onClick={() => setModalOpen(false)}

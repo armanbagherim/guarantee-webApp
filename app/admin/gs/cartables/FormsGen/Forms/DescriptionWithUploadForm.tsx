@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Uploader from "@/app/components/design/Uploader";
 
 const DescriptionWithUploadForm = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {

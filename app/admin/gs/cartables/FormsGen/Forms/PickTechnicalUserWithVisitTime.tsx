@@ -5,7 +5,7 @@ import {
     Chip
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 import PickTechUserModal from "./PickModals/TechUser";

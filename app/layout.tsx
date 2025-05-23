@@ -3,7 +3,7 @@ import "./globals.scss";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
 
 const cacheRtl = createCache({
@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="fa" dir="rtl">
       <body>
         <CacheProvider value={cacheRtl}>
-          <ToastContainer position="top-center" />
+          <Toaster position="top-center" />
           <NextTopLoader showSpinner={false} />
           {children}
         </CacheProvider>

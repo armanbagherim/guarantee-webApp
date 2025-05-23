@@ -9,7 +9,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import React, { useRef, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { Toaster, toast } from "react-hot-toast";
 import VerificationInput from "react-verification-input";
 
 export default function SignInForm({ session }) {
@@ -133,7 +133,7 @@ export default function SignInForm({ session }) {
   return (
     <div className="">
       <div className="login">
-        <ToastContainer />
+        <Toaster />
 
         <div className="mb-10 md:mb-0">
           <div className="h-full md:flex lg:flex xl:flex 2xl:flex shadow-none md:shadow-shadowCustom border-none md:border justify-center border border-[#F1F1F1] rounded-[30px]">

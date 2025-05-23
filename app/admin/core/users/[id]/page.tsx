@@ -3,7 +3,7 @@ import { fetcher, useFetcher } from "@/app/components/admin-components/fetcher";
 import Loading from "@/app/components/admin-components/loading";
 import { redirect, useParams, useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { toast } from "react-toastify"; // Import toast from react-toastify
+import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
 import { useAtom } from "jotai";
 import { pageTitle } from "@/app/admin/layout";
 import SaveBar from "@/app/components/admin-components/SaveBar";

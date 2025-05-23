@@ -26,7 +26,7 @@ export default function Modal({
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>{children}</DialogContent>
-      <DialogActions>
+      {/* <DialogActions>
         <Button onClick={handleClose}>لغو</Button>
 
         {action && (
@@ -34,7 +34,7 @@ export default function Modal({
             تایید
           </Button>
         )}
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
   );
 }

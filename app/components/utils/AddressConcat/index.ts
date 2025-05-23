@@ -3,12 +3,7 @@ const concat = (address) => {
   if (address?.province?.name) {
     parts.push(`استان: ${address?.province?.name}`);
   }
-  if (address?.city?.name) {
-    parts.push(`شهر: ${address.city.name}`);
-  }
-  if (address?.neighborhood?.name) {
-    parts.push(`محله: ${address.neighborhood.name}`);
-  }
+
   if (address?.street) {
     parts.push(`خیابان: ${address.street}`);
   }
