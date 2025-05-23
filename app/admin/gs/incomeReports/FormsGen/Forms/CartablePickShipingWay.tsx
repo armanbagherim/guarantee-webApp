@@ -6,7 +6,7 @@ import {
     CircularProgress,
     Backdrop
 } from "@mui/material";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Image from "next/image";
 import 'dayjs/locale/fa';

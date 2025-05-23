@@ -4,7 +4,7 @@ import NewAddress from "@/app/components/design/NewAddress";
 import concat from "@/app/components/utils/AddressConcat";
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaPencilAlt, FaTrash } from "react-icons/fa";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export default function UserAddressesModule() {

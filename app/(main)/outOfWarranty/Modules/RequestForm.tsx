@@ -19,7 +19,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { fetcher } from "@/app/components/admin-components/fetcher";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import LightDataGridClient from "@/app/components/admin-components/LightDataGrid/LightDataGridClient";
 import { LoadingIcon } from "@/app/components/design/icons";

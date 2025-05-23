@@ -9,7 +9,7 @@ import { pageTitle } from "../../layout";
 import LightDataGrid from "@/app/components/admin-components/LightDataGrid/LightDataGrid";
 import { IconButton } from "@mui/material";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ChangeFormatDate from "@/app/components/admin-components/ChangeFormatDate";
 import Swal from "sweetalert2";

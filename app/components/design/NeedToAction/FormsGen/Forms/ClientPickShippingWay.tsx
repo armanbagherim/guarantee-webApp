@@ -6,7 +6,7 @@ import {
   CircularProgress,
   Backdrop,
 } from "@mui/material";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Image from "next/image";
 import "dayjs/locale/fa";
@@ -204,8 +204,8 @@ const ClientPickShippingWay = ({
             key={way.id}
             onClick={() => handleTabChange(index)}
             className={`flex-shrink-0 flex flex-row items-center p-2 rounded-lg transition-all ${activeTab === index
-                ? "border-2 border-blue-600 bg-blue-50"
-                : "border-2 border-transparent hover:border-gray-300"
+              ? "border-2 border-blue-600 bg-blue-50"
+              : "border-2 border-transparent hover:border-gray-300"
               }`}
             disabled={isSubmitting}
           >

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Select, MenuItem } from "@mui/material";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Dialog from '@mui/material/Dialog';
 import LightDataGrid from "@/app/components/admin-components/LightDataGrid/LightDataGrid";

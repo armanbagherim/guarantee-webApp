@@ -91,7 +91,6 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
                 </p>
               </div>
 
-
               <div className="space-y-1">
                 <p className="text-gray-500 text-sm">مبلغ کل</p>
                 <p className="font-medium">{formatPrice(factor.totalPrice)}</p>

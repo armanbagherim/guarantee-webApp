@@ -6,7 +6,7 @@ import { Button, DialogActions } from "@mui/material";
 import { useFormik } from "formik";
 import { ConvertToNull } from "../../utils/ConvertToNull";
 import { fetcher } from "../../admin-components/fetcher";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import AdditionalData from "./AdditionalData";
 import * as Yup from "yup";
 

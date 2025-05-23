@@ -7,7 +7,6 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import { toast, Toaster } from "react-hot-toast";
-import "react-hot-toast/dist/ReactToastify.css";
 
 const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   const [selectedProvince, setSelectedProvince] = useState("");

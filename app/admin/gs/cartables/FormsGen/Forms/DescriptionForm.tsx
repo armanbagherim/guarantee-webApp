@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const DescriptionForm = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
     const [description, setDescription] = useState("");

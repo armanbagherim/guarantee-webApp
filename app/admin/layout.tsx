@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
-import "react-hot-toast/dist/ReactToastify.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 import { Provider, atom } from "jotai";

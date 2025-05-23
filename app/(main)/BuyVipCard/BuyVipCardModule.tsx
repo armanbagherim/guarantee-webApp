@@ -8,6 +8,7 @@ import VipCard from './Vip';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { fetcher } from '@/app/components/admin-components/fetcher';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function BuyVipCardModule({ session, vipCards, paymentGateways }) {
     const [selectedCardId, setSelectedCardId] = useState(vipCards[0]?.id || null);
@@ -16,20 +17,9 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
     const navigationNextRef = useRef(null);
     const [selectedGateway, setSelectedGateway] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [isBeginning, setIsBeginning] = useState(true);
+    const [isEnd, setIsEnd] = useState(false);
     const router = useRouter();
-    const transformCardData = (card) => ({
-        id: card.id.toString(),
-        serialNumber: `#${card.id.toString().padStart(4, '0')}`,
-        startDate: new Date().toISOString(),
-        endDate: new Date(new Date().setMonth(new Date().getMonth() + card.monthPeriod)).toISOString(),
-        vipBundleTypeId: card.id,
-        totalCredit: card.price,
-        availableCredit: card.price,
-        vipBundleType: {
-            id: card.id,
-            cardColor: card.cardColor
-        }
-    });
 
     const handleSlideClick = (index) => {
         if (swiperRef.current) {
@@ -54,31 +44,67 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
                     paymentGatewayId: selectedGateway
                 }
             });
-            console.log(res);
-            router.push(res.result.redirectUrl)
-            // Handle successful payment redirection here
+            router.push(res.result.redirectUrl);
         } catch (error) {
             console.log(error);
             alert("خطا در پرداخت. لطفاً مجدداً تلاش کنید");
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
+    useEffect(() => {
+        if (!swiperRef.current) return;
+
+        const swiper = swiperRef.current;
+
+        const updateNavState = () => {
+            setIsBeginning(swiper.isBeginning);
+            setIsEnd(swiper.isEnd);
+        };
+
+        swiper.on("slideChange", updateNavState);
+        swiper.on("reachEnd", updateNavState);
+        swiper.on("reachBeginning", updateNavState);
+
+        updateNavState();
+    }, []);
 
     return (
         <div className="mx-auto p-4 relative max-w-6xl">
             <div className="relative bg-white rounded-3xl p-4">
+
+                {/* Navigation Buttons */}
+                <button
+                    ref={navigationPrevRef}
+                    disabled={isBeginning}
+                    className={`absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2 shadow-md transition 
+                        ${isBeginning ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-100 cursor-pointer"}`}
+                >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+
+                <button
+                    ref={navigationNextRef}
+                    disabled={isEnd}
+                    className={`absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2 shadow-md transition 
+                        ${isEnd ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-100 cursor-pointer"}`}
+                >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+
                 <Swiper
-                    ref={swiperRef}
                     modules={[Navigation]}
                     navigation={{
                         prevEl: navigationPrevRef.current,
                         nextEl: navigationNextRef.current,
                     }}
-
                     onSwiper={(swiper) => {
                         swiperRef.current = swiper;
                         setTimeout(() => {
+                            swiper.params.navigation.prevEl = navigationPrevRef.current;
+                            swiper.params.navigation.nextEl = navigationNextRef.current;
+                            swiper.navigation.init();
                             swiper.navigation.update();
                         });
                     }}
@@ -98,22 +124,19 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
                     }}
                     className="py-4"
                 >
-                    {vipCards.map((card, index) => {
-
-                        return (
-                            <SwiperSlide key={card.id} onClick={() => handleSlideClick(index)}>
-                                <div className={`transition-all duration-300 mx-auto h-full ${selectedCardId === card.id
-                                    ? 'scale-100 z-10 transform-gpu'
-                                    : 'scale-90 opacity-80 transform-gpu'
-                                    }`}>
-                                    <VipCard
-                                        data={card}
-                                        cardName={card.title}
-                                    />
-                                </div>
-                            </SwiperSlide>
-                        );
-                    })}
+                    {vipCards.map((card, index) => (
+                        <SwiperSlide key={card.id} onClick={() => handleSlideClick(index)}>
+                            <div className={`transition-all duration-300 mx-auto h-full ${selectedCardId === card.id
+                                ? 'scale-100 z-10 transform-gpu'
+                                : 'scale-90 opacity-80 transform-gpu'
+                                }`}>
+                                <VipCard
+                                    data={card}
+                                    cardName={card.title}
+                                />
+                            </div>
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
             </div>
 
@@ -142,17 +165,24 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
                     ))}
                 </div>
             </div>
-            <button className='bg-primary text-white px-4 items-center  justify-center gap-2 flex py-4 rounded-xl w-full text-center' onClick={paymentAdditionalPackage}>{isLoading ? (
-                <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    در حال پردازش...
-                </>
-            ) : (
-                'پرداخت'
-            )}</button>
+
+            <button
+                className='bg-primary text-white px-4 items-center justify-center gap-2 flex py-4 rounded-xl w-full text-center'
+                onClick={paymentAdditionalPackage}
+                disabled={isLoading}
+            >
+                {isLoading ? (
+                    <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        در حال پردازش...
+                    </>
+                ) : (
+                    'پرداخت'
+                )}
+            </button>
         </div>
     );
 }

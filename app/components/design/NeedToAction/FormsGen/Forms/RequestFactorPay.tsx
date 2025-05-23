@@ -13,7 +13,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Image from "next/image";
 import "dayjs/locale/fa";
@@ -307,8 +307,8 @@ const RequestFactorPay = ({
                       <TableCell>
                         <span
                           className={`px-2 py-1 rounded-full text-xs ${service.warrantyServiceTypeId === 1
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
                             }`}
                         >
                           {service.warrantyServiceTypeTitle}
@@ -350,8 +350,8 @@ const RequestFactorPay = ({
                       <TableCell>
                         <span
                           className={`px-2 py-1 rounded-full text-xs ${service.warrantyServiceTypeId === 1
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
                             }`}
                         >
                           {service.warrantyServiceTypeTitle}
@@ -375,8 +375,8 @@ const RequestFactorPay = ({
             key={gateWay.id}
             onClick={() => handleTabChange(index)}
             className={`flex-shrink-0 flex flex-row items-center p-2 rounded-lg transition-all ${activeTab === index
-                ? "border-2 border-blue-600 bg-blue-50"
-                : "border-2 border-transparent hover:border-gray-300"
+              ? "border-2 border-blue-600 bg-blue-50"
+              : "border-2 border-transparent hover:border-gray-300"
               }`}
             disabled={isSubmitting}
           >
