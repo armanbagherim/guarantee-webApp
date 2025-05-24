@@ -48,7 +48,11 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
     }
 
     // Add the new province to the list
-    const newProvince = { provinceId: province.id, fee: 0, name: province.name };
+    const newProvince = {
+      provinceId: province.id,
+      fee: 0,
+      name: province.name,
+    };
     const updatedProvinces = [...formik.values.provinceSolutions, newProvince];
     formik.setFieldValue("provinceSolutions", updatedProvinces);
 
@@ -67,10 +71,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
   return (
     <>
       {/* Toast Container for displaying notifications */}
-      <Toaster
-        position="top-center"
-
-      />
+      <Toaster position="top-center" />
 
       <Modal
         loading={loading}
@@ -101,7 +102,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
 
               {/* Fee Input */}
               <Input
-                onChange={e => formik.setFieldValue("fee", +e.target.value)}
+                onChange={(e) => formik.setFieldValue("fee", +e.target.value)}
                 variant="outlined"
                 value={formik.values.fee || ""}
                 label="فی هزینه"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -10,10 +10,18 @@ import { Checkbox, FormControlLabel, Box } from "@mui/material";
 import Map from "@/app/components/design/NewAddress/Map";
 import AdditionalData from "@/app/components/design/NewAddress/AdditionalData";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
+import toast from "react-hot-toast";
 
-const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
-  const steps = ["اطلاعات اصلی", "مشخصات مکانی", "اطلاعات کاربر", "نقشه"];
-
+const DataHandler = ({
+  editData,
+  loading,
+  formik,
+  setIsEdit,
+  provinces,
+  setLoading,
+}) => {
+  const steps = ["اطلاعات اصلی", "نقشه", "مشخصات مکانی", "اطلاعات کاربر"];
+  const [tempCity, setTempCity] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -26,6 +34,63 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  const normalizePersianText = (text) => {
+    if (!text) return "";
+    return text.replace(/ی/g, "ي").trim();
+  };
+
+  // Fetch provinces only once on mount
+
+  const fetchAddress = async () => {
+    setLoading(true);
+    if (!formik.values.address.latitude || !formik.values.address.longitude) {
+      formik.setTouched({ latitude: true, longitude: true });
+      toast.error("لطفا یک نقطه روی نقشه انتخاب کنید");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://api.neshan.org/v5/reverse?lat=${formik.values.address.latitude}&lng=${formik.values.address.longitude}`,
+        {
+          method: "GET",
+          headers: {
+            "Api-Key": "service.67711799b0114ce5aa1380ba7b2a2f4b",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch address");
+      }
+
+      const result = await response.json();
+      if (result.status === "OK") {
+        const normalizedState = normalizePersianText(
+          result.state.replace("استان", "")
+        );
+        console.log(normalizedState);
+        console.log(provinces);
+        const matchedProvince = provinces.find(
+          (province) => normalizePersianText(province.name) === normalizedState
+        );
+        console.log(matchedProvince);
+        if (matchedProvince) {
+          formik.setFieldValue("address.provinceId", matchedProvince.id);
+          console.log(matchedProvince);
+        } else {
+          console.warn(`No province found for ${normalizedState}`);
+        }
+        setLoading(false);
+        formik.setFieldValue("address.street", result.formatted_address);
+        handleNext(); // برو به مرحله مشخصات مکانی
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error("خطا در دریافت آدرس");
+      console.error("Error fetching address:", error);
+    }
   };
 
   return (
@@ -44,7 +109,13 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
       maxSize="sm"
       isOpen={editData.open}
       acceptText={activeStep === steps.length - 1 ? "ثبت نهایی" : "مرحله بعد"}
-      handleAccept={activeStep === steps.length - 1 ? formik.handleSubmit : handleNext}
+      handleAccept={
+        activeStep === steps.length - 1
+          ? formik.handleSubmit
+          : activeStep === 1
+          ? fetchAddress
+          : handleNext
+      }
     >
       <form className="pt-4" onSubmit={formik.handleSubmit}>
         <div style={{ width: "100%" }}>
@@ -78,7 +149,16 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                       fullWidth
                       margin="normal"
                     />
-                    <DatePickerPersian label="تاریخ مجوز" date={formik.values.licenseDate} onChange={e => formik.setFieldValue("licenseDate", new Date(e).toISOString())} />
+                    <DatePickerPersian
+                      label="تاریخ مجوز"
+                      date={formik.values.licenseDate}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          "licenseDate",
+                          new Date(e).toISOString()
+                        )
+                      }
+                    />
                     <Input
                       onChange={formik.handleChange}
                       variant="outlined"
@@ -125,14 +205,18 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                 )}
 
                 {/* Step 2: مشخصات مکانی */}
-                {activeStep === 1 && (
+                {activeStep === 2 && (
                   <div className="py-8">
-                    <AdditionalData isAdmin={true} data={formik} />
+                    <AdditionalData
+                      isAdmin={true}
+                      proviences={provinces}
+                      data={formik}
+                    />
                   </div>
                 )}
 
                 {/* Step 3: اطلاعات کاربر */}
-                {activeStep === 2 && (
+                {activeStep === 3 && (
                   <div className="py-8">
                     <Box mb={3}>
                       <Input
@@ -192,9 +276,19 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                 )}
 
                 {/* Step 4: نقشه */}
-                {activeStep === 3 && (
+                {activeStep === 1 && (
                   <div className="py-8" style={{ height: "400px" }}>
                     <Map isAdmin={true} data={formik} />
+                    {/* <Button
+                      key="map"
+                      variant="contained"
+                      color="success"
+                      onClick={fetchAddress}
+                      className="w-full"
+                      fullWidth
+                    >
+                      ثبت و دریافت اطلاعات از روی نقشه
+                    </Button> */}
                   </div>
                 )}
               </div>

@@ -43,7 +43,7 @@ const Modal = (props: IModal) => {
     hasBack = false,
     backText = null,
     handleBack = null,
-    acceptText
+    acceptText,
   } = props;
   const theme = useTheme();
   const mediaQuery = useMediaQuery(theme.breakpoints.down("md"));
@@ -78,7 +78,7 @@ const Modal = (props: IModal) => {
         <DialogContent>
           {loading ? (
             <div className="flex justify-center h-[400px] items-center">
-              <img src="/images/loader.svg" className="w-1/5" alt="" />
+              <CircularProgress />
             </div>
           ) : (
             children
@@ -106,7 +106,7 @@ const Modal = (props: IModal) => {
                   onClick={handleAccept}
                   autoFocus
                 >
-                  {acceptText ?? 'ثبت'}
+                  {acceptText ?? "ثبت"}
                 </Button>
               )}
             </div>

@@ -18,7 +18,7 @@ export default function EavTypesModule() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchContracts, setFetchContracts] = useState(false);
-
+  const [provinces, setProvinces] = useState([]);
   const [isEditEav, setIsEditEav] = useState({
     open: false,
     id: null,
@@ -43,7 +43,20 @@ export default function EavTypesModule() {
         }),
     });
   }, []);
-
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const res = await fetcher({
+          url: `/v1/api/guarantee/client/provinces`,
+          method: "GET",
+        });
+        setProvinces(res.result || []);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
+    };
+    fetchProvinces();
+  }, []);
   const eavData = useFormik({
     enableReinitialize: true,
     validateOnChange: false,
@@ -76,8 +89,9 @@ export default function EavTypesModule() {
       console.log(dataBody);
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/admin/guaranteeOrganizations${isEditEav.active ? `/${isEditEav.id}` : ""
-            }`,
+          url: `/v1/api/guarantee/admin/guaranteeOrganizations${
+            isEditEav.active ? `/${isEditEav.id}` : ""
+          }`,
           method: isEditEav.active ? "PUT" : "POST",
           body: dataBody,
         });
@@ -95,8 +109,6 @@ export default function EavTypesModule() {
     },
   });
 
-
-
   return (
     <div>
       <DataHandler
@@ -104,6 +116,8 @@ export default function EavTypesModule() {
         loading={loading}
         formik={eavData}
         setIsEdit={setIsEditEav}
+        provinces={provinces}
+        setLoading={setLoading}
       />
 
       <ContractDataGrid
