@@ -22,6 +22,34 @@ const attachmentLabels = {
 };
 
 export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
+  const rejectEavType = async (id) => {
+    const { value: rejectDescription } = await Swal.fire({
+      title: "رد درخواست",
+      input: "textarea",
+      inputLabel: "دلیل رد درخواست را وارد کنید",
+      inputPlaceholder: "دلیل رد را اینجا بنویسید...",
+      showCancelButton: true,
+      confirmButtonText: "رد درخواست",
+      cancelButtonText: "لغو",
+      inputValidator: (value) => {
+        if (!value) return "دلیل رد درخواست الزامی است";
+      },
+    });
+
+    if (rejectDescription) {
+      try {
+        await fetcher({
+          url: `/v1/api/guarantee/admin/preRegistrationOrganizations/${id}`,
+          method: "DELETE",
+          body: { rejectDescription },
+        });
+        toast.success("درخواست با موفقیت رد شد");
+        setTriggered((prev) => !prev);
+      } catch (err) {
+        toast.error(err.message);
+      }
+    }
+  };
   return [
     {
       accessorKey: "title",
@@ -60,7 +88,16 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
         const addr = row?.original?.address;
         if (!addr) return "—";
 
-        const { province, city, neighborhood, street, alley, plaque, floorNumber, postalCode } = addr;
+        const {
+          province,
+          city,
+          neighborhood,
+          street,
+          alley,
+          plaque,
+          floorNumber,
+          postalCode,
+        } = addr;
 
         return (
           <div className="text-right text-sm leading-6">
@@ -152,18 +189,18 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
 
         return (
           <>
+            <Button onClick={() => setOpenConfirmModal(true)} color="primary">
+              تایید
+            </Button>
             {!row.original.isConfirm && (
-              <Button onClick={() => setOpenConfirmModal(true)} color="primary">
-                تایید
+              <Button
+                onClick={() => rejectEavType(row.original.id)}
+                color="error"
+              >
+                رد درخواست
               </Button>
             )}
 
-            <Button
-              onClick={() => deleteEavType(row.original.id)}
-              color="error"
-            >
-              حذف
-            </Button>
             <Button onClick={() => setOpenImageModal(true)} color="info">
               مشاهده فایل‌ها
             </Button>
@@ -232,9 +269,7 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setOpenConfirmModal(false)}>
-                  لغو
-                </Button>
+                <Button onClick={() => setOpenConfirmModal(false)}>لغو</Button>
                 <Button
                   onClick={handleSaveConfirmation}
                   variant="contained"
