@@ -11,11 +11,16 @@ export const metadata: Metadata = {
   title: "کلاب آریا کیش | ورود",
   description: "ورود به کلاب آریا کیش",
 };
-const LoginPage = async () => {
+const LoginPage = async ({ searchParams }) => {
   const session: ISession | null = await getServerSession(authOptions);
+  const param = await searchParams;
 
   if (session?.token) {
-    return redirect("/");
+    if (param.redirect_back_url) {
+      return redirect(param.redirect_back_url);
+    } else {
+      return redirect("/");
+    }
   }
   return <SignInForm session={session} />;
 };

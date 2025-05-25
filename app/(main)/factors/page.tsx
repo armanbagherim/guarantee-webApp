@@ -21,40 +21,44 @@ async function getData(session, offset = 0, limit = 10) {
   const data = await res.json();
   return {
     factors: data.result,
-    total: data.total
+    total: data.total,
   };
 }
 
-export default async function UserRequestsList({ searchParams }: { searchParams: { page?: string } }) {
+export default async function UserRequestsList({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
   const session = await getServerSession(authOptions);
   const currentPage = Number(searchParams?.page) || 1;
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
   const { factors, total } = await getData(session, offset, limit);
-  console.log(factors)
+  console.log(factors);
   const totalPages = Math.ceil(total / limit);
 
   // Format price with commas
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('fa-IR').format(price) + ' ریال';
+    return new Intl.NumberFormat("fa-IR").format(price) + " ریال";
   };
 
   // Format date
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('fa-IR');
+    return date.toLocaleDateString("fa-IR");
   };
 
   // Get status text
   const getStatusText = (statusId) => {
     const statusMap = {
-      1: 'در انتظار پرداخت',
-      2: 'در حال پردازش',
-      3: 'پرداخت شده',
-      4: 'لغو شده'
+      1: "در انتظار پرداخت",
+      2: "در حال پردازش",
+      3: "پرداخت شده",
+      4: "لغو شده",
     };
-    return statusMap[statusId] || 'نامشخص';
+    return statusMap[statusId] || "نامشخص";
   };
 
   return (
@@ -77,16 +81,23 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
                 </div>
                 <div className="space-y-1">
                   <p className="text-gray-500 text-sm">تاریخ پرداخت</p>
-                  <p className="font-medium">{formatDate(factor.settlementDate)}</p>
+                  <p className="font-medium">
+                    {formatDate(factor.settlementDate)}
+                  </p>
                 </div>
               </div>
 
-
               <div className="space-y-1">
                 <p className="text-gray-500 text-sm">وضعیت</p>
-                <p className={`font-medium ${factor.factorStatusId === 3 ? 'text-green-600' :
-                  factor.factorStatusId === 4 ? 'text-red-600' : 'text-blue-600'
-                  }`}>
+                <p
+                  className={`font-medium ${
+                    factor.factorStatusId === 3
+                      ? "text-green-600"
+                      : factor.factorStatusId === 4
+                      ? "text-red-600"
+                      : "text-blue-600"
+                  }`}
+                >
                   {getStatusText(factor.factorStatusId)}
                 </p>
               </div>
@@ -106,15 +117,12 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
             </div>
 
             <div className="mt-4 pt-4 border-t flex justify-end items-center">
-
-
               <Link
                 href={`/factorDetail/client/${factor.id}`}
                 className="px-4 py-2 flex gap-2 items-center bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 <FaPrint />
                 <span>جزيیات کامل و پرینت</span>
-
               </Link>
             </div>
           </div>
@@ -157,8 +165,11 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
                 <Link
                   key={pageNum}
                   href={`?page=${pageNum}`}
-                  className={`px-4 py-2 border rounded-md ${currentPage === pageNum ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
-                    }`}
+                  className={`px-4 py-2 border rounded-md ${
+                    currentPage === pageNum
+                      ? "bg-blue-600 text-white"
+                      : "hover:bg-gray-100"
+                  }`}
                 >
                   {pageNum}
                 </Link>
@@ -179,7 +190,8 @@ export default async function UserRequestsList({ searchParams }: { searchParams:
       )}
 
       <div className="mt-4 text-center text-sm text-gray-500">
-        نمایش {offset + 1} تا {Math.min(offset + limit, total)} از {total} فاکتور
+        نمایش {offset + 1} تا {Math.min(offset + limit, total)} از {total}{" "}
+        فاکتور
       </div>
     </div>
   );
