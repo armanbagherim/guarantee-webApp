@@ -7,12 +7,14 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 
 async function getData(id: string, session) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/admin/normalGuarantees/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/client/normalGuarantee/myGuarantees/${id}`, {
     headers: {
       Authorization: `Bearer ${session.token}`
     }
   })
   const data = await res.json()
+  console.log(data)
+
   if (!data) notFound()
   return data
 }
@@ -30,8 +32,10 @@ async function getRequestTypes(session) {
 
 
 export default async function RepairRequest({ params }) {
+
   const session = await getServerSession(authOptions);
   const { result: data } = await getData(params.id, session)
+  console.log(data)
   const { result: requestTypes } = await getRequestTypes(session)
   console.log(data)
   return (
