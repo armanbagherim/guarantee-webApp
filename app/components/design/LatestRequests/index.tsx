@@ -20,19 +20,23 @@ interface LatestRequestsProps {
 }
 
 export default function LatestRequests({ requestTitle, statusItems }: LatestRequestsProps) {
-  console.log(statusItems)
+  console.log('log', statusItems)
   return (
     <div className="mb-4">
+
       <Card title="وضعیت آخرین درخواست گارانتی">
         <div className="px-4">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-bold">{requestTitle}</h2>
-            <Link
-              className="bg-primary text-sm px-4 py-2 text-white rounded-xl"
-              href={`/requests/${statusItems?.requestId}`}
-            >
-              جزئیات
-            </Link>
+            {statusItems?.requestId ? <>
+              <h2 className="text-sm font-bold">{requestTitle}</h2>
+              <Link
+                className="bg-primary text-sm px-4 py-2 text-white rounded-xl"
+                href={`/requests/${statusItems?.requestId}`}
+              >
+                جزئیات
+              </Link>
+            </> : <span className="text-sm font-bold">هنوز هیچ درخواستی ثبت نکرده اید</span>}
+
           </div>
           <ul className="relative">
             <span className="absolute right-[6px] top-0 h-full bg-[#F0F0F0] w-[1.5px] z-[0]"></span>
