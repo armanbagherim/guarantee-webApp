@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 
-export default function FactorDetail({ factor }) {
+export default function FactorDetail({ factor, isAdmin = false }) {
   // Format price with commas
   const formatPrice = (price) => {
     return new Intl.NumberFormat("fa-IR").format(Number(price)) + " ریال";
@@ -96,7 +96,7 @@ export default function FactorDetail({ factor }) {
               <h1 className="text-lg font-bold">فاکتور #{factor.id}</h1>
               <div className="flex gap-2">
                 <Link
-                  href="/factors"
+                  href={isAdmin ? "/admin/gs/factors" : "/factors"}
                   className="px-3 py-1 border rounded-md text-xs hover:bg-gray-100"
                 >
                   بازگشت
@@ -150,13 +150,12 @@ export default function FactorDetail({ factor }) {
               <div>
                 <span className="text-gray-600">وضعیت: </span>
                 <span
-                  className={`font-medium ${
-                    factor.factorStatusId === 3
+                  className={`font-medium ${factor.factorStatusId === 3
                       ? "text-green-600"
                       : factor.factorStatusId === 4
-                      ? "text-red-600"
-                      : "text-blue-600"
-                  }`}
+                        ? "text-red-600"
+                        : "text-blue-600"
+                    }`}
                 >
                   {getStatusText(factor.factorStatusId)}
                 </span>

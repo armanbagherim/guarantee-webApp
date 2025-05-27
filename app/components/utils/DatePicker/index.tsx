@@ -9,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import { FormLabel, TextField } from "@mui/material";
+import { startOfDay } from "date-fns-jalali";
 
 // Create RTL cache
 const cacheRtl = createCache({
@@ -29,6 +30,21 @@ const DatePickerPersian = ({
     [existingTheme]
   );
 
+  const today = startOfDay(new Date());
+
+  const handleDateChange = (newValue) => {
+    if (!newValue) return onChange(null);
+
+    // تنظیم ساعت روی 12:00 برای جلوگیری از تبدیل اشتباه به UTC
+    const fixedDate = new Date(newValue);
+    fixedDate.setHours(12, 0, 0, 0);
+    const isoString = fixedDate.toISOString();
+
+    console.log("Fixed ISO Date:", isoString); // برای تست
+
+    onChange(isoString);
+  };
+
   return (
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={theme}>
@@ -40,14 +56,14 @@ const DatePickerPersian = ({
           )}
           <LocalizationProvider dateAdapter={AdapterDateFnsJalali}>
             <DatePicker
-              value={date}
-              onChange={(newValue) =>
-                onChange(newValue ? newValue.toISOString() : null)
-              }
+              showDaysOutsideCurrentMonth={false}
+              value={date ? new Date(date) : null}
+              onChange={handleDateChange}
+              minDate={today}
               format={format}
               slotProps={{
                 textField: {
-                  size: "small",
+                  size: "medium",
                   fullWidth: true,
                   variant: "outlined",
                 },

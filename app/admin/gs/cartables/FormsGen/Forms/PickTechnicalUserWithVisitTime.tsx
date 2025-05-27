@@ -128,7 +128,10 @@ const PickTechnicalUserWithVisitTime = ({
                 <DatePickerPersian
                     label="تاریخ حضور تکنسین"
                     date={startDate}
-                    onChange={(e) => setStartDate(new Date(e).toISOString())}
+                    onChange={(e) => {
+                        console.log(e)
+                        setStartDate(e)
+                    }}
                 />
 
                 {/* چیپ‌های بازه زمانی */}

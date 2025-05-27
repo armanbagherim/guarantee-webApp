@@ -31,6 +31,6 @@ export default async function FactorDetailsPage({ params }: { params: { id: stri
 
 
     return (
-        <FactorDetail factor={factor} />
+        <FactorDetail isAdmin factor={factor} />
     );
 }
