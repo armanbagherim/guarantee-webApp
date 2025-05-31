@@ -155,7 +155,7 @@ const SideMenu = () => {
           <div className="flex justify-between text-white items-center">
             <span className="text-black">
               <span> سلام </span>
-              {session?.result?.firstname}
+              {session?.result?.firstname} {session?.result?.lastname}
             </span>
             <span className="cursor-pointer" onClick={() => signOut()}>
               <svg

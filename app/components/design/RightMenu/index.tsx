@@ -75,7 +75,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               }`}
             >
               <Cards color={isActive("/normalCards") ? "#3B82F6" : "#6F6F6F"} />
-              <span>کارت های گارانتی</span>
+              <span>درخواست تعمیرات گارانتی</span>
             </li>
           </Link>
           <Link onClick={(e) => setIsOpen(false)} href="/vipCards">
@@ -85,7 +85,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               }`}
             >
               <Cards color={isActive("#") ? "#3B82F6" : "#6F6F6F"} />
-              <span>کارت های VIP</span>
+              <span>درخواست تعمیرات VIP</span>
             </li>
           </Link>
           <Link onClick={(e) => setIsOpen(false)} href="/outOfWarranty">
@@ -97,7 +97,7 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <Requests
                 color={isActive("/outOfWarranty") ? "#3B82F6" : "#6F6F6F"}
               />
-              <span>درخواست خارج از گارانتی</span>
+              <span>درخواست تعمیرات آزاد</span>
             </li>
           </Link>
           <Link onClick={(e) => setIsOpen(false)} href="/BuyVipCard">

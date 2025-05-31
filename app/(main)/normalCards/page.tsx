@@ -31,12 +31,15 @@ export default async function NormalCards({ searchParams }) {
   const totalPages = Math.ceil(total / limit);
 
   console.log(session);
-
+  console.log(guarantees);
   return (
     <div className="">
       <div className="bg-white mb-4 p-4 rounded-2xl flex justify-between items-center">
         <span className="font-bold text-gray-600">کارت های گارانتی عادی</span>
-        <Link className="bg-primary py-4 px-4 rounded-xl text-white text-sm" href="/SubmitCard">
+        <Link
+          className="bg-primary py-4 px-4 rounded-xl text-white text-sm"
+          href="/SubmitCard"
+        >
           ثبت کارت گارانتی جدید
         </Link>
       </div>
@@ -81,10 +84,11 @@ export default async function NormalCards({ searchParams }) {
           <Link
             key={page}
             href={`?page=${page}`}
-            className={`px-4 py-2 rounded-md ${currentPage === page
-                ? 'bg-primary text-white'
-                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
+            className={`px-4 py-2 rounded-md ${
+              currentPage === page
+                ? "bg-primary text-white"
+                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+            }`}
           >
             {page}
           </Link>

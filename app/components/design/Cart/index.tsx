@@ -36,8 +36,9 @@ const Cart: React.FC<ICard> = (props) => {
         <span className="font-bold text-sm text-white">
           {props.data.guaranteePeriod.title}
         </span>
-        <span className="font-bold text-sm text-white">
-          برند: {props.data.brand.title}
+        <span className="font-bold text-sm text-white flex flex-col items-end">
+          <span>برند: {props.data.brand.title}</span>
+          <span> {props.data.variant.title}</span>
         </span>
       </div>
       <div className="text-center text-white font-bold my-6 text-xl">
