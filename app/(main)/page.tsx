@@ -91,7 +91,7 @@ export default async function Home() {
             text="ثبت کارت گارانتی"
           />
           <LinkCard
-            href="/availability"
+            href="/requests"
             icon={<FaHistory />}
             text="پیگیری درخواست‌ها"
           />
