@@ -1,6 +1,6 @@
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import React from "react";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { IconButton } from "@mui/material";
 import { FaDownload } from "react-icons/fa";
 import Link from "next/link";

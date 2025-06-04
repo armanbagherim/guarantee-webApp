@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { fetcher } from "@/app/components/admin-components/fetcher";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { useRouter } from "next/navigation";
 import Uploader from "@/app/components/design/Uploader";
 import React, { useEffect, useState } from "react";

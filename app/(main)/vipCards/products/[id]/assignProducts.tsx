@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { useParams, useRouter } from "next/navigation";
 import LightDataGridClient from "@/app/components/admin-components/LightDataGrid/LightDataGridClient";
 import { LoadingIcon } from "@/app/components/design/icons";

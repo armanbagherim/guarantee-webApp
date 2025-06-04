@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetcher, useFetcher } from "@/app/components/admin-components/fetcher";
 import Loading from "../../../../components/admin-components/loading";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { useAtom } from "jotai";
 import { pageTitle } from "../../../layout";
 import SaveBar from "@/app/components/admin-components/SaveBar";

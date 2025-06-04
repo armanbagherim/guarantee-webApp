@@ -11,7 +11,7 @@ import {
   CardContent,
 } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme }) => ({

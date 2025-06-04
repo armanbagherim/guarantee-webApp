@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { useFetcher, fetcher } from "@/app/components/admin-components/fetcher";
 import Loading from "../../../../components/admin-components/loading";
 import { useAtom } from "jotai";

@@ -13,7 +13,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import Image from "next/image";
 import "dayjs/locale/fa";

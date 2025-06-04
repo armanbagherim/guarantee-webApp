@@ -9,7 +9,7 @@ import DataHandler from "./DataHandler";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import { useFormik } from "formik";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import ContractDataGrid from "./Contracts/ContractDataGrid";
 
 export default function EavTypesModule({ bundleType }) {

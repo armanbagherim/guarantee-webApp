@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { LinearProgress, Box, IconButton } from "@mui/material";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import ClearIcon from "@mui/icons-material/Clear";
 

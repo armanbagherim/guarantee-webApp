@@ -5,6 +5,7 @@ import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Swal from "sweetalert2";
+import GavelIcon from "@mui/icons-material/Gavel";
 
 export function columns(
   isEditEav,
@@ -17,7 +18,7 @@ export function columns(
   const getData = async (id: string) => {
     try {
       const res = await fetcher({
-        url: `/v1/api/guarantee/admin/supplierPersons/${id}`,
+        url: `/v1/api/guarantee/admin/faqs/${id}`,
         method: "GET",
       });
       return res.result;
@@ -41,7 +42,7 @@ export function columns(
 
       if (result.isConfirmed) {
         const req = await fetcher({
-          url: `/v1/api/guarantee/admin/supplierPersons/${id}`,
+          url: `/v1/api/guarantee/admin/faqs/${id}`,
           method: "DELETE",
         });
         toast.success("موفق");
@@ -52,21 +53,17 @@ export function columns(
     }
   };
   return [
-
-
     {
-      accessorKey: "user",
-      header: "نام",
-      Cell: ({ row }) => (
-        <span>
-          {row?.original?.user?.firstname} {row?.original?.user?.lastname}
-        </span>
-      ),
+      accessorKey: "question",
+      header: "سوال",
     },
-
     {
-      accessorKey: "user.phoneNumber",
-      header: "شماره موبایل  ",
+      accessorKey: "answer",
+      header: "پاسخ",
+    },
+    {
+      accessorKey: "priority",
+      header: "اولویت",
     },
     {
       accessorKey: "Actions",
@@ -77,16 +74,14 @@ export function columns(
           <IconButton
             onClick={async (e) => {
               const editData = await getData(row.original.id);
-              console.log(editData);
 
               setIsEditEav({ active: true, id: row.original.id, open: true });
 
               formik.setValues({
                 ...formik.values,
-                firstname: editData.user.firstname,
-                lastname: editData.user.lastname,
-                phoneNumber: editData.user.phoneNumber,
-                nationalCode: editData.user.nationalCode,
+                question: editData.question,
+                answer: editData.answer,
+                priority: +editData.priority,
               });
             }}
             aria-label="delete"
@@ -104,6 +99,7 @@ export function columns(
           >
             <DeleteIcon />
           </IconButton>
+
 
         </>
       ),

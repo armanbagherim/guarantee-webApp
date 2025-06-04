@@ -1,6 +1,6 @@
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import Swal from "sweetalert2";
 import HistoryIcon from "@mui/icons-material/History";

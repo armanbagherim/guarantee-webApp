@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { IconButton, Tooltip } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 

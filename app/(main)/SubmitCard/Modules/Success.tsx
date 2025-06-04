@@ -106,9 +106,8 @@ export default function Success({ packages, guarantee, paymentGateways, cardType
         </h2>
       </div>
 
-      {cardTypeState === 'normal' && <><p className="mb-2 text-xs text-gray-500">
-        شما می توانید شرایطی که شامل گارانتی نمی گردد را با هزینه اندک به شرایط
-        گارانتی اضافه نمائید
+      {cardTypeState === 'normal' && <><p className="mb-2 text-justify text-md text-gray-500">
+        مشتریان گرامی می‌توانند با پرداخت هزینه‌ای مناسب، شرایط و مواردی را که به‌صورت پیش‌فرض تحت پوشش گارانتی قرار ندارند، به قرارداد گارانتی خود افزوده و از پوشش گسترده‌تر خدمات بهره‌مند شوند.
       </p>
 
         <AdditionalItems selectedItems={selectedItems} setSelectedItems={setSelectedItems} packages={packages} />

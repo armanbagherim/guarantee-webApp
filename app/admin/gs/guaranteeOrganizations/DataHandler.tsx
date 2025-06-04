@@ -10,7 +10,7 @@ import { Checkbox, FormControlLabel, Box } from "@mui/material";
 import Map from "@/app/components/design/NewAddress/Map";
 import AdditionalData from "@/app/components/design/NewAddress/AdditionalData";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 
 const DataHandler = ({
   editData,
@@ -113,8 +113,8 @@ const DataHandler = ({
         activeStep === steps.length - 1
           ? formik.handleSubmit
           : activeStep === 1
-          ? fetchAddress
-          : handleNext
+            ? fetchAddress
+            : handleNext
       }
     >
       <form className="pt-4" onSubmit={formik.handleSubmit}>

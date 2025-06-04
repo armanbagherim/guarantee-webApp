@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Autocomplete } from "@mui/material";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 
 const PickOrganization = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Typography, div, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider } from "@mui/material";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 
 const PreFactor = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {

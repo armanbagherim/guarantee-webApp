@@ -9,7 +9,7 @@ import DataHandler from "./DataHandler";
 import { fetcher, useFetcher } from "@/app/components/admin-components/fetcher";
 import { useFormik } from "formik";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 
 export default function EavTypesModule() {
   const [title, setTitle] = useAtom(pageTitle);

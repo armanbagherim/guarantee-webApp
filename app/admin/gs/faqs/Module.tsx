@@ -10,6 +10,7 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import { useFormik } from "formik";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 import toast from "@/app/components/toast";
+import ContractDataGrid from "./Contracts/ContractDataGrid";
 
 export default function EavTypesModule() {
   const [title, setTitle] = useAtom(pageTitle);
@@ -32,7 +33,7 @@ export default function EavTypesModule() {
 
   useEffect(() => {
     setTitle({
-      title: "خدمات",
+      title: "سوالات متداول",
       buttonTitle: "افزودن",
       link: null,
       onClick: () =>
@@ -43,14 +44,13 @@ export default function EavTypesModule() {
     });
   }, []);
 
-  const data = useFormik({
+  const eavData = useFormik({
     enableReinitialize: true,
     validateOnChange: false,
     initialValues: {
-      title: null,
-      fee: 0,
-      provinceSolutions: []
-
+      question: null,
+      answer: null,
+      priority: null,
     },
     // validationSchema: formSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -58,7 +58,7 @@ export default function EavTypesModule() {
       console.log(dataBody);
       try {
         const result = await fetcher({
-          url: `/v1/api/guarantee/admin/solutions${isEditEav.active ? `/${isEditEav.id}` : ""
+          url: `/v1/api/guarantee/admin/faqs${isEditEav.active ? `/${isEditEav.id}` : ""
             }`,
           method: isEditEav.active ? "PUT" : "POST",
           body: dataBody,
@@ -77,24 +77,26 @@ export default function EavTypesModule() {
     },
   });
 
+
+
   return (
     <div>
       <DataHandler
         editData={isEditEav}
         loading={loading}
-        formik={data}
+        formik={eavData}
         setIsEdit={setIsEditEav}
       />
 
       <LightDataGrid
         triggered={triggered}
-        url={"/v1/api/guarantee/admin/solutions"}
+        url={"/v1/api/guarantee/admin/faqs"}
         columns={columns(
           isEditEav,
           setIsEditEav,
           triggered,
           setTriggered,
-          data,
+          eavData,
           setContractsModal
         )}
       />

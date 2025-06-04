@@ -7,7 +7,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import toast from "react-hot-toast";
+import toast from "@/app/components/toast";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { fetcher } from "@/app/components/admin-components/fetcher";
