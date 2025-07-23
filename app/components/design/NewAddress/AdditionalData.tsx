@@ -17,7 +17,7 @@ export default function AdditionalData({ data, isAdmin = false, proviences }) {
   };
   // Form fields configuration
   const formFields = [
-    { name: "name", label: "نام آدرس" },
+    { name: "name", label: "نام آدرس برای مثال خانه یا شرکت" },
     { name: "street", label: "خیابان" },
     { name: "plaque", label: "پلاک" },
     { name: "floorNumber", label: "طبقه" },

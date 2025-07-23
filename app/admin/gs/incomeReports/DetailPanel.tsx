@@ -37,7 +37,7 @@ const detailPanel = ({ row }) => {
                     <div><strong>برند:</strong> {request?.brand?.title}</div>
                     <div><strong>مدل:</strong> {request?.variant?.title}</div>
                     <div><strong>نوع محصول:</strong> {request?.productType?.title}</div>
-                    <div><strong>شماره سریال:</strong> {guarantee?.serialNumber}</div>
+                    <div><strong>شماره کارت گارانتی:</strong> {guarantee?.serialNumber}</div>
                 </div>
             </div>
 

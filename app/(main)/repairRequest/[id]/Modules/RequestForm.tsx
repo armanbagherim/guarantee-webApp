@@ -173,6 +173,9 @@ export default function RequestForm({ requestTypes, guarantee, session }) {
         )}
       </div>
 
+      <div className="bg-red-100 mb-2 text-center text-red-700 py-2 px-4 rounded-lg">
+        لطفا عکس کارت گارانتی را نیز در پیوست ارسال نمایید.
+      </div>
       <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">
         درصورت نیاز به ارسال ویدیو می‌توانید ویدیو خود را به شماره 09202186780
         در واتساپ یا ایتا ارسال نمایید.

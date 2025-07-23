@@ -23,7 +23,7 @@ import CurrentState from "./currentState";
 export default function EavTypesModule({ session, searchParams }) {
   const [title, setTitle] = useAtom(pageTitle);
   const [triggered, setTriggered] = useState(false);
-  const [filtersReady, setFiltersReady] = useState(false); // NEW
+  const [filtersReady, setFiltersReady] = useState(false);
   const [activeRequestActionModal, setActiveRequestActionModal] = useState({
     currentOperation: null,
     isOpen: false,
@@ -47,6 +47,7 @@ export default function EavTypesModule({ session, searchParams }) {
     firstname: "",
     lastname: "",
     requestTypeId: "",
+    serialNumber: "", // Added serialNumber to filters
   });
   const [requestTypes, setRequestTypes] = useState([]);
 
@@ -65,6 +66,7 @@ export default function EavTypesModule({ session, searchParams }) {
       "firstname",
       "lastname",
       "requestTypeId",
+      "serialNumber", // Added serialNumber to filterKeys
     ];
 
     const initialFilters = {};
@@ -127,6 +129,7 @@ export default function EavTypesModule({ session, searchParams }) {
       firstname: "",
       lastname: "",
       requestTypeId: "",
+      serialNumber: "", // Reset serialNumber
     });
     setTriggered(!triggered);
   };
@@ -230,6 +233,16 @@ export default function EavTypesModule({ session, searchParams }) {
                 </MenuItem>
               ))}
             </TextField>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              fullWidth
+              label="شماره کارت گارانتی"
+              name="serialNumber"
+              value={filters.serialNumber}
+              onChange={handleFilterChange}
+              size="small"
+            />
           </Grid>
           <Grid item xs={12} container justifyContent="flex-end" spacing={2}>
             <Grid item>

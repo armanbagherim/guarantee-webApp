@@ -75,7 +75,7 @@ export default function SubmitCardMain() {
 
       {guarantee && (
         <div className="mt-4 p-4 bg-green-50 border border-green-300 rounded text-sm text-green-800 space-y-2">
-          <div>📄 شماره سریال: {guarantee.serialNumber}</div>
+          <div>📄 شماره کارت گارانتی: {guarantee.serialNumber}</div>
           <div>🏷️ برند: {guarantee.brand?.title}</div>
           <div>🧾 مدل: {guarantee.variant?.title}</div>
           <div>🛠️ نوع محصول: {guarantee.productType?.title}</div>

@@ -26,8 +26,8 @@ const detailPanel = ({ row }) => {
                 <div className="space-y-1">
                     <div><strong>نام:</strong> {request?.user?.firstname} {request?.user?.lastname}</div>
                     <div><strong>کد ملی:</strong> {request?.user?.nationalCode || 'ثبت نشده'}</div>
-                    <div><strong>شماره تماس:</strong> {request?.phoneNumber}</div>
-                </div>
+                    <div><strong>شماره موبایل ثبت شده در فرم:</strong> {request?.phoneNumber}</div>
+                    <div><strong>شماره موبایل کاربر :</strong> {request?.user?.phoneNumber}</div>                </div>
             </div>
 
             {/* Product Information */}
@@ -37,7 +37,7 @@ const detailPanel = ({ row }) => {
                     <div><strong>برند:</strong> {request?.brand?.title}</div>
                     <div><strong>مدل:</strong> {request?.variant?.title}</div>
                     <div><strong>نوع محصول:</strong> {request?.productType?.title}</div>
-                    <div><strong>شماره سریال:</strong> {guarantee?.serialNumber}</div>
+                    <div><strong>شماره کارت گارانتی:</strong> {guarantee?.serialNumber}</div>
                 </div>
             </div>
 

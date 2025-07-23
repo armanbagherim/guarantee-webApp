@@ -166,7 +166,7 @@ export function columns(
     },
     {
       accessorKey: "guaranteeRequest.guarantee.serialNumber",
-      header: "شماره سریال",
+      header: "شماره کارت گارانتی",
     },
 
     {

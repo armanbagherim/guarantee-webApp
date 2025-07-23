@@ -22,6 +22,7 @@ const DatePickerPersian = ({
   onChange,
   label = null,
   format = "yyyy/MM/dd",
+  openPast = false, // Added openPast prop with default false
 }) => {
   const existingTheme = useTheme();
 
@@ -59,7 +60,7 @@ const DatePickerPersian = ({
               showDaysOutsideCurrentMonth={false}
               value={date ? new Date(date) : null}
               onChange={handleDateChange}
-              minDate={today}
+              minDate={openPast ? undefined : today} // Conditionally apply minDate
               format={format}
               slotProps={{
                 textField: {

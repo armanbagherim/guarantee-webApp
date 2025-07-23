@@ -43,7 +43,8 @@ export default function EavTypesModule({ session }) {
     phoneNumber: '',
     firstname: '',
     lastname: '',
-    requestTypeId: ''
+    requestTypeId: '',
+    serialNumber: '' // Added serialNumber to filters
   });
   const [requestTypes, setRequestTypes] = useState([]);
 
@@ -91,7 +92,8 @@ export default function EavTypesModule({ session }) {
       phoneNumber: '',
       firstname: '',
       lastname: '',
-      requestTypeId: ''
+      requestTypeId: '',
+      serialNumber: '' // Reset serialNumber
     });
     setTriggered(!triggered);
   };
@@ -191,6 +193,16 @@ export default function EavTypesModule({ session }) {
                 </MenuItem>
               ))}
             </TextField>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              fullWidth
+              label="شماره کارت گارانتی"
+              name="serialNumber"
+              value={filters.serialNumber}
+              onChange={handleFilterChange}
+              size="small"
+            />
           </Grid>
           <Grid item xs={12} container justifyContent="flex-end" spacing={2}>
             <Grid item>

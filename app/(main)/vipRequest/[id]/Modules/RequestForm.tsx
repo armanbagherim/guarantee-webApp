@@ -15,6 +15,7 @@ import toast from "@/app/components/toast";
 import { useRouter } from "next/navigation";
 import Uploader from "@/app/components/design/Uploader";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
+import Link from "next/link";
 
 export default function RequestForm({
   requestTypes,
@@ -173,6 +174,11 @@ export default function RequestForm({
                   </MenuItem>
                 ))}
               </Select>
+              {products.length === 0 && <div className="flex justify-between items-center mt-2">
+                <span className="text-sm font-bold text-red-600">محصولی اضافه نکرده اید</span>
+                <Link href={`/vipCards/products/${guaranteeId}`} className="text-sm font-bold text-blue-600">افزودن محصول</Link>
+              </div>}
+
             </FormControl>
           </div>
           <div>

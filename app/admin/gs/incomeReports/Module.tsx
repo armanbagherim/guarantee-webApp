@@ -156,6 +156,7 @@ export default function EavTypesModule({ session }) {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
+              openPast={true}
               label="از تاریخ"
               date={filters.beginDate}
               onChange={(e) => {
@@ -171,6 +172,7 @@ export default function EavTypesModule({ session }) {
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
               label="تا تاریخ"
+              openPast={true}
               date={filters.endDate}
               onChange={(e) => {
                 const date = new Date(e);
