@@ -51,7 +51,7 @@ const DatePickerPersian = ({
       <ThemeProvider theme={theme}>
         <div dir="rtl" className="flex flex-col mb-3">
           {label && (
-            <FormLabel className="font-bold text-sm text-gray-600 mb-1 mt-4">
+            <FormLabel className="font-bold text-sm text-gray-600 mb-1 mt-2">
               {label}
             </FormLabel>
           )}
