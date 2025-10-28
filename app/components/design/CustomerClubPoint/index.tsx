@@ -13,8 +13,8 @@ export default function CustomerClubPoint({ clubPoint }: IClubPoints) {
       <div className="px-4">
         <h4 className="text-2xl text-center font-bold">امتیاز شما</h4>
         <div className="mx-auto flex justify-center flex-col">
-          <div className="mb-8">
-            <CustomerClubVector />
+          <div className="mb-8 text-center">
+            <img src="/winner.png" className="h-auto w-[350px] mx-auto"/>
           </div>
           <div className="bg-primary flex justify-between p-4 text-white items-center rounded-[15px]">
             <Cup />{" "}

@@ -31,6 +31,11 @@ export function columns() {
       Cell: ({ row }) => <span>{formatDate(row.original.createdAt)}</span>,
     },
     {
+      accessorKey: "settlementDate",
+      header: "تاریخ پرداخت",
+      Cell: ({ row }) => <span>{formatDate(row.original.settlementDate)}</span>,
+    },
+    {
       accessorKey: "totalPrice",
       header: "مبلغ کل",
       Cell: ({ row }) => (

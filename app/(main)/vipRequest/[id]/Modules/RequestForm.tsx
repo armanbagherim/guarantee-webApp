@@ -190,6 +190,7 @@ export default function RequestForm({
               value={phoneNumber}
               onChange={(e) => handlePhoneNumberChange(e.target.value)}
             />
+            <span className="text-sm text-green-800 font-bold mt-2 block">در صورت پاسخگو نبودن شماره دیگری وارد کنید</span>
           </div>
         </div>
 
