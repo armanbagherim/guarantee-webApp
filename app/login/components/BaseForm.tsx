@@ -1,4 +1,3 @@
-
 "use client";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 import { getSession, signIn, useSession } from "next-auth/react";
@@ -23,9 +22,9 @@ export default function SignInForm({ session }) {
   const [lastName, setLastName] = useState("");
   const [nationalCode, setNationalCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [signUp, setSignUp] = useState(true);
+  const [signUp, setSignUp] = useState(false);
 
-  const [state, setState] = useState("verify");
+  const [state, setState] = useState("phone");
   const [number, setNumber] = useState();
   const [rule, setRule] = useState(false);
   const [userTypeId, setUserTypeId] = useState(1); // 1: حقیقی, 2: حقوقی
@@ -113,13 +112,19 @@ export default function SignInForm({ session }) {
 
       const redirectUrl = pathname.get("redirect_back_url") || "/";
 
-      const result = await signIn("credentials", {
+      const body = {
         verifyCode,
         phoneNumber,
-        firstName,
-        nationalCode,
-        lastName,
-        userTypeId,
+        ...(signUp && {
+          firstName,
+          nationalCode,
+          lastName,
+          userTypeId,
+        }),
+      };
+
+      const result = await signIn("credentials", {
+        ...body,
         redirect: false,
         callbackUrl: redirectUrl,
       });
@@ -163,30 +168,39 @@ export default function SignInForm({ session }) {
                     <div className="text-right">
                       {signUp && (
                         <div className="flex flex-col gap-5">
-                          <div className="flex justify-center mb-4 border-b border-gray-300 pb-2">
-                            <div className="flex bg-gray-100 rounded-full p-1">
-                              <button
-                                type="button"
-                                onClick={() => setUserTypeId(1)}
-                                className={`px - 6 py - 2 rounded - full transition - colors ${userTypeId === 1
-                                  ? "bg-primary text-white shadow-md"
-                                  : "bg-transparent text-gray-700"
-                                  } `}
-                              >
-                                مشتری حقیقی
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setUserTypeId(2)}
-                                className={`px - 6 py - 2 rounded - full transition - colors ${userTypeId === 2
-                                  ? "bg-primary text-white shadow-md"
-                                  : "bg-transparent text-gray-700"
-                                  } `}
-                              >
-                                مشتری حقوقی
-                              </button>
-                            </div>
+                          <div className="flex justify-center mb-6">
+                          <div className="flex bg-white rounded-lg shadow-md p-1">
+                            <button
+                              type="button"
+                              onClick={() => setUserTypeId(1)}
+                              className={`px-6 py-3 rounded-md transition-all duration-300 font-medium flex items-center gap-2 ${
+                                userTypeId === 1
+                                  ? "bg-blue-500 text-white shadow-sm"
+                                  : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              }`}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                              مشتری حقیقی
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setUserTypeId(2)}
+                              className={`px-6 py-3 rounded-md transition-all duration-300 font-medium flex items-center gap-2 ${
+                                userTypeId === 2
+                                  ? "bg-blue-500 text-white shadow-sm"
+                                  : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              }`}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm3 1h6v4H7V5zm6 6H7v2h6v-2z" clipRule="evenodd" />
+                                <path d="M8 7a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm1 3a1 1 0 100 2h2a1 1 0 100-2H9z" />
+                              </svg>
+                              مشتری حقوقی
+                            </button>
                           </div>
+                        </div>
                           <div className="flex gap-4">
                             <div className="w-full">
                               <h4 className="opacity-70 text-xs mb-3">نام</h4>

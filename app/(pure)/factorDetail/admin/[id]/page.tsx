@@ -27,7 +27,7 @@ async function getFactorDetails(id: string) {
 
 export default async function FactorDetailsPage({ params }: { params: { id: string } }) {
     const { result: factor } = await getFactorDetails(params.id);
-
+    console.log(factor)
 
 
     return (

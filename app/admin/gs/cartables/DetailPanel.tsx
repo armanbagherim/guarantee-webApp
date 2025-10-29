@@ -24,11 +24,11 @@ const detailPanel = ({ row }) => {
             <div className="bg-gray-50 p-3 rounded-md">
                 <h3 className="font-bold text-sm mb-2">اطلاعات کاربر</h3>
                 <div className="space-y-1">
+                    <div><strong>نوع مشتری:</strong> {request?.user?.userType?.title}</div>
                     <div><strong>نام:</strong> {request?.user?.firstname} {request?.user?.lastname}</div>
-                    <div><strong>کد ملی:</strong> {request?.user?.nationalCode || 'ثبت نشده'}</div>
+                    <div><strong>{request?.user?.userType.id == 1 ? "کد ملی" : "شناسه ملی" } :</strong> {request?.user?.nationalCode || 'ثبت نشده'}</div>
                     <div><strong>شماره موبایل ثبت شده در فرم:</strong> {request?.phoneNumber}</div>
-                    <div><strong>شماره موبایل کاربر :</strong> {request?.user?.phoneNumber}</div>
-                </div>
+                    <div><strong>شماره موبایل کاربر :</strong> {request?.user?.phoneNumber}</div>                </div>
             </div>
 
             {/* Product Information */}

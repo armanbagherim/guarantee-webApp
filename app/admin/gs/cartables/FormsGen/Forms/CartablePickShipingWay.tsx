@@ -4,7 +4,11 @@ import {
     TextField,
     Box,
     CircularProgress,
-    Backdrop
+    Backdrop,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
 } from "@mui/material";
 import toast from "@/app/components/toast";
 import { fetcher } from "@/app/components/admin-components/fetcher";
@@ -23,6 +27,10 @@ const CartablePickShipingWay = ({ currentOperation, nodeCommands, setAction, set
     const [activeTab, setActiveTab] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // New loading state for initial data
+    const [items, setItems] = useState([]);
+    const [itemModalOpen, setItemModalOpen] = useState(false);
+    const [newItemTitle, setNewItemTitle] = useState("");
+    const [newItemBarcode, setNewItemBarcode] = useState("");
     const router = useRouter();
 
     const fetchShipmentWays = async () => {
@@ -66,6 +74,27 @@ const CartablePickShipingWay = ({ currentOperation, nodeCommands, setAction, set
         setSelectedShippingWay(shippingWays[index]?.id || null);
     };
 
+    const handleAddItem = () => {
+        if (!newItemTitle.trim()) {
+            toast.error("لطفا عنوان را وارد کنید.");
+            return;
+        }
+        const newItem = {
+            title: newItemTitle.trim(),
+            barcode: newItemBarcode.trim() || null,
+        };
+        setItems([...items, newItem]);
+        setNewItemTitle("");
+        setNewItemBarcode("");
+        setItemModalOpen(false);
+        toast.success("اقلام با موفقیت اضافه شد.");
+    };
+
+    const handleRemoveItem = (index) => {
+        const updatedItems = items.filter((_, i) => i !== index);
+        setItems(updatedItems);
+    };
+
     const handleButtonClick = async (command) => {
         if (!selectedShippingWay) {
             toast.error("لطفا روش ارسال را انتخاب کنید");
@@ -89,6 +118,7 @@ const CartablePickShipingWay = ({ currentOperation, nodeCommands, setAction, set
                     nodeId: +node.id,
                     cartableShipmentWayTrackingCode: description,
                     cartableShipmentWayId: +selectedShippingWay,
+                    items: items,
                 }),
             });
 
@@ -149,6 +179,50 @@ const CartablePickShipingWay = ({ currentOperation, nodeCommands, setAction, set
                     <div>در حال پردازش درخواست...</div>
                 </Box>
             </Backdrop>
+
+            {/* New Section: اقلام همراه با دستگاه - با دیزاین مدرن و Tailwind */}
+            <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                    <span className="text-xl font-bold text-gray-800">اقلام همراه با دستگاه</span>
+                    <button
+                        onClick={() => setItemModalOpen(true)}
+                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-md transition-all duration-200 transform hover:scale-105"
+                    >
+                        + اضافه کردن اقلام
+                    </button>
+                </div>
+                {items.length > 0 ? (
+                    <div className="space-y-3">
+                        {items.map((item, index) => (
+                            <div
+                                key={index}
+                                className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 flex justify-between items-center hover:shadow-md transition-shadow duration-200"
+                            >
+                                <div className="flex flex-col space-y-1 flex-1">
+                                    <span className="text-sm font-semibold text-gray-900">{item.title}</span>
+                                    {item.barcode && (
+                                        <span className="text-xs text-gray-600">بارکد: {item.barcode}</span>
+                                    )}
+                                </div>
+                                <button
+                                    onClick={() => handleRemoveItem(index)}
+                                    className="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-sm transition-all duration-200 transform hover:scale-110"
+                                    title="حذف"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
+                        <p className="text-sm text-gray-500 mb-2">هیچ اقلامی اضافه نشده است.</p>
+                        <p className="text-xs text-gray-400">برای ثبت اقلام همراه، روی دکمه بالا کلیک کنید.</p>
+                    </div>
+                )}
+            </div>
 
             {/* Custom Flex Tabs */}
             <div className="w-full flex overflow-x-auto gap-2 p-1 rounded-xl">
@@ -214,6 +288,40 @@ const CartablePickShipingWay = ({ currentOperation, nodeCommands, setAction, set
                     </Button>
                 ))}
             </div>
+
+            {/* Modal for Adding Items */}
+            <Dialog open={itemModalOpen} onClose={() => setItemModalOpen(false)}>
+                <DialogTitle>اضافه کردن اقلام همراه با دستگاه</DialogTitle>
+                <DialogContent>
+                    <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="item-title"
+                            label="عنوان اقلام"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={newItemTitle}
+                            onChange={(e) => setNewItemTitle(e.target.value)}
+                        />
+                        <TextField
+                            margin="dense"
+                            id="item-barcode"
+                            label="بارکد (اختیاری)"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={newItemBarcode}
+                            onChange={(e) => setNewItemBarcode(e.target.value)}
+                        />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setItemModalOpen(false)}>لغو</Button>
+                    <Button onClick={handleAddItem}>اضافه کردن</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

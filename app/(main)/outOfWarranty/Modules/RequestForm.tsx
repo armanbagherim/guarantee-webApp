@@ -15,6 +15,7 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -40,6 +41,10 @@ export default function RequestForm({ requestTypes, session }) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [description, setDescription] = useState("");
+  const [items, setItems] = useState([]);
+  const [itemModalOpen, setItemModalOpen] = useState(false);
+  const [newItemTitle, setNewItemTitle] = useState("");
+  const [newItemBarcode, setNewItemBarcode] = useState("");
   const router = useRouter();
 
   // Modal select states
@@ -89,6 +94,27 @@ export default function RequestForm({ requestTypes, session }) {
     return true;
   };
 
+  const handleAddItem = () => {
+    if (!newItemTitle.trim()) {
+      toast.error("لطفا عنوان را وارد کنید.");
+      return;
+    }
+    const newItem = {
+      title: newItemTitle.trim(),
+      barcode: newItemBarcode.trim() || null,
+    };
+    setItems([...items, newItem]);
+    setNewItemTitle("");
+    setNewItemBarcode("");
+    setItemModalOpen(false);
+    toast.success("اقلام با موفقیت اضافه شد.");
+  };
+
+  const handleRemoveItem = (index) => {
+    const updatedItems = items.filter((_, i) => i !== index);
+    setItems(updatedItems);
+  };
+
   const saveData = async () => {
     if (!validateForm()) return;
 
@@ -106,6 +132,7 @@ export default function RequestForm({ requestTypes, session }) {
           brandId: +selectedBrand,
           variantId: +selectedVariant,
           attachments: photos.map((photo) => ({ attachmentId: photo.id })),
+          items: items,
         },
       });
       toast.success("درخواست با موفقیت ثبت شد.");
@@ -191,7 +218,7 @@ export default function RequestForm({ requestTypes, session }) {
 
   return (
     <div className="bg-white p-6 rounded-[25px] request">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <AddressSection
           refetch={getAddresses}
           allAddresess={allAddresess}
@@ -279,7 +306,52 @@ export default function RequestForm({ requestTypes, session }) {
 
         </div>
       </div>
-      <div className="mb-4">
+
+      {/* New Section: اقلام همراه با دستگاه - با دیزاین مدرن و Tailwind */}
+      <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-xl font-bold text-gray-800">اقلام همراه با دستگاه</span>
+          <button
+            onClick={() => setItemModalOpen(true)}
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-md transition-all duration-200 transform hover:scale-105"
+          >
+            + اضافه کردن اقلام
+          </button>
+        </div>
+        {items.length > 0 ? (
+          <div className="space-y-3">
+            {items.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 flex justify-between items-center hover:shadow-md transition-shadow duration-200"
+              >
+                <div className="flex flex-col space-y-1 flex-1">
+                  <span className="text-sm font-semibold text-gray-900">{item.title}</span>
+                  {item.barcode && (
+                    <span className="text-xs text-gray-600">بارکد: {item.barcode}</span>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleRemoveItem(index)}
+                  className="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-sm transition-all duration-200 transform hover:scale-110"
+                  title="حذف"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
+            <p className="text-sm text-gray-500 mb-2">هیچ اقلامی اضافه نشده است.</p>
+            <p className="text-xs text-gray-400">برای ثبت اقلام همراه، روی دکمه بالا کلیک کنید.</p>
+          </div>
+        )}
+      </div>
+
+      <div className="mb-6">
         <span className="mb-3 text-bold block">آپلود تصویر محصول</span>
         <Uploader
           photos={photos}
@@ -290,7 +362,7 @@ export default function RequestForm({ requestTypes, session }) {
           token={session.token}
         />
       </div>
-      <div className="bg-yellow-100 mb-4 text-center text-yellow-700 py-2 px-4 rounded-lg">
+      <div className="bg-yellow-100 mb-6 text-center text-yellow-700 py-2 px-4 rounded-lg">
         درصورت نیاز به ارسال ویدیو می‌توانید ویدیو خود را به شماره ۰۹۲۰۲۱۸۶۷۸۰
         در واتساپ یا ایتا ارسال نمایید.
       </div>
@@ -360,6 +432,40 @@ export default function RequestForm({ requestTypes, session }) {
           <Button onClick={() => setModalOpen(false)} color="primary">
             بستن
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Modal for Adding Items */}
+      <Dialog open={itemModalOpen} onClose={() => setItemModalOpen(false)}>
+        <DialogTitle>اضافه کردن اقلام همراه با دستگاه</DialogTitle>
+        <DialogContent>
+          <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="item-title"
+              label="عنوان اقلام"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={newItemTitle}
+              onChange={(e) => setNewItemTitle(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              id="item-barcode"
+              label="بارکد (اختیاری)"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={newItemBarcode}
+              onChange={(e) => setNewItemBarcode(e.target.value)}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setItemModalOpen(false)}>لغو</Button>
+          <Button onClick={handleAddItem}>اضافه کردن</Button>
         </DialogActions>
       </Dialog>
     </div>

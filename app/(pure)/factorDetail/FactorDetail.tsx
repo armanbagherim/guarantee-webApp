@@ -161,11 +161,15 @@ export default function FactorDetail({ factor, isAdmin = false }) {
                 </span>
               </div>
               <div>
+                <span className="text-gray-600">نوع مشتری: </span>
+                {factor.userTypeTitle}
+              </div>
+              <div>
                 <span className="text-gray-600">نام مشتری: </span>
                 {factor.fullName}
               </div>
               <div>
-                <span className="text-gray-600">کد ملی: </span>
+                <span className="text-gray-600">{factor.userTypeId === 1 ? "کد ملی: " : "شناسه ملی: "}</span>
                 {factor.nationalCode ?? "ثبت نشده"}
               </div>
               <div>
