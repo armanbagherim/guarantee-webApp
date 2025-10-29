@@ -1,3 +1,4 @@
+
 "use client";
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
 import { getSession, signIn, useSession } from "next-auth/react";
@@ -22,11 +23,12 @@ export default function SignInForm({ session }) {
   const [lastName, setLastName] = useState("");
   const [nationalCode, setNationalCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [signUp, setSignUp] = useState(false);
+  const [signUp, setSignUp] = useState(true);
 
-  const [state, setState] = useState("phone");
+  const [state, setState] = useState("verify");
   const [number, setNumber] = useState();
   const [rule, setRule] = useState(false);
+  const [userTypeId, setUserTypeId] = useState(1); // 1: حقیقی, 2: حقوقی
   const phoneNumberRegex = /^09\d{9}$/; // Iranian mobile number pattern
   const verificationCodeRegex = /^\d{4}$/; // Exactly 4 digits
 
@@ -117,6 +119,7 @@ export default function SignInForm({ session }) {
         firstName,
         nationalCode,
         lastName,
+        userTypeId,
         redirect: false,
         callbackUrl: redirectUrl,
       });
@@ -160,6 +163,30 @@ export default function SignInForm({ session }) {
                     <div className="text-right">
                       {signUp && (
                         <div className="flex flex-col gap-5">
+                          <div className="flex justify-center mb-4 border-b border-gray-300 pb-2">
+                            <div className="flex bg-gray-100 rounded-full p-1">
+                              <button
+                                type="button"
+                                onClick={() => setUserTypeId(1)}
+                                className={`px - 6 py - 2 rounded - full transition - colors ${userTypeId === 1
+                                  ? "bg-primary text-white shadow-md"
+                                  : "bg-transparent text-gray-700"
+                                  } `}
+                              >
+                                مشتری حقیقی
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setUserTypeId(2)}
+                                className={`px - 6 py - 2 rounded - full transition - colors ${userTypeId === 2
+                                  ? "bg-primary text-white shadow-md"
+                                  : "bg-transparent text-gray-700"
+                                  } `}
+                              >
+                                مشتری حقوقی
+                              </button>
+                            </div>
+                          </div>
                           <div className="flex gap-4">
                             <div className="w-full">
                               <h4 className="opacity-70 text-xs mb-3">نام</h4>
@@ -183,7 +210,9 @@ export default function SignInForm({ session }) {
                             </div>
                           </div>
                           <div className="w-full">
-                            <h4 className="opacity-70 text-xs mb-3">کد ملی</h4>
+                            <h4 className="opacity-70 text-xs mb-3">
+                              {userTypeId === 1 ? "کد ملی" : "شناسه ملی"}
+                            </h4>
                             <input
                               className="bg-[#f6f6f6] border border-gray-300 text-right rounded-2xl py-4 px-6 w-full outline-none mb-4"
                               type="text"
@@ -276,7 +305,7 @@ export default function SignInForm({ session }) {
                     <span>{state === "phone" ? "دریافت کد تایید" : "ورود"}</span>
                     <span
                       role="status"
-                      className={`pr-4 ${loading !== true && "hidden"}`}
+                      className={`pr - 4 ${loading !== true && "hidden"} `}
                     >
                       <svg
                         aria-hidden="true"
@@ -290,7 +319,7 @@ export default function SignInForm({ session }) {
                           fill="currentColor"
                         />
                         <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C385.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
                           fill="currentFill"
                         />
                       </svg>
