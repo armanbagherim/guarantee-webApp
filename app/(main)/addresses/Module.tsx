@@ -101,7 +101,7 @@ export default function UserAddressesModule() {
                   </div>
                 </div>
                 <p>{concat(address)}</p>
-                {/* <p>کد پستی: {address.postalCode}</p>
+                {/*] <p>کد پستی: {address.postalCode}</p>
                 <p>شهر: {address.city}</p> */}
               </div>
             ))

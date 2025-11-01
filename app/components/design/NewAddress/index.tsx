@@ -16,10 +16,11 @@ const formSchema = Yup.object({
   latitude: Yup.number().required("انتخاب مختصات الزامی است"),
   longitude: Yup.number().required("انتخاب مختصات الزامی است"),
   provinceId: Yup.number().min(1, "انتخاب استان الزامی است"),
+  cityId: Yup.number().min(1, "انتخاب شهر الزامی است"),
   street: Yup.string().required("نام خیابان الزامی است"),
-  plaque: Yup.string().required("پلاک الزامی است"), // Optional
-  floorNumber: Yup.string().required("طبقه الزامی است"), // Optional
-  postalCode: Yup.string().required("کد پستی الزامی است"), // Optional
+  plaque: Yup.string().required("پلاک الزامی است"),
+  floorNumber: Yup.string().required("طبقه الزامی است"),
+  postalCode: Yup.string().required("کد پستی الزامی است"),
 });
 
 export default function NewAddress({
@@ -109,6 +110,7 @@ export default function NewAddress({
       latitude: null,
       longitude: null,
       provinceId: 0,
+      cityId: 0,
       street: null,
       plaque: null,
       floorNumber: null,
@@ -162,6 +164,7 @@ export default function NewAddress({
         latitude: edit.latitude || null,
         longitude: edit.longitude || null,
         provinceId: edit.provinceId || 0,
+        cityId: edit.cityId || 0,
         street: edit.street || null,
         plaque: edit.plaque || null,
         floorNumber: edit.floorNumber || null,
