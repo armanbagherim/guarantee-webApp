@@ -7,11 +7,20 @@ import LightDataGrid from "@/app/components/admin-components/LightDataGrid/Light
 import { columns } from "./columns";
 import FormGen from "./FormsGen";
 import DetailPanel from "./DetailPanel";
-import { TextField, Button, Grid, Paper, Autocomplete, Dialog } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Grid,
+  Paper,
+  Autocomplete,
+  Dialog,
+} from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ClearIcon from "@mui/icons-material/Clear";
+import DownloadIcon from "@mui/icons-material/Download";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 import { fetcher } from "@/app/components/admin-components/fetcher";
+import toast from "@/app/components/toast";
 import PickOrganizationModal from "./Organization";
 
 export default function EavTypesModule({ session }) {
@@ -84,7 +93,6 @@ export default function EavTypesModule({ session }) {
       }
     };
 
-
     fetchRequestTypes();
   }, []);
 
@@ -143,11 +151,47 @@ export default function EavTypesModule({ session }) {
     });
     setOrganOpen({
       isOpen: false,
-      value: null
-    })
+      value: null,
+    });
     setSelectedOrg(null);
     setTriggered(!triggered);
     fetchTotals();
+  };
+
+  const downloadExcel = async () => {
+    if (!filters.beginDate || !filters.endDate) {
+      toast.error("لطفاً تاریخ‌ها را انتخاب کنید");
+      return;
+    }
+
+    try {
+      const queryString = buildQueryString();
+      const response = await fetcher({
+        url: `/v1/api/guarantee/report/incomeReports/export?${queryString}`,
+        method: "GET",
+        responseType: "blob",
+      });
+
+      // Create a download link
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `income-report_${new Date().toISOString().split("T")[0]}.xlsx`
+      );
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("فایل با موفقیت دانلود شد");
+    } catch (err) {
+      toast.error("خطا در دانلود فایل");
+      console.error("Download error:", err);
+    }
   };
 
   return (
@@ -186,19 +230,35 @@ export default function EavTypesModule({ session }) {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <h4 className="mb-4 font-bold">انتخاب نماینده</h4>
-            <button className="bg-gray-100 p-4 font-bold text-md w-full rounded-xl text-right" onClick={e => setOrganOpen({
-              ...organOpen,
-              isOpen: true,
-            })}>{organOpen.value ?? "نماینده"}</button>
-            <Dialog open={organOpen.isOpen} onClose={() => setOrganOpen(
-              {
-                ...organOpen,
-                isOpen: false,
+            <button
+              className="bg-gray-100 p-4 font-bold text-md w-full rounded-xl text-right"
+              onClick={(e) =>
+                setOrganOpen({
+                  ...organOpen,
+                  isOpen: true,
+                })
               }
-            )} fullWidth maxWidth="sm">
+            >
+              {organOpen.value ?? "نماینده"}
+            </button>
+            <Dialog
+              open={organOpen.isOpen}
+              onClose={() =>
+                setOrganOpen({
+                  ...organOpen,
+                  isOpen: false,
+                })
+              }
+              fullWidth
+              maxWidth="sm"
+            >
               <div className="p-4">
                 <h2 className="text-lg font-bold mb-4">انتخاب سازمان</h2>
-                <PickOrganizationModal setOrganId={setFilters} url={`/v1/api/guarantee/admin/guaranteeOrganizations`} setOrganOpen={setOrganOpen} />
+                <PickOrganizationModal
+                  setOrganId={setFilters}
+                  url={`/v1/api/guarantee/admin/guaranteeOrganizations`}
+                  setOrganOpen={setOrganOpen}
+                />
               </div>
             </Dialog>
           </Grid>
@@ -229,6 +289,16 @@ export default function EavTypesModule({ session }) {
                 اعمال فیلتر
               </Button>
             </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={downloadExcel}
+                color="secondary"
+              >
+                خروجی اکسل
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Paper>
@@ -236,14 +306,17 @@ export default function EavTypesModule({ session }) {
       {/* Totals Summary */}
       {totals && (
         <div className="bg-gray-50 p-6 mb-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">خلاصه مبالغ</h3>
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            خلاصه مبالغ
+          </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div>
               <div className="text-sm font-medium text-gray-800">
                 جمع مبلغ خدمات شامل گارانتی:
               </div>
               <div className="text-base font-bold text-emerald-600">
-                {Number(totals.sumOfSolutionIncludeWarranty).toLocaleString()} ءرء
+                {Number(totals.sumOfSolutionIncludeWarranty).toLocaleString()}{" "}
+                ءرء
               </div>
             </div>
             <div>
@@ -275,7 +348,9 @@ export default function EavTypesModule({ session }) {
                 حداقل مبلغ دریافت از مشتری برای موارد خارج شرایط گارانتی:
               </div>
               <div className="text-base font-bold text-gray-600">
-                {Number(totals.atLeastPayFromCustomerForOutOfWarranty).toLocaleString()}{" "}
+                {Number(
+                  totals.atLeastPayFromCustomerForOutOfWarranty
+                ).toLocaleString()}{" "}
                 ءرء
               </div>
             </div>
@@ -292,7 +367,10 @@ export default function EavTypesModule({ session }) {
                 پرداخت نقدی مشتری در صورت نداشتن اعتبار VIP:
               </div>
               <div className="text-base font-bold text-gray-600">
-                {Number(totals.extraCashPaymentForUnavailableVip).toLocaleString()} ءرء
+                {Number(
+                  totals.extraCashPaymentForUnavailableVip
+                ).toLocaleString()}{" "}
+                ءرء
               </div>
             </div>
             <div>

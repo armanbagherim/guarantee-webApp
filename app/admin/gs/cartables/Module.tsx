@@ -21,6 +21,7 @@ import {
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ClearIcon from '@mui/icons-material/Clear';
 import Attachements from "./attachements";
+import RequestItems from "./RequestItems";
 
 export default function EavTypesModule({ session }) {
   const [title, setTitle] = useAtom(pageTitle);
@@ -37,6 +38,11 @@ export default function EavTypesModule({ session }) {
     requestId: null,
     isOpen: false,
   });
+    const [requestOpen, setRequestOpen] = useState({
+      requestId: null,
+      isOpen: false,
+      request: null
+    });
   const [filters, setFilters] = useState({
     requestId: '',
     nationalCode: '',
@@ -117,11 +123,13 @@ export default function EavTypesModule({ session }) {
         action={activeRequestActionModal}
         setAction={setActiveRequestActionModal}
       />
-
       <HistoryData historyOpen={historyOpen} setHistoryOpen={setHistoryOpen} />
-      <Attachements historyOpen={attachementsOpen} setHistoryOpen={setAttachementsOpen} />
-
-      {/* Filter Section */}
+      <Attachements
+        historyOpen={attachementsOpen}
+        setHistoryOpen={setAttachementsOpen}
+      />
+      <RequestItems historyOpen={requestOpen} setHistoryOpen={setRequestOpen} />
+      ,{/* Filter Section */}
       <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>
@@ -226,7 +234,6 @@ export default function EavTypesModule({ session }) {
           </Grid>
         </Grid>
       </Paper>
-
       <LightDataGrid
         triggered={triggered}
         url={`/v1/api/guarantee/admin/cartables?${buildQueryString()}`}
@@ -237,7 +244,9 @@ export default function EavTypesModule({ session }) {
           historyOpen,
           setHistoryOpen,
           attachementsOpen,
-          setAttachementsOpen
+          setAttachementsOpen,
+          requestOpen,
+          setRequestOpen
         )}
         detailPanel={DetailPanel}
       />

@@ -75,7 +75,14 @@ const Uploader = ({
         type === "image" && /^image\/(jpeg|png|gif|webp)$/.test(file.type);
       const isValidVideo =
         type === "video" && /^video\/(mp4|avi|mov)$/.test(file.type);
-      return isValidImage || isValidVideo;
+      const isValidExcel =
+        type === "excel" && (
+          file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+          file.type === "application/vnd.ms-excel" ||
+          /\.(xlsx|xls)$/i.test(file.name)
+        );
+
+      return isValidImage || isValidVideo || isValidExcel;
     });
 
     if (validFiles.length === 0) {
@@ -209,7 +216,10 @@ const Uploader = ({
               accept={
                 type === "image"
                   ? "image/jpeg,image/png,image/gif,image/webp"
-                  : "video/mp4,video/avi,video/mov"
+                  : type === "video"
+                  ? "video/mp4,video/avi,video/mov"
+                  : /* excel */
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.xlsx,.xls"
               }
               multiple
               onChange={handleFileChange}
@@ -222,7 +232,7 @@ const Uploader = ({
           </div>
           <div className="flex gap-4">
             {files.map((file) => (
-              <div key={file.name}>
+              <div key={file.name} className="flex items-center gap-2">
                 {type === "image" ? (
                   <img
                     src={file.preview}
@@ -231,8 +241,21 @@ const Uploader = ({
                     height={100}
                     width={100}
                   />
-                ) : (
+                ) : type === "video" ? (
                   <video className="" src={file.preview} controls></video>
+                ) : type === "excel" ? (
+                  <div className="flex items-center gap-2 p-2 border rounded bg-yellow-50">
+                    <span style={{ fontSize: 28 }}>📊</span>
+                    <div>
+                      <div className="font-medium">{file.name}</div>
+                      <div className="text-sm text-gray-500">{(file.size / (1024 * 1024)).toFixed(2)} MB</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 p-2 border rounded">
+                    <span>📄</span>
+                    <div>{file.name}</div>
+                  </div>
                 )}
               </div>
             ))}

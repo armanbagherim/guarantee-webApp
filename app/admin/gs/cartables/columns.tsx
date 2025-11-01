@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import HistoryIcon from "@mui/icons-material/History";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AllInboxIcon from "@mui/icons-material/AllInbox";
+
 export function columns(
   triggered,
   setTriggered,
@@ -13,7 +15,9 @@ export function columns(
   istoryOpen,
   setHistoryOpen,
   attachementsOpen,
-  setAttachementsOpen
+  setAttachementsOpen,
+  requestOpen,
+  setRequestOpen
 ) {
   const getData = async (id: string) => {
     try {
@@ -187,6 +191,20 @@ export function columns(
               }}
             >
               <AdjustIcon />
+            </button>
+          </Tooltip>
+          <Tooltip placement="top" title={`اقلام همراه`}>
+            <button
+              className="px-2 py-2 text-xs font-bold bg-rose-100 hover:bg-rose-900 hover:text-white transition-all text-rose-600 rounded-lg"
+              onClick={async (e) => {
+                setRequestOpen({
+                  requestId: row.original.requestId,
+                  isOpen: true,
+                  request: row.original,
+                });
+              }}
+            >
+              <AllInboxIcon />
             </button>
           </Tooltip>
           <Tooltip placement="top" title={`گردش درخواست`}>
