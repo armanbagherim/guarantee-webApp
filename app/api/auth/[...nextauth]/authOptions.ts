@@ -39,7 +39,7 @@ export const authOptions = {
               lastname: lastName,
               nationalCode,
               phoneNumber,
-              userTypeId
+              userTypeId: +userTypeId
             }).filter(([_, value]) => value !== null && value !== "")
           );
 
@@ -58,7 +58,7 @@ export const authOptions = {
             const errors = await res.json();
             console.log(nationalCode);
             console.log('herererere', errors);
-            throw new Error("! کد تایید معتبر نیست");
+            throw new Error(errors.message || "خطای سیستم");
           }
         }
 
