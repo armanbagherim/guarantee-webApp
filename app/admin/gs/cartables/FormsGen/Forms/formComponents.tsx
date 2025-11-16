@@ -1,4 +1,5 @@
 import React from "react";
+import ReceiveDeviceInOrganization from "./ReceiveDeviceInOrganization";
 
 // Dynamically import components
 const PickOrganization = React.lazy(() => import("./PickOrganization"));
@@ -22,4 +23,5 @@ export const formComponents = {
     PreFactor,
     CartablePickShipingWay,
     DescriptionWithUploadForm,
+    ReceiveDeviceInOrganization,
 };
