@@ -38,11 +38,11 @@ export default function EavTypesModule({ session }) {
     requestId: null,
     isOpen: false,
   });
-    const [requestOpen, setRequestOpen] = useState({
-      requestId: null,
-      isOpen: false,
-      request: null
-    });
+  const [requestOpen, setRequestOpen] = useState({
+    requestId: null,
+    isOpen: false,
+    request: null
+  });
   const [filters, setFilters] = useState({
     requestId: '',
     nationalCode: '',
@@ -129,7 +129,7 @@ export default function EavTypesModule({ session }) {
         setHistoryOpen={setAttachementsOpen}
       />
       <RequestItems historyOpen={requestOpen} setHistoryOpen={setRequestOpen} />
-      ,{/* Filter Section */}
+      {/* Filter Section */}
       <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>

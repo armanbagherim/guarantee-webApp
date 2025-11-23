@@ -5,7 +5,6 @@ import { pageTitle } from "../../layout";
 import { useAtom } from "jotai";
 import LightDataGrid from "@/app/components/admin-components/LightDataGrid/LightDataGrid";
 import { columns } from "./columns";
-import FormGen from "./FormsGen";
 import HistoryData from "./historyData";
 import DetailPanel from "./DetailPanel";
 import {
@@ -152,17 +151,11 @@ export default function EavTypesModule({ session, searchParams }) {
 
   return (
     <div>
-      <FormGen
-        triggered={triggered}
-        setTriggered={setTriggered}
-        session={session}
-        action={activeRequestActionModal}
-        setAction={setActiveRequestActionModal}
-      />
+
 
       <HistoryData historyOpen={historyOpen} setHistoryOpen={setHistoryOpen} />
       <CurrentState historyOpen={currentOpen} setHistoryOpen={setCurrentOpen} />
-      <RequestItems historyOpen={requestOpen} setHistoryOpen={setRequestOpen} />, 
+      <RequestItems historyOpen={requestOpen} setHistoryOpen={setRequestOpen} />,
       <Attachements
         historyOpen={attachementsOpen}
         setHistoryOpen={setAttachementsOpen}
