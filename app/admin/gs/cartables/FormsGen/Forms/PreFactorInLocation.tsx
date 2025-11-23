@@ -7,7 +7,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableContainer,
     TableHead,
     TableRow,
 } from "@mui/material";
@@ -208,8 +207,8 @@ const PreFactorInLocation = ({
                                         <TableCell>
                                             <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${item.warrantyServiceTypeId === 1
-                                                        ? "bg-green-100 text-green-800"
-                                                        : "bg-red-100 text-red-800"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : "bg-red-100 text-red-800"
                                                     }`}
                                             >
                                                 {item.warrantyServiceTypeTitle}
@@ -247,8 +246,8 @@ const PreFactorInLocation = ({
                                         <TableCell>
                                             <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${item.warrantyServiceTypeId === 1
-                                                        ? "bg-green-100 text-green-800"
-                                                        : "bg-red-100 text-red-800"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : "bg-red-100 text-red-800"
                                                     }`}
                                             >
                                                 {item.warrantyServiceTypeTitle}
@@ -278,8 +277,8 @@ const PreFactorInLocation = ({
                             type="button"
                             onClick={() => setPaymentType("cash")}
                             className={`px-8 py-4 rounded-xl border-2 font-medium transition-all duration-200 ${paymentType === "cash"
-                                    ? "border-primary bg-primary/10 text-primary shadow-lg"
-                                    : "border-gray-300 text-gray-600 hover:border-gray-400"
+                                ? "border-primary bg-primary/10 text-primary shadow-lg"
+                                : "border-gray-300 text-gray-600 hover:border-gray-400"
                                 }`}
                         >
                             پرداخت نقدی در محل
@@ -288,8 +287,8 @@ const PreFactorInLocation = ({
                             type="button"
                             onClick={() => setPaymentType("online")}
                             className={`px-8 py-4 rounded-xl border-2 font-medium transition-all duration-200 ${paymentType === "online"
-                                    ? "border-primary bg-primary/10 text-primary shadow-lg"
-                                    : "border-gray-300 text-gray-600 hover:border-gray-400"
+                                ? "border-primary bg-primary/10 text-primary shadow-lg"
+                                : "border-gray-300 text-gray-600 hover:border-gray-400"
                                 }`}
                         >
                             پرداخت آنلاین توسط مشتری
