@@ -26,7 +26,7 @@ export default function EavTypesModule() {
 
   useEffect(() => {
     setTitle({
-      title: "شماره ها",
+      title: "لیست ثبت نام ها",
       buttonTitle: null,
       link: null,
       onClick: null,

@@ -25,7 +25,7 @@ export default function EavTypesModule() {
 
   useEffect(() => {
     setTitle({
-      title: "مدل دستگاه ها",
+      title: "نظرسنجی",
       buttonTitle: null,
       link: null,
       onClick: null,

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 export const metadata: Metadata = {
-  title: "گزارشات درامدی",
+  title: "گزارشات عملکرد کاربران",
 };
 
 const EntityTypes = async () => {

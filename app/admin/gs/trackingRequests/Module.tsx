@@ -59,7 +59,7 @@ export default function EavTypesModule({ session, searchParams }) {
 
   useEffect(() => {
     setTitle({
-      title: "کارتابل",
+      title: "پیگیری درخواست ها",
       buttonTitle: null,
       link: null,
     });

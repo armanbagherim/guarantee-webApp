@@ -189,9 +189,12 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
 
         return (
           <>
-            <Button onClick={() => setOpenConfirmModal(true)} color="primary">
-              تایید
-            </Button>
+            {!row.original.isConfirm && (
+              <Button onClick={() => setOpenConfirmModal(true)} color="primary">
+                تایید
+              </Button>
+            )}
+
             {!row.original.isConfirm && (
               <Button
                 onClick={() => rejectEavType(row.original.id)}
