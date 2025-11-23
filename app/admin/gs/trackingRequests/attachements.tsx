@@ -2,7 +2,7 @@ import { fetcher } from '@/app/components/admin-components/fetcher';
 import { Dialog, DialogContent, Skeleton, Avatar, Chip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 export default function Attachments({ historyOpen, setHistoryOpen }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
