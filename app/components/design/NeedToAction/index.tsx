@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Card from "../Card";
 import Link from "next/link";
 import { INeedtoAction } from "@/app/interfaces/INeedtoAction";
-import FormGen from "./FormsGen";
 import { FaInbox } from "react-icons/fa"; // Importing an icon from react-icons
 
 interface Props {
@@ -21,13 +20,7 @@ export default function NeedToAction({ needToActions, session }: Props) {
 
   return (
     <div className="mb-4">
-      <FormGen
-        triggered={triggered}
-        setTriggered={setTriggered}
-        session={session}
-        action={activeRequestActionModal}
-        setAction={setActiveRequestActionModal}
-      />
+
 
       <Card title="درخواست های نیازمند اقدام">
         <div className="px-4">

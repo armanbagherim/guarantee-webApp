@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { pageTitle } from "../../layout";
 import { useAtom } from "jotai";
-import FormGen from "./FormsGen";
 import DetailPanel from "./DetailPanel";
 import {
   TextField,

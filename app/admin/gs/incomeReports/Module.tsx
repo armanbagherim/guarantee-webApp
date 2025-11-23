@@ -5,7 +5,6 @@ import { pageTitle } from "../../layout";
 import { useAtom } from "jotai";
 import LightDataGrid from "@/app/components/admin-components/LightDataGrid/LightDataGrid";
 import { columns } from "./columns";
-import FormGen from "./FormsGen";
 import DetailPanel from "./DetailPanel";
 import {
   TextField,
