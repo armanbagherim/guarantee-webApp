@@ -224,11 +224,12 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
                         {attachmentLabels[key]}
                       </div>
                       <Image
-                        width={100}
-                        height={100}
                         src={`${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/admin/preRegistrationOrganizations/image/${fileName}`}
-                        alt={attachmentLabels[key]}
-                        className="w-full rounded-lg border"
+                        width="0"
+                        height="0"
+                        sizes="100vw"
+                        className="w-full h-auto"
+                        quality={100}
                       />
                     </div>
                   ) : null
