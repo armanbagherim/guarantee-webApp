@@ -3,10 +3,21 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Box,
   Button,
+  Typography,
+  Divider,
+  Chip,
+  Grid,
+  IconButton,
+  Tooltip,
   TextField,
 } from "@mui/material";
+import {
+  Visibility as VisibilityIcon,
+  CheckCircle as ConfirmIcon,
+  Cancel as RejectIcon,
+  Image as ImageIcon,
+} from "@mui/icons-material";
 import toast from "@/app/components/toast";
 import Swal from "sweetalert2";
 import { useState } from "react";
@@ -15,10 +26,10 @@ import Image from "next/image";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 
 const attachmentLabels = {
-  license: "تصویر پروانه کسب",
-  national: "تصویر کارت ملی",
-  estate: "تصویر نمای بیرون واحد صنفی",
-  postal: "تصویر نمای داخل واحد صنفی",
+  license: "پروانه کسب",
+  national: "کارت ملی",
+  estate: "نمای بیرونی",
+  postal: "نمای داخلی",
 };
 
 export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
@@ -26,14 +37,12 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
     const { value: rejectDescription } = await Swal.fire({
       title: "رد درخواست",
       input: "textarea",
-      inputLabel: "دلیل رد درخواست را وارد کنید",
-      inputPlaceholder: "دلیل رد را اینجا بنویسید...",
+      inputLabel: "دلیل رد درخواست",
+      inputPlaceholder: "دلیل را وارد کنید...",
       showCancelButton: true,
-      confirmButtonText: "رد درخواست",
+      confirmButtonText: "رد کن",
       cancelButtonText: "لغو",
-      inputValidator: (value) => {
-        if (!value) return "دلیل رد درخواست الزامی است";
-      },
+      inputValidator: (value) => !value && "وارد کردن دلیل الزامی است",
     });
 
     if (rejectDescription) {
@@ -43,193 +52,231 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
           method: "DELETE",
           body: { rejectDescription },
         });
-        toast.success("درخواست با موفقیت رد شد");
+        toast.success("درخواست رد شد");
         setTriggered((prev) => !prev);
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.message || "خطا در رد درخواست");
       }
     }
   };
+
   return [
     {
       accessorKey: "title",
       header: "نام نمایندگی",
-      Cell: ({ row }) => <span className="mr-4">{row?.original?.title}</span>,
+      Cell: ({ row }) => <span className="font-medium">{row.original.title}</span>,
     },
     {
       accessorKey: "licenseCode",
-      header: "شناسه جواز کسب",
+      header: "کد جواز",
+      Cell: ({ row }) => <code className="text-xs px-2 py-1 bg-gray-100 rounded">{row.original.licenseCode || "—"}</code>,
     },
     {
       accessorKey: "firstname",
-      header: "نام",
+      header: "نام و نام خانوادگی",
       Cell: ({ row }) => (
-        <span className="mr-4">{row?.original?.firstname}</span>
-      ),
-    },
-    {
-      accessorKey: "lastname",
-      header: "نام خانوادگی",
-      Cell: ({ row }) => (
-        <span className="mr-4">{row?.original?.lastname}</span>
+        <span className="font-medium">
+          {row.original.firstname} {row.original.lastname}
+        </span>
       ),
     },
     {
       accessorKey: "phoneNumber",
       header: "شماره تماس",
-      Cell: ({ row }) => (
-        <span className="mr-4">{row?.original?.phoneNumber}</span>
-      ),
+      Cell: ({ row }) => <span dir="ltr" className="font-mono text-sm">{row.original.phoneNumber}</span>,
     },
     {
-      accessorKey: "address",
-      header: "آدرس کامل",
-      Cell: ({ row }) => {
-        const addr = row?.original?.address;
-        if (!addr) return "—";
-
-        const {
-          province,
-          city,
-          neighborhood,
-          street,
-          alley,
-          plaque,
-          floorNumber,
-          postalCode,
-        } = addr;
-
-        return (
-          <div className="text-right text-sm leading-6">
-            {province?.name}، {city?.name}، {neighborhood?.name}
-            <br />
-            {street && `خیابان ${street}`}
-            {alley && `، کوچه ${alley}`}
-            {plaque && `، پلاک ${plaque}`}
-            {floorNumber && `، طبقه ${floorNumber}`}
-            {postalCode && <div>کد پستی: {postalCode}</div>}
-          </div>
-        );
-      },
+      accessorKey: "isConfirm",
+      header: "وضعیت",
+      Cell: ({ row }) => (
+        <Chip
+          label={
+            row.original.isConfirm === true
+              ? "تایید شده"
+              : row.original.isConfirm === false
+              ? "رد شده"
+              : "در انتظار"
+          }
+          color={
+            row.original.isConfirm === true
+              ? "success"
+              : row.original.isConfirm === false
+              ? "error"
+              : "warning"
+          }
+          size="small"
+          variant="outlined"
+        />
+      ),
     },
     {
       accessorKey: "Actions",
       header: "عملیات",
+      enableSorting: false,
+      size: 180,
       Cell: ({ row }) => {
-        const [openImageModal, setOpenImageModal] = useState(false);
-        const [openConfirmModal, setOpenConfirmModal] = useState(false);
+        const data = row.original;
+
+        const [openDetails, setOpenDetails] = useState(false);
+        const [openImages, setOpenImages] = useState(false);
+        const [openConfirm, setOpenConfirm] = useState(false);
 
         const [startDate, setStartDate] = useState(null);
         const [endDate, setEndDate] = useState(null);
-        const [licenseDate, setLicenseDate] = useState(null);
         const [representativeShare, setRepresentativeShare] = useState("");
         const [organizationCode, setOrganizationCode] = useState("");
 
         const resetFields = () => {
           setStartDate(null);
           setEndDate(null);
-          setLicenseDate(null);
           setRepresentativeShare("");
           setOrganizationCode("");
         };
 
         const attachments = {
-          license: row.original.licenseAttachment?.fileName,
-          national: row.original.nationalAttachment?.fileName,
-          estate: row.original.estateAttachment?.fileName,
-          postal: row.original.postalAttachment?.fileName,
+          license: data.licenseAttachment?.fileName,
+          national: data.nationalAttachment?.fileName,
+          estate: data.estateAttachment?.fileName,
+          postal: data.postalAttachment?.fileName,
         };
 
-        const deleteEavType = async (id) => {
-          const result = await Swal.fire({
-            title: "مطمئن هستید؟",
-            text: "با حذف این گزینه امکان بازگشت آن وجود ندارد",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "بله حذفش کن",
-            cancelButtonText: "لغو",
-          });
-
-          if (result.isConfirmed) {
-            try {
-              await fetcher({
-                url: `/v1/api/guarantee/admin/preRegistrationOrganizations/${id}`,
-                method: "DELETE",
-              });
-              toast.success("موفق");
-              setTriggered((prev) => !prev);
-            } catch (err) {
-              toast.error(err.message);
-            }
-          }
-        };
-
-        const handleSaveConfirmation = async () => {
+        const handleConfirm = async () => {
           try {
             await fetcher({
-              url: `/v1/api/guarantee/admin/preRegistrationOrganizations/${row.original.id}`,
+              url: `/v1/api/guarantee/admin/preRegistrationOrganizations/${data.id}`,
               method: "PATCH",
               body: {
                 startDate,
                 endDate,
-                representativeShare,
+                representativeShare: +representativeShare || 0,
                 organizationCode,
               },
             });
-            toast.success("تایید با موفقیت انجام شد");
+            toast.success("نمایندگی تایید شد");
             setTriggered((prev) => !prev);
-            setOpenConfirmModal(false);
+            setOpenConfirm(false);
             resetFields();
           } catch (err) {
-            toast.error(err.message);
+            toast.error(err.message || "خطا در تایید");
           }
         };
 
         return (
-          <>
-            {!row.original.isConfirm && (
-              <Button onClick={() => setOpenConfirmModal(true)} color="primary">
-                تایید
-              </Button>
+          <div className="flex items-center gap-1">
+
+            {/* آیکون جزئیات کامل */}
+            <Tooltip title="جزئیات کامل" arrow>
+              <IconButton size="small" color="info" onClick={() => setOpenDetails(true)}>
+                <VisibilityIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            {/* آیکون تایید (فقط اگر هنوز تایید نشده) */}
+            {data.isConfirm === null && (
+              <Tooltip title="تایید نمایندگی" arrow>
+                <IconButton size="small" color="success" onClick={() => setOpenConfirm(true)}>
+                  <ConfirmIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
             )}
 
-            {!row.original.isConfirm && (
-              <Button
-                onClick={() => rejectEavType(row.original.id)}
-                color="error"
-              >
-                رد درخواست
-              </Button>
+            {/* آیکون رد درخواست */}
+            {data.isConfirm === null && (
+              <Tooltip title="رد درخواست" arrow>
+                <IconButton size="small" color="error" onClick={() => rejectEavType(data.id)}>
+                  <RejectIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
             )}
 
-            <Button onClick={() => setOpenImageModal(true)} color="info">
-              مشاهده فایل‌ها
-            </Button>
+            {/* آیکون مشاهده تصاویر */}
+            <Tooltip title="مشاهده تصاویر" arrow>
+              <IconButton size="small" color="secondary" onClick={() => setOpenImages(true)}>
+              <ImageIcon fontSize="small" />
+            </IconButton>
+            </Tooltip>
 
-            {/* Image Dialog */}
-            <Dialog
-              open={openImageModal}
-              onClose={() => setOpenImageModal(false)}
-              maxWidth="md"
-              fullWidth
-            >
-              <DialogTitle>فایل‌های پیوست شده</DialogTitle>
-              <DialogContent dividers className="space-y-4">
+            {/* مودال جزئیات کامل */}
+            <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="lg" fullWidth>
+              <DialogTitle className="text-center font-bold text-lg">
+                جزئیات نمایندگی: {data.title}
+              </DialogTitle>
+              <DialogContent dividers>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="subtitle1" className="font-bold mb-3 text-primary">
+                      اطلاعات مالک و جواز
+                    </Typography>
+                    <div className="space-y-3 text-sm">
+                      <div><strong>نام:</strong> {data.firstname} {data.lastname}</div>
+                      <div><strong>موبایل:</strong> {data.phoneNumber}</div>
+                      <div><strong>کد جواز:</strong> {data.licenseCode || "ندارد"}</div>
+                      <div><strong>تاریخ صدور جواز:</strong> {new Date(data.licenseDate).toLocaleDateString("fa-IR")}</div>
+                      <div><strong>وضعیت:</strong> <Chip label={data.isConfirm === null ? "در انتظار" : "تایید شده"} color="warning" size="small" /></div>
+                    </div>
+
+                    <Divider className="my-5" />
+
+                    <Typography variant="subtitle1" className="font-bold mb-3 text-primary">
+                      آدرس کامل
+                    </Typography>
+                    <div className="text-sm leading-7 bg-gray-50 p-4 rounded-lg">
+                      {data.address?.province?.name && `${data.address.province.name}، `}
+                      {data.address?.city?.name && `${data.address.city.name}`}
+                      <br />
+                      {data.address?.street && `خیابان ${data.address.street}`}
+                      {data.address?.alley && `، کوچه ${data.address.alley}`}
+                      {data.address?.plaque && `، پلاک ${data.address.plaque}`}
+                      {data.address?.floorNumber && `، طبقه ${data.address.floorNumber}`}
+                      {data.address?.postalCode && <><br /><strong>کد پستی:</strong> {data.address.postalCode}</>}
+                    </div>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="subtitle1" className="font-bold mb-3 text-primary">
+                      تصاویر پیوست شده
+                    </Typography>
+                    <Grid container spacing={2}>
+                      {Object.entries(attachments).map(([key, fileName]) =>
+                        fileName ? (
+                          <Grid item xs={6} key={key}>
+                            <p className="text-xs text-center text-gray-600 mb-2 font-medium">
+                              {attachmentLabels[key]}
+                            </p>
+                            <Image
+                              src={`${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/admin/preRegistrationOrganizations/image/${fileName}`}
+                              alt={attachmentLabels[key]}
+                              width={400}
+                              height={400}
+                              className="rounded-lg shadow-md w-full h-auto object-cover border"
+                            />
+                          </Grid>
+                        ) : null
+                      )}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setOpenDetails(false)}>بستن</Button>
+              </DialogActions>
+            </Dialog>
+
+            {/* مودال تصاویر جداگانه */}
+            <Dialog open={openImages} onClose={() => setOpenImages(false)} maxWidth="md" fullWidth>
+              <DialogTitle>تصاویر پیوست شده</DialogTitle>
+              <DialogContent dividers className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {Object.entries(attachments).map(([key, fileName]) =>
                   fileName ? (
-                    <div key={key}>
-                      <div className="text-gray-700 mb-1">
-                        {attachmentLabels[key]}
-                      </div>
+                    <div key={key} className="text-center">
+                      <p className="mb-3 font-medium">{attachmentLabels[key]}</p>
                       <Image
                         src={`${process.env.NEXT_PUBLIC_BASE_URL}/v1/api/guarantee/admin/preRegistrationOrganizations/image/${fileName}`}
-                        width="0"
-                        height="0"
+                        width={0}
+                        height={0}
                         sizes="100vw"
-                        className="w-full h-auto"
-                        quality={100}
+                        className="w-full h-auto rounded-xl shadow-lg"
+                        alt={attachmentLabels[key]}
                       />
                     </div>
                   ) : null
@@ -237,53 +284,23 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
               </DialogContent>
             </Dialog>
 
-            {/* Confirm Dialog */}
-            <Dialog
-              open={openConfirmModal}
-              onClose={() => setOpenConfirmModal(false)}
-              maxWidth="md"
-              fullWidth
-            >
-              <DialogTitle>اطلاعات تایید نمایندگی</DialogTitle>
-              <DialogContent dividers className="space-y-4 mb-12">
-                <DatePickerPersian
-                  label="تاریخ شروع"
-                  date={startDate}
-                  onChange={(e) => setStartDate(new Date(e).toISOString())}
-                />
-
-                <DatePickerPersian
-                  label="تاریخ پایان"
-                  date={endDate}
-                  onChange={(e) => setEndDate(new Date(e).toISOString())}
-                />
-
-                <TextField
-                  fullWidth
-                  label="سهم نماینده"
-                  value={representativeShare}
-                  onChange={(e) => setRepresentativeShare(+e.target.value)}
-                />
-
-                <TextField
-                  fullWidth
-                  label="کد نماینده"
-                  value={organizationCode}
-                  onChange={(e) => setOrganizationCode(e.target.value)}
-                />
+            {/* مودال تایید */}
+            <Dialog open={openConfirm} onClose={() => { setOpenConfirm(false); resetFields(); }} maxWidth="sm" fullWidth>
+              <DialogTitle>تایید نمایندگی</DialogTitle>
+              <DialogContent dividers className="space-y-4">
+                <DatePickerPersian label="تاریخ شروع" date={startDate} onChange={(e) => setStartDate(new Date(e).toISOString())} />
+                <DatePickerPersian label="تاریخ پایان" date={endDate} onChange={(e) => setEndDate(new Date(e).toISOString())} />
+                <TextField fullWidth label="سهم نماینده (%)" type="number" value={representativeShare} onChange={(e) => setRepresentativeShare(e.target.value)} />
+                <TextField fullWidth label="کد سازمانی" value={organizationCode} onChange={(e) => setOrganizationCode(e.target.value)} />
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setOpenConfirmModal(false)}>لغو</Button>
-                <Button
-                  onClick={handleSaveConfirmation}
-                  variant="contained"
-                  color="primary"
-                >
-                  ذخیره
+                <Button onClick={() => { setOpenConfirm(false); resetFields(); }}>لغو</Button>
+                <Button onClick={handleConfirm} variant="contained" color="success">
+                  تایید و ذخیره
                 </Button>
               </DialogActions>
             </Dialog>
-          </>
+          </div>
         );
       },
     },
