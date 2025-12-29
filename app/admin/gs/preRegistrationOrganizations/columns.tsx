@@ -63,12 +63,12 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
   return [
     {
       accessorKey: "title",
-      header: "نام نمایندگی",
+      header: "نام واحد صنفیس",
       Cell: ({ row }) => <span className="font-medium">{row.original.title}</span>,
     },
     {
       accessorKey: "licenseCode",
-      header: "کد جواز",
+      header: "شناسه جواز کسب",
       Cell: ({ row }) => <code className="text-xs px-2 py-1 bg-gray-100 rounded">{row.original.licenseCode || "—"}</code>,
     },
     {
@@ -94,15 +94,15 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
             row.original.isConfirm === true
               ? "تایید شده"
               : row.original.isConfirm === false
-              ? "رد شده"
-              : "در انتظار"
+                ? "رد شده"
+                : "در انتظار"
           }
           color={
             row.original.isConfirm === true
               ? "success"
               : row.original.isConfirm === false
-              ? "error"
-              : "warning"
+                ? "error"
+                : "warning"
           }
           size="small"
           variant="outlined"
@@ -192,14 +192,14 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
             {/* آیکون مشاهده تصاویر */}
             <Tooltip title="مشاهده تصاویر" arrow>
               <IconButton size="small" color="secondary" onClick={() => setOpenImages(true)}>
-              <ImageIcon fontSize="small" />
-            </IconButton>
+                <ImageIcon fontSize="small" />
+              </IconButton>
             </Tooltip>
 
             {/* مودال جزئیات کامل */}
             <Dialog open={openDetails} onClose={() => setOpenDetails(false)} maxWidth="lg" fullWidth>
               <DialogTitle className="text-center font-bold text-lg">
-                جزئیات نمایندگی: {data.title}
+                واحد صنفی: {data.title}
               </DialogTitle>
               <DialogContent dividers>
                 <Grid container spacing={4}>
@@ -210,8 +210,8 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
                     <div className="space-y-3 text-sm">
                       <div><strong>نام:</strong> {data.firstname} {data.lastname}</div>
                       <div><strong>موبایل:</strong> {data.phoneNumber}</div>
-                      <div><strong>کد جواز:</strong> {data.licenseCode || "ندارد"}</div>
-                      <div><strong>تاریخ صدور جواز:</strong> {new Date(data.licenseDate).toLocaleDateString("fa-IR")}</div>
+                      <div><strong>شناسه جواز کسب:</strong> {data.licenseCode || "ندارد"}</div>
+                      <div><strong>تاریخ صدور جواز کسب:</strong> {new Date(data.licenseDate).toLocaleDateString("fa-IR")}</div>
                       <div><strong>وضعیت:</strong> <Chip label={data.isConfirm === null ? "در انتظار" : "تایید شده"} color="warning" size="small" /></div>
                     </div>
 

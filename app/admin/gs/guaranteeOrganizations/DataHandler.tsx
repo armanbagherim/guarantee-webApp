@@ -21,8 +21,14 @@ const DataHandler = ({
   setLoading,
 }) => {
   const steps = ["اطلاعات اصلی", "نقشه", "مشخصات مکانی", "اطلاعات کاربر"];
-  const [tempCity, setTempCity] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
+
+  // Reset step when modal opens/closes
+  useEffect(() => {
+    if (editData.open) {
+      setActiveStep(0);
+    }
+  }, [editData.open]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -44,13 +50,17 @@ const DataHandler = ({
   // Fetch provinces only once on mount
 
   const fetchAddress = async () => {
-    setLoading(true);
+    // Validate latitude and longitude before proceeding
     if (!formik.values.address.latitude || !formik.values.address.longitude) {
-      formik.setTouched({ latitude: true, longitude: true });
+      formik.setTouched({ 
+        "address.latitude": true, 
+        "address.longitude": true 
+      });
       toast.error("لطفا یک نقطه روی نقشه انتخاب کنید");
       return;
     }
 
+    setLoading(true);
     try {
       const response = await fetch(
         `https://api.neshan.org/v5/reverse?lat=${formik.values.address.latitude}&lng=${formik.values.address.longitude}`,
@@ -61,6 +71,7 @@ const DataHandler = ({
           },
         }
       );
+      
       if (!response.ok) {
         throw new Error("Failed to fetch address");
       }
@@ -68,28 +79,29 @@ const DataHandler = ({
       const result = await response.json();
       if (result.status === "OK") {
         const normalizedState = normalizePersianText(
-          result.state.replace("استان", "")
+          result.state?.replace("استان", "") || ""
         );
-        console.log(normalizedState);
-        console.log(provinces);
+        
         const matchedProvince = provinces.find(
           (province) => normalizePersianText(province.name) === normalizedState
         );
-        console.log(matchedProvince);
+        
         if (matchedProvince) {
           formik.setFieldValue("address.provinceId", matchedProvince.id);
-          console.log(matchedProvince);
         } else {
           console.warn(`No province found for ${normalizedState}`);
         }
-        setLoading(false);
-        formik.setFieldValue("address.street", result.formatted_address);
+        
+        formik.setFieldValue("address.street", result.formatted_address || "");
         handleNext(); // برو به مرحله مشخصات مکانی
+      } else {
+        toast.error("خطا در دریافت آدرس از نقشه");
       }
     } catch (error) {
-      setLoading(false);
       toast.error("خطا در دریافت آدرس");
       console.error("Error fetching address:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,7 +149,7 @@ const DataHandler = ({
               <div>
                 {/* Step 1: اطلاعات اصلی */}
                 {activeStep === 0 && (
-                  <div className="py-8">
+                  <div className="py-6 space-y-4">
                     <Input
                       onChange={formik.handleChange}
                       variant="outlined"
@@ -170,11 +182,11 @@ const DataHandler = ({
                       fullWidth
                       margin="normal"
                     />
-                    <Box mt={2}>
+                    <Box mt={3} className="flex flex-col gap-3">
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={formik.values.isNationwide}
+                            checked={formik.values.isNationwide || false}
                             onChange={(e) =>
                               formik.setFieldValue(
                                 "isNationwide",
@@ -187,13 +199,16 @@ const DataHandler = ({
                         }
                         label="مرکزی"
                       />
-                    </Box>
-                    <Box mt={2}>
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={formik.values.isOnlinePayment}
-                            onChange={formik.handleChange}
+                            checked={formik.values.isOnlinePayment || false}
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "isOnlinePayment",
+                                e.target.checked
+                              )
+                            }
                             name="isOnlinePayment"
                             color="primary"
                           />
@@ -206,7 +221,7 @@ const DataHandler = ({
 
                 {/* Step 2: مشخصات مکانی */}
                 {activeStep === 2 && (
-                  <div className="py-8">
+                  <div className="py-6">
                     <AdditionalData
                       isAdmin={true}
                       proviences={provinces}
@@ -217,78 +232,77 @@ const DataHandler = ({
 
                 {/* Step 3: اطلاعات کاربر */}
                 {activeStep === 3 && (
-                  <div className="py-8">
-                    <Box mb={3}>
-                      <Input
-                        onChange={formik.handleChange}
-                        variant="outlined"
-                        value={formik.values.user.firstname || ""}
-                        label="نام"
-                        name="user.firstname"
-                        error={
-                          formik.errors.user?.firstname &&
-                          formik.touched.user?.firstname
-                        }
-                        helperText={
-                          formik.touched.user?.firstname &&
-                          formik.errors.user?.firstname
-                        }
-                        fullWidth
-                      />
-                    </Box>
-                    <Box mb={3}>
-                      <Input
-                        onChange={formik.handleChange}
-                        variant="outlined"
-                        value={formik.values.user.lastname || ""}
-                        label="نام خانوادگی"
-                        name="user.lastname"
-                        error={
-                          formik.errors.user?.lastname &&
-                          formik.touched.user?.lastname
-                        }
-                        helperText={
-                          formik.touched.user?.lastname &&
-                          formik.errors.user?.lastname
-                        }
-                        fullWidth
-                      />
-                    </Box>
-                    <Box mb={3}>
-                      <Input
-                        onChange={formik.handleChange}
-                        variant="outlined"
-                        value={formik.values.user.phoneNumber || ""}
-                        label="شماره تلفن"
-                        name="user.phoneNumber"
-                        error={
-                          formik.errors.user?.phoneNumber &&
-                          formik.touched.user?.phoneNumber
-                        }
-                        helperText={
-                          formik.touched.user?.phoneNumber &&
-                          formik.errors.user?.phoneNumber
-                        }
-                        fullWidth
-                      />
-                    </Box>
+                  <div className="py-6 space-y-4">
+                    <Input
+                      onChange={formik.handleChange}
+                      variant="outlined"
+                      value={formik.values.user?.firstname || ""}
+                      label="نام"
+                      name="user.firstname"
+                      error={
+                        formik.errors.user?.firstname &&
+                        formik.touched.user?.firstname
+                      }
+                      helperText={
+                        formik.touched.user?.firstname &&
+                        formik.errors.user?.firstname
+                      }
+                      fullWidth
+                      margin="normal"
+                    />
+                    <Input
+                      onChange={formik.handleChange}
+                      variant="outlined"
+                      value={formik.values.user?.lastname || ""}
+                      label="نام خانوادگی"
+                      name="user.lastname"
+                      error={
+                        formik.errors.user?.lastname &&
+                        formik.touched.user?.lastname
+                      }
+                      helperText={
+                        formik.touched.user?.lastname &&
+                        formik.errors.user?.lastname
+                      }
+                      fullWidth
+                      margin="normal"
+                    />
+                    <Input
+                      onChange={formik.handleChange}
+                      variant="outlined"
+                      value={formik.values.user?.phoneNumber || ""}
+                      label="شماره تلفن"
+                      name="user.phoneNumber"
+                      error={
+                        formik.errors.user?.phoneNumber &&
+                        formik.touched.user?.phoneNumber
+                      }
+                      helperText={
+                        formik.touched.user?.phoneNumber &&
+                        formik.errors.user?.phoneNumber
+                      }
+                      fullWidth
+                      margin="normal"
+                    />
                   </div>
                 )}
 
-                {/* Step 4: نقشه */}
+                {/* Step 2: نقشه */}
                 {activeStep === 1 && (
-                  <div className="py-8" style={{ height: "400px" }}>
-                    <Map isAdmin={true} data={formik} />
-                    {/* <Button
-                      key="map"
-                      variant="contained"
-                      color="success"
-                      onClick={fetchAddress}
-                      className="w-full"
-                      fullWidth
-                    >
-                      ثبت و دریافت اطلاعات از روی نقشه
-                    </Button> */}
+                  <div className="py-6">
+                    <div className="mb-4">
+                      <Typography variant="body2" color="textSecondary" className="mb-2">
+                        لطفا روی نقشه کلیک کنید تا موقعیت را انتخاب کنید
+                      </Typography>
+                    </div>
+                    <div style={{ height: "450px", width: "100%", borderRadius: "8px", overflow: "hidden" }}>
+                      <Map isAdmin={true} data={formik} />
+                    </div>
+                    {formik.touched.address?.latitude && !formik.values.address?.latitude && (
+                      <Typography variant="caption" color="error" className="mt-2 block">
+                        لطفا یک نقطه روی نقشه انتخاب کنید
+                      </Typography>
+                    )}
                   </div>
                 )}
               </div>

@@ -17,6 +17,7 @@ import {
   Avatar,
   useTheme,
   alpha,
+  Tooltip,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -26,15 +27,25 @@ import PersonIcon from "@mui/icons-material/Person";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import toast from "@/app/components/toast";
 import PickOrganizationModal from "./Organization";
 
+interface ActivityReportItem {
+  count: number;
+  requestIds: string[];
+  toActivity?: {
+    name: string;
+  };
+  // Add other properties as needed
+}
+
 export default function EavTypesModule({ session }) {
   const [title, setTitle] = useAtom(pageTitle);
   const [triggered, setTriggered] = useState(false);
-  const [reportData, setReportData] = useState([]);
+  const [reportData, setReportData] = useState<ActivityReportItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [organOpen, setOrganOpen] = useState({ isOpen: false, value: null });
   const theme = useTheme();
@@ -142,20 +153,10 @@ export default function EavTypesModule({ session }) {
 
   return (
     <div dir="rtl">
-      {/* Filters */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2,
-          mb: 2,
-          background: `linear-gradient(135deg, ${alpha(
-            theme.palette.primary.main,
-            0.03
-          )} 0%, ${alpha(theme.palette.secondary.main, 0.03)} 100%)`,
-          border: `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
-        }}
-      >
-        <Grid container spacing={1.5}>
+      {/* Filter Section */}
+      <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+        {/* Main Filter Grid */}
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
               openPast
@@ -186,28 +187,23 @@ export default function EavTypesModule({ session }) {
               }}
             />
           </Grid>
-
           <Grid item xs={12} sm={6} md={3}>
-            <Typography
-              variant="caption"
-              sx={{ mb: 0.5, display: "block", fontWeight: 600 }}
+            <p
+              className="pb-3"
             >
               انتخاب نماینده
-            </Typography>
-            <Button
-              variant="outlined"
-              fullWidth
-              size="small"
-              sx={{
-                p: 1.5,
-                justifyContent: "flex-start",
-                borderColor: alpha(theme.palette.primary.main, 0.2),
-                fontSize: "0.875rem",
-              }}
-              onClick={() => setOrganOpen({ ...organOpen, isOpen: true })}
+            </p>
+            <button
+              className="bg-gray-100 block !py-4 px-4 font-bold text-md w-full rounded-xl text-right"
+              onClick={(e) =>
+                setOrganOpen({
+                  ...organOpen,
+                  isOpen: true,
+                })
+              }
             >
-              {organOpen.value || "نماینده"}
-            </Button>
+              {organOpen.value ?? "نماینده"}
+            </button>
             <Dialog
               open={organOpen.isOpen}
               onClose={() => setOrganOpen({ ...organOpen, isOpen: false })}
@@ -224,52 +220,41 @@ export default function EavTypesModule({ session }) {
               </div>
             </Dialog>
           </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            container
-            alignItems="center"
-            spacing={0.5}
-          >
-            <Grid item>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<ClearIcon />}
-                onClick={resetFilters}
-                sx={{ fontSize: "0.75rem" }}
-              >
-                حذف فیلترها
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<FilterListIcon />}
-                onClick={applyFilters}
-                sx={{ fontSize: "0.75rem" }}
-              >
-                اعمال فیلتر
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<DownloadIcon />}
-                onClick={downloadExcel}
-                color="success"
-                sx={{ fontSize: "0.75rem" }}
-              >
-                خروجی
-              </Button>
-            </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            {/* Empty space for alignment */}
           </Grid>
         </Grid>
+
+        {/* Buttons Row - Full sized with happy colors */}
+        <div className="flex gap-4 mt-6">
+          <button
+            onClick={resetFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl border-2 border-orange-400 text-orange-600 bg-orange-50 font-semibold text-base transition-all duration-300 hover:border-orange-500 hover:bg-orange-100 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            حذف فیلترها
+          </button>
+          <button
+            onClick={applyFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold text-base transition-all duration-300 hover:from-green-600 hover:to-emerald-700 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            اعمال فیلتر
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-base transition-all duration-300 hover:from-blue-600 hover:to-indigo-700 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            خروجی
+          </button>
+        </div>
       </Paper>
 
       {/* Summary Section */}
@@ -353,16 +338,40 @@ export default function EavTypesModule({ session }) {
                         انتقال فعالیت
                       </Typography>
                     </Box>
-                    <Chip
-                      label={`${item.count} بار`}
-                      size="small"
-                      sx={{
-                        background: theme.palette.primary.main,
-                        color: "white",
-                        fontSize: "0.7rem",
-                        height: 20,
-                      }}
-                    />
+                    <Box display="flex" gap={1}>
+                      <Tooltip title="پیگیری درخواست‌ها">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          color="primary"
+                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                            e.stopPropagation();
+                            const requestIds = item.requestIds?.join(',');
+                            window.location.href = `/admin/gs/trackingRequests?requestIds=${requestIds}`;
+                          }}
+                          sx={{
+                            minWidth: 'auto',
+                            p: 0.5,
+                            '&:hover': {
+                              backgroundColor: 'primary.light',
+                              color: 'primary.contrastText',
+                            },
+                          }}
+                        >
+                          <VisibilityIcon fontSize="small" />
+                        </Button>
+                      </Tooltip>
+                      <Chip
+                        label={`${item.count} بار`}
+                        size="small"
+                        sx={{
+                          background: theme.palette.primary.main,
+                          color: "white",
+                          fontSize: "0.7rem",
+                          height: 20,
+                        }}
+                      />
+                    </Box>
                   </Box>
 
                   {/* Simplified Activity View */}

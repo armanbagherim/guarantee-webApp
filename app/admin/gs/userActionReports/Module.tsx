@@ -9,7 +9,6 @@ import {
   Button,
   Grid,
   Paper,
-  Autocomplete,
   Dialog,
   Card,
   CardContent,
@@ -30,6 +29,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import DatePickerPersian from "@/app/components/utils/DatePicker";
 import { fetcher } from "@/app/components/admin-components/fetcher";
 import toast from "@/app/components/toast";
@@ -86,7 +86,7 @@ export default function EavTypesModule({ session }) {
 
   useEffect(() => {
     setTitle({
-      title: "کارتابل",
+      title: "گزارش عملکرد کاربران",
       buttonTitle: null,
       link: null,
     });
@@ -111,9 +111,9 @@ export default function EavTypesModule({ session }) {
     fetchRequestTypes();
   }, []);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -121,11 +121,14 @@ export default function EavTypesModule({ session }) {
 
   const buildQueryString = () => {
     const params = new URLSearchParams();
+
+    // Add all filters to query params
     Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
+      if (value && typeof value === 'string') {
         params.append(key, value);
       }
     });
+
     return params.toString();
   };
 
@@ -170,6 +173,19 @@ export default function EavTypesModule({ session }) {
     isOpen: false,
     value: null,
   });
+
+  const getActivityIcon = (actionType: string) => {
+    switch (actionType) {
+      case 'user':
+        return <PersonIcon />;
+      case 'timeline':
+        return <TimelineIcon />;
+      case 'swap':
+        return <SwapHorizIcon />;
+      default:
+        return <PersonIcon />;
+    }
+  };
 
   const applyFilters = () => {
     setTriggered(!triggered);
@@ -234,20 +250,10 @@ export default function EavTypesModule({ session }) {
 
   return (
     <div dir="rtl">
-      {/* Filter Section - More Compact */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2,
-          mb: 2,
-          background: `linear-gradient(135deg, ${alpha(
-            theme.palette.primary.main,
-            0.03
-          )} 0%, ${alpha(theme.palette.secondary.main, 0.03)} 100%)`,
-          border: `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
-        }}
-      >
-        <Grid container spacing={1.5}>
+      {/* Filter Section */}
+      <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+        {/* Main Filter Grid */}
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
               openPast={true}
@@ -256,7 +262,7 @@ export default function EavTypesModule({ session }) {
               onChange={(e) => {
                 const date = new Date(e);
                 date.setHours(0, 0, 0, 0);
-                setFilters((prev) => ({
+                setFilters(prev => ({
                   ...prev,
                   startDate: date.toISOString(),
                 }));
@@ -265,13 +271,13 @@ export default function EavTypesModule({ session }) {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
-              label="تا تاریخ"
               openPast={true}
+              label="تا تاریخ"
               date={filters.endDate}
               onChange={(e) => {
                 const date = new Date(e);
                 date.setHours(23, 59, 59, 999);
-                setFilters((prev) => ({
+                setFilters(prev => ({
                   ...prev,
                   endDate: date.toISOString(),
                 }));
@@ -279,97 +285,115 @@ export default function EavTypesModule({ session }) {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography
-              variant="caption"
-              sx={{ mb: 0.5, display: "block", fontWeight: 600 }}
-            >
-              انتخاب نماینده
-            </Typography>
-            <Button
-              variant="outlined"
+            <TextField
               fullWidth
+              label="شماره درخواست"
+              name="requestId"
+              value={filters.requestId}
+              onChange={handleFilterChange}
               size="small"
               sx={{
-                p: 1.5,
-                justifyContent: "flex-start",
-                borderColor: alpha(theme.palette.primary.main, 0.2),
-                fontSize: "0.875rem",
+                '& .MuiInputBase-root': {
+                  height: 40,
+                },
               }}
-              onClick={() =>
-                setOrganOpen({
-                  ...organOpen,
-                  isOpen: true,
-                })
-              }
-            >
-              {organOpen.value || "نماینده"}
-            </Button>
-            <Dialog
-              open={organOpen.isOpen}
-              onClose={() =>
-                setOrganOpen({
-                  ...organOpen,
-                  isOpen: false,
-                })
-              }
-              fullWidth
-              maxWidth="sm"
-            >
-              <div className="p-4">
-                <h2 className="text-lg font-bold mb-4">انتخاب سازمان</h2>
-                <PickOrganizationModal
-                  setOrganId={setFilters}
-                  url={`/v1/api/guarantee/admin/guaranteeOrganizations`}
-                  setOrganOpen={setOrganOpen}
-                />
-              </div>
-            </Dialog>
+            />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            container
-            alignItems="center"
-            spacing={0.5}
-          >
-            <Grid item>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<ClearIcon />}
-                onClick={resetFilters}
-                sx={{ fontSize: "0.75rem" }}
-              >
-                حذف فیلترها
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<FilterListIcon />}
-                onClick={applyFilters}
-                sx={{ fontSize: "0.75rem" }}
-              >
-                اعمال فیلتر
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<DownloadIcon />}
-                onClick={downloadExcel}
-                color="success"
-                sx={{ fontSize: "0.75rem" }}
-              >
-                خروجی
-              </Button>
-            </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              label="کد ملی"
+              name="nationalCode"
+              value={filters.nationalCode}
+              onChange={handleFilterChange}
+              size="small"
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 40,
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              label="شماره همراه"
+              name="phoneNumber"
+              value={filters.phoneNumber}
+              onChange={handleFilterChange}
+              size="small"
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 40,
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              label="نام"
+              name="firstname"
+              value={filters.firstname}
+              onChange={handleFilterChange}
+              size="small"
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 40,
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              label="نام خانوادگی"
+              name="lastname"
+              value={filters.lastname}
+              onChange={handleFilterChange}
+              size="small"
+              sx={{
+                '& .MuiInputBase-root': {
+                  height: 40,
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            {/* Empty space for alignment */}
           </Grid>
         </Grid>
+
+        {/* Buttons Row - Full sized with happy colors */}
+        <div className="flex gap-4 mt-6">
+          <button
+            onClick={resetFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl border-2 border-orange-400 text-orange-600 bg-orange-50 font-semibold text-base transition-all duration-300 hover:border-orange-500 hover:bg-orange-100 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            حذف فیلترها
+          </button>
+          <button
+            onClick={applyFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold text-base transition-all duration-300 hover:from-green-600 hover:to-emerald-700 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            اعمال فیلتر
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-base transition-all duration-300 hover:from-blue-600 hover:to-indigo-700 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            خروجی
+          </button>
+        </div>
       </Paper>
 
       {/* Compact Summary Section */}
@@ -434,36 +458,63 @@ export default function EavTypesModule({ session }) {
                   },
                 }}
               >
-                <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
-                  {/* Compact Header */}
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    mb={2}
-                  >
+                <CardContent>
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Box display="flex" alignItems="center">
-                      <SwapHorizIcon
+                      <Avatar
                         sx={{
-                          ml: 1,
+                          bgcolor: alpha(theme.palette.primary.main, 0.1),
                           color: theme.palette.primary.main,
-                          fontSize: 20,
+                          mr: 1.5,
+                          width: 40,
+                          height: 40,
+                        }}
+                      >
+                        {getActivityIcon(item.actionType)}
+                      </Avatar>
+                      <Box>
+                        <Typography variant="subtitle2" fontWeight="bold">
+                          {item.actionTitle}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {new Date(item.actionDate).toLocaleDateString('fa-IR')}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <Tooltip title="پیگیری درخواست‌ها">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          color="primary"
+                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                            e.stopPropagation();
+                            const requestIds = item.requestIds?.join(',');
+                            window.location.href = `/admin/gs/trackingRequests?requestIds=${requestIds}`;
+                          }}
+                          sx={{
+                            minWidth: 'auto',
+                            p: 0.5,
+                            '&:hover': {
+                              backgroundColor: 'primary.light',
+                              color: 'primary.contrastText',
+                            },
+                          }}
+                        >
+                          <VisibilityIcon fontSize="small" />
+                        </Button>
+                      </Tooltip>
+                      <Chip
+                        label={item.count}
+                        size="small"
+                        sx={{
+                          background: theme.palette.primary.main,
+                          color: 'white',
+                          fontSize: '0.7rem',
+                          height: 20,
                         }}
                       />
-                      <Typography variant="subtitle2" fontWeight="bold">
-                        انتقال فعالیت
-                      </Typography>
                     </Box>
-                    <Chip
-                      label={`${item.count} بار`}
-                      size="small"
-                      sx={{
-                        background: theme.palette.primary.main,
-                        color: "white",
-                        fontSize: "0.7rem",
-                        height: 20,
-                      }}
-                    />
                   </Box>
 
                   {/* Compact User Section */}

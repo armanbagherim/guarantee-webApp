@@ -18,15 +18,62 @@ import dayjs from "dayjs";
 import { useRouter } from 'next/navigation';
 import concat from "@/app/components/utils/AddressConcat";
 import BusinessIcon from '@mui/icons-material/Business';
+import Uploader from "@/app/components/admin-components/Uploader";
 
-const ReceiveDeviceInOrganization = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
+// Type definitions
+interface Photo {
+    id: string;
+    [key: string]: any;
+}
+
+interface Item {
+    title: string;
+    barcode: string | null;
+}
+
+interface NodeCommand {
+    id: number;
+    name: string;
+    route: string;
+    nodeCommandType: {
+        commandColor: string;
+    };
+}
+
+interface CurrentOperation {
+    id: string;
+    requestId: string;
+}
+
+interface Session {
+    token: string;
+}
+
+const ReceiveDeviceInOrganization = ({
+    currentOperation,
+    nodeCommands,
+    setAction,
+    setTriggered,
+    triggered,
+    session,
+    ...node
+}: {
+    currentOperation: CurrentOperation;
+    nodeCommands: NodeCommand[];
+    setAction: (action: any) => void;
+    setTriggered: (triggered: boolean) => void;
+    triggered: boolean;
+    session: Session;
+    [key: string]: any;
+}) => {
     const [description, setDescription] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // New loading state for initial data
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [itemModalOpen, setItemModalOpen] = useState(false);
     const [newItemTitle, setNewItemTitle] = useState("");
     const [newItemBarcode, setNewItemBarcode] = useState("");
+    const [photos, setPhotos] = useState<Photo[]>([]);
     const router = useRouter();
 
     useEffect(() => {
@@ -49,12 +96,12 @@ const ReceiveDeviceInOrganization = ({ currentOperation, nodeCommands, setAction
         toast.success("اقلام با موفقیت اضافه شد.");
     };
 
-    const handleRemoveItem = (index) => {
+    const handleRemoveItem = (index: number) => {
         const updatedItems = items.filter((_, i) => i !== index);
         setItems(updatedItems);
     };
 
-    const handleButtonClick = async (command) => {
+    const handleButtonClick = async (command: NodeCommand) => {
         setIsSubmitting(true);
 
         try {
@@ -72,6 +119,7 @@ const ReceiveDeviceInOrganization = ({ currentOperation, nodeCommands, setAction
                     nodeId: +node.id,
                     description: description,
                     items: items,
+                    attachments: photos.map((photo) => ({ attachmentId: photo.id }))
                 }),
             });
 
@@ -85,13 +133,13 @@ const ReceiveDeviceInOrganization = ({ currentOperation, nodeCommands, setAction
 
             startTransition(() => {
                 setTriggered(!triggered);
-                setAction((prev) => ({ ...prev, isOpen: false }));
+                setAction((prev: any) => ({ ...prev, isOpen: false }));
                 router.refresh();
             });
 
             toast.success(result.result.message);
-        } catch (error) {
-            toast.error(error.message);
+        } catch (error: any) {
+            toast.error(error.message || "An error occurred");
             console.error("Error:", error);
         } finally {
             setIsSubmitting(false);
@@ -177,6 +225,22 @@ const ReceiveDeviceInOrganization = ({ currentOperation, nodeCommands, setAction
                 )}
             </div>
 
+            {/* Upload Section */}
+            <div className="mb-4">
+                <span className="mb-3 text-bold block">اپلود تصویر محصول</span>
+                <Uploader
+                    id="device-upload"
+                    location={"v1/api/guarantee/cartable/requestAttachments/image"}
+                    refetch={triggered}
+                    setPhotos={setPhotos}
+                    photos={photos}
+                    type="image"
+                    isFull={true}
+                    triggered={triggered}
+                    setTriggered={setTriggered}
+                />
+            </div>
+
             {/* Description Textarea */}
             <div className="w-full">
                 <TextField
@@ -193,7 +257,7 @@ const ReceiveDeviceInOrganization = ({ currentOperation, nodeCommands, setAction
                 <Button
                     variant="contained"
                     className="!bg-gray-600"
-                    onClick={() => setAction((prev) => ({ ...prev, isOpen: false }))}
+                    onClick={() => setAction((prev: any) => ({ ...prev, isOpen: false }))}
                     disabled={isSubmitting}
                 >
                     بستن

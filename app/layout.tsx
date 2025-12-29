@@ -5,6 +5,7 @@ import createCache from "@emotion/cache";
 import rtlPlugin from "stylis-plugin-rtl";
 import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
+import Script from "next/script";
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -24,6 +25,17 @@ export default function RootLayout({
           <NextTopLoader showSpinner={false} />
           {children}
         </CacheProvider>
+        <Script
+          id="muchat-agent"
+          type="module"
+          dangerouslySetInnerHTML={{
+            __html: `import Chatbox from 'https://cdn.mu.chat/embeds/dist/chatbox/index.js?v=2';
+             
+   Chatbox.initBubble({
+   agentId: 'cmaoe6qid00x5vjfme757x5ji',
+      });`,
+          }}
+        />
       </body>
     </html>
   );

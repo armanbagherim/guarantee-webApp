@@ -227,10 +227,10 @@ export default function EavTypesModule({ session }) {
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <div className="h-full">
             <h4 className="mb-4 font-bold">انتخاب نماینده</h4>
             <button
-              className="bg-gray-100 p-4 font-bold text-md w-full rounded-xl text-right"
+              className="bg-gray-100 block !py-12 px-4 font-bold text-md w-full rounded-xl text-right"
               onClick={(e) =>
                 setOrganOpen({
                   ...organOpen,
@@ -260,7 +260,7 @@ export default function EavTypesModule({ session }) {
                 />
               </div>
             </Dialog>
-          </Grid>
+          </div>
           <Grid
             item
             xs={12}

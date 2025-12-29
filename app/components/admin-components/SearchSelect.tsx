@@ -39,11 +39,11 @@ export default function SearchSelect({
   diffKey = "id", // default diffKey is 'id'
   disabled = false,
 }) {
-  const [currentValue, setCurrentValue] = useState(defaultValue);
+  const [currentValue, setCurrentValue] = useState(value || defaultValue);
 
   useEffect(() => {
-    setCurrentValue(defaultValue);
-  }, [defaultValue]);
+    setCurrentValue(value || defaultValue);
+  }, [value, defaultValue]);
 
   if (loadingState) {
     return (

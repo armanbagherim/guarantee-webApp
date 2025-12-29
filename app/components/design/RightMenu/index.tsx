@@ -113,6 +113,15 @@ export default function RightMenu({ requestsCount, notificationCount }) {
               <span>پیگیری درخواست ها</span>
             </li>
           </Link>
+          <Link onClick={(e) => setIsOpen(false)} href="/needToActions">
+            <li
+              className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("/needToActions") ? "text-blue-500" : "text-gray-500"
+                }`}
+            >
+              <Requests color={isActive("/needToActions") ? "#3B82F6" : "#6F6F6F"} />
+              <span>درخواست‌های نیازمند اقدام</span>
+            </li>
+          </Link>
           <Link onClick={(e) => setIsOpen(false)} href="/availability">
             <li
               className={`flex gap-4 font-bold text-xs text-[#606C80] ${isActive("/availability") ? "text-blue-500" : "text-gray-500"

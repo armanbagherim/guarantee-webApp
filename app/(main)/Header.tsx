@@ -45,8 +45,10 @@ export default function Header({ hasPermission }) {
     <div className="p-4 mt-4 mb-4 rounded-2xl bg-white mx-4 sm:mx-8">
       <div className="flex justify-between w-full items-center">
         <Image
-          width={80}
-          height={80}
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: 'auto', height: '40px' }} // optional
           src="/logo.webp"
           alt="لوگو"
           className="sm:w-24 sm:h-24"
