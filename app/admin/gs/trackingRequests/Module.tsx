@@ -85,17 +85,50 @@ export default function EavTypesModule({ session, searchParams }) {
 
     // Handle requestIds from query params
     if (searchParams?.requestIds) {
-      const ids = Array.isArray(searchParams.requestIds)
-        ? searchParams.requestIds
-        : searchParams.requestIds.split(',').map((id: string) => id.trim());
+      let ids: string[] = [];
 
-      initialFilters.requestIds = ids;
-      shouldTrigger = true;
+      if (Array.isArray(searchParams.requestIds)) {
+        // If it's already an array
+        ids = searchParams.requestIds.map((id: any) => String(id).trim());
+      } else {
+        // If it's a string, try to parse as JSON first (in case it's "[1]" or "[1,2]")
+        const requestIdsValue = String(searchParams.requestIds).trim();
+        try {
+          const parsed = JSON.parse(requestIdsValue);
+          if (Array.isArray(parsed)) {
+            ids = parsed.map((id: any) => String(id).trim());
+          } else {
+            // If it's a single number after parsing, convert to array
+            ids = [String(parsed).trim()];
+          }
+        } catch {
+          // If JSON parse fails, treat as comma-separated string or single value
+          if (requestIdsValue.includes(',')) {
+            ids = requestIdsValue.split(',').map((id: string) => id.trim());
+          } else {
+            // Single value
+            ids = [requestIdsValue];
+          }
+        }
+      }
+
+      if (ids.length > 0) {
+        initialFilters.requestIds = ids.filter(id => id !== '');
+        shouldTrigger = true;
+      }
+    }
+
+    // Handle requestId (singular) - convert to requestIds array
+    if (searchParams?.requestId && !searchParams?.requestIds) {
+      const singleId = String(searchParams.requestId).trim();
+      if (singleId) {
+        initialFilters.requestIds = [singleId];
+        shouldTrigger = true;
+      }
     }
 
     // Handle other filters
     const otherFilterKeys = [
-      "requestId",
       "nationalCode",
       "phoneNumber",
       "firstname",
@@ -244,7 +277,7 @@ export default function EavTypesModule({ session, searchParams }) {
   const buildQueryString = () => {
     const params = new URLSearchParams();
 
-    // Handle requestIds array - append each ID separately
+    // Handle requestIds array
     if (filters.requestIds?.length > 0) {
       // Convert all request IDs to integers and filter out any invalid values
       const intRequestIds = filters.requestIds
@@ -254,10 +287,17 @@ export default function EavTypesModule({ session, searchParams }) {
         })
         .filter((id): id is number => id !== null);
 
-      // Append each requestId separately so they are separated by &
-      intRequestIds.forEach(id => {
-        params.append('requestIds', id.toString());
-      });
+      if (intRequestIds.length > 0) {
+        // If only one ID, use requestId (singular)
+        if (intRequestIds.length === 1) {
+          params.append('requestId', intRequestIds[0].toString());
+        } else {
+          // If multiple IDs, use requestIds (plural) and append each separately
+          intRequestIds.forEach(id => {
+            params.append('requestIds', id.toString());
+          });
+        }
+      }
     }
 
     // Handle other filters
