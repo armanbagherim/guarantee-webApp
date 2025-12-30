@@ -229,7 +229,7 @@ const ReceiveDeviceInOrganization = ({
             <div className="mb-4">
                 <span className="mb-3 text-bold block">اپلود تصویر محصول</span>
                 <Uploader
-                    id="device-upload"
+                    id={null}
                     location={"v1/api/guarantee/cartable/requestAttachments/image"}
                     refetch={triggered}
                     setPhotos={setPhotos}
