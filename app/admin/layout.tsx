@@ -16,11 +16,11 @@ import RouteGuard from "./RouteGuard";
 interface IPageTitle {
   title: string;
   link: string | null;
-  buttonTitle: void;
-  onClick: void;
+  buttonTitle: string | null;
+  onClick: (() => void) | null;
 }
 
-export const pageTitle = atom({
+export const pageTitle = atom<IPageTitle>({
   title: "داشبورد",
   link: null,
   buttonTitle: null,
@@ -39,7 +39,7 @@ export default function RootLayout({
 
 
   return (
-    <Provider initialValues={pageTitle}>
+    <Provider>
       <CacheProvider value={cacheRtl}>
         <html lang="fa" dir="rtl">
           <head></head>

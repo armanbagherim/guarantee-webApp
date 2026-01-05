@@ -12,8 +12,9 @@ interface ICard {
 export default function Card({ title, link, children, linkText }: ICard) {
   return (
     <div className="bg-white pb-4 rounded-[20px]">
-      <div className="mb-10">
+      
         {title && (
+          <div className="mb-10">
           <div className="bg-primary/10 flex justify-between items-center rounded-[20px] p-5">
             <span className="text-xs font-bold text-primary">{title}</span>
             {link && (
@@ -22,8 +23,8 @@ export default function Card({ title, link, children, linkText }: ICard) {
               </Link>
             )}
           </div>
+          </div>
         )}
-      </div>
       {children}
     </div>
   );

@@ -1,17 +1,21 @@
-import { TextField, TextFieldVariants } from "@mui/material";
+import { TextField, TextFieldVariants, TextFieldProps } from "@mui/material";
 import React from "react";
 
 interface Iinput {
   label: string;
-  onChange: () => void;
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   error?: boolean;
   loading?: boolean;
   variant?: TextFieldVariants;
   type?: string;
   value?: any;
-  onClick?: () => void;
-  name?: any;
-  helperText: any;
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
+  name?: string;
+  helperText?: React.ReactNode;
+  fullWidth?: boolean;
+  margin?: TextFieldProps["margin"];
 }
 
 const Input = (props: Iinput) => {
@@ -26,6 +30,8 @@ const Input = (props: Iinput) => {
     onClick,
     name,
     helperText,
+    fullWidth = true,
+    margin = "none",
   } = props;
   return (
     <TextField
@@ -33,7 +39,8 @@ const Input = (props: Iinput) => {
       inputProps={{ className: "!text-sm !font-bold !text-gray-600" }}
       type={type}
       InputLabelProps={{ className: "!text-sm !font-bold !text-gray-600" }}
-      fullWidth
+      fullWidth={fullWidth}
+      margin={margin}
       variant={variant}
       label={label}
       onChange={onChange}
