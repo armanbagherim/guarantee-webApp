@@ -14,7 +14,6 @@ export interface DiscountCodeFormValues {
     validFrom: string | null;
     validUntil: string | null;
     isActive: boolean;
-    organizationId: string | null;
     description: string;
 }
 
@@ -22,11 +21,6 @@ export interface EditModalState {
     open: boolean;
     id: string | null;
     active: boolean;
-}
-
-export interface OrganizationPickerState {
-    isOpen: boolean;
-    value: string | null;
 }
 
 export interface DiscountCodeRow {

@@ -13,7 +13,6 @@ import {
   DiscountCodeFormValues,
   DiscountCodeRow,
   EditModalState,
-  OrganizationPickerState,
 } from "./types";
 
 const formatNumber = (value?: number | null) => {
@@ -39,8 +38,7 @@ export function columns(
   setIsEditModal: Dispatch<SetStateAction<EditModalState>>,
   triggered: boolean,
   setTriggered: Dispatch<SetStateAction<boolean>>,
-  formik: FormikProps<DiscountCodeFormValues>,
-  setOrganizationPicker: Dispatch<SetStateAction<OrganizationPickerState>>
+  formik: FormikProps<DiscountCodeFormValues>
 ): MRT_ColumnDef<DiscountCodeRow>[] {
   const getData = async (id: string) => {
     try {
@@ -96,25 +94,14 @@ export function columns(
       discountValue: data.discountValue ?? null,
       totalUsageLimit: data.totalUsageLimit ?? null,
       perUserUsageLimit: data.perUserUsageLimit ?? null,
-      maxDiscountAmount: data.maxDiscountAmount ?? null,
+      maxDiscountAmount: +data.maxDiscountAmount ?? null,
       validFrom: data.validFrom ?? null,
       validUntil: data.validUntil ?? null,
       isActive:
-        typeof data.isActive === "boolean" ? data.isActive : formik.values.isActive,
-      organizationId:
-        data.organizationId ??
-        data.organization?.id ??
-        formik.values.organizationId ??
-        null,
+        typeof data.isActive === "boolean"
+          ? data.isActive
+          : formik.values.isActive,
       description: data.description ?? "",
-    });
-
-    setOrganizationPicker({
-      isOpen: false,
-      value:
-        data.organization?.name ??
-        data.organizationName ??
-        null,
     });
   };
 

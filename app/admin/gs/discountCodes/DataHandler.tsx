@@ -5,7 +5,6 @@ import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
 import {
   Checkbox,
-  Dialog,
   FormControl,
   FormControlLabel,
   InputLabel,
@@ -14,13 +13,11 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import DatePickerPersian from "@/app/components/utils/DatePicker";
-import PickOrganizationModal from "@/app/admin/gs/cartables/FormsGen/Forms/PickModals/Organization";
 import { FormikProps } from "formik";
 import {
   DiscountCodeFormValues,
   DiscountType,
   EditModalState,
-  OrganizationPickerState,
 } from "./types";
 
 interface DataHandlerProps {
@@ -29,8 +26,6 @@ interface DataHandlerProps {
   formik: FormikProps<DiscountCodeFormValues>;
   setIsEdit: (value: EditModalState) => void;
   discountTypes: DiscountType[];
-  organizationPicker: OrganizationPickerState;
-  setOrganizationPicker: React.Dispatch<React.SetStateAction<OrganizationPickerState>>;
 }
 
 const DataHandler: React.FC<DataHandlerProps> = ({
@@ -39,12 +34,9 @@ const DataHandler: React.FC<DataHandlerProps> = ({
   formik,
   setIsEdit,
   discountTypes,
-  organizationPicker,
-  setOrganizationPicker,
 }) => {
   const handleClose = () => {
     formik.resetForm();
-    setOrganizationPicker({ isOpen: false, value: null });
     setIsEdit({ open: false, id: null, active: false });
   };
 
@@ -54,21 +46,6 @@ const DataHandler: React.FC<DataHandlerProps> = ({
       const value = event.target.value;
       formik.setFieldValue(field, value === "" ? null : Number(value));
     };
-
-  const openOrganizationPicker = () => {
-    setOrganizationPicker((prev) => ({
-      ...prev,
-      isOpen: true,
-    }));
-  };
-
-  const handleOrganizationSelect = (organizationId: string | number | null) => {
-    if (organizationId === null || organizationId === undefined) {
-      formik.setFieldValue("organizationId", null);
-      return;
-    }
-    formik.setFieldValue("organizationId", String(organizationId));
-  };
 
   const handleDiscountTypeChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
@@ -93,8 +70,10 @@ const DataHandler: React.FC<DataHandlerProps> = ({
               value={formik.values.code || ""}
               label="کد"
               name="code"
-              error={formik.errors.code && formik.touched.code}
-              helperText={formik.touched.code && formik.errors.code}
+              error={Boolean(formik.touched.code && formik.errors.code)}
+              helperText={
+                formik.touched.code ? formik.errors.code : undefined
+              }
               fullWidth
             />
             <Input
@@ -103,8 +82,10 @@ const DataHandler: React.FC<DataHandlerProps> = ({
               value={formik.values.title || ""}
               label="عنوان"
               name="title"
-              error={formik.errors.title && formik.touched.title}
-              helperText={formik.touched.title && formik.errors.title}
+              error={Boolean(formik.touched.title && formik.errors.title)}
+              helperText={
+                formik.touched.title ? formik.errors.title : undefined
+              }
               fullWidth
             />
             <FormControl fullWidth>
@@ -162,28 +143,21 @@ const DataHandler: React.FC<DataHandlerProps> = ({
               type="number"
               fullWidth
             />
-            <div>
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <DatePickerPersian
                 label="تاریخ شروع"
-                date={formik.values.validFrom}
-                onChange={(value) => formik.setFieldValue("validFrom", value)}
+                date={formik.values.validFrom ?? null}
+                onChange={(value: string | null) =>
+                  formik.setFieldValue("validFrom", value)
+                }
               />
-            </div>
-            <div>
               <DatePickerPersian
                 label="تاریخ پایان"
-                date={formik.values.validUntil}
-                onChange={(value) => formik.setFieldValue("validUntil", value)}
+                date={formik.values.validUntil ?? null}
+                onChange={(value: string | null) =>
+                  formik.setFieldValue("validUntil", value)
+                }
               />
-            </div>
-            <div className="md:col-span-2">
-              <button
-                type="button"
-                className="w-full bg-gray-100 hover:bg-gray-200 transition-all rounded-xl px-4 py-3 text-right font-semibold text-gray-700"
-                onClick={openOrganizationPicker}
-              >
-                {organizationPicker.value || "انتخاب نماینده"}
-              </button>
             </div>
             <div className="md:col-span-2">
               <textarea
@@ -213,26 +187,6 @@ const DataHandler: React.FC<DataHandlerProps> = ({
         </form>
       </Modal>
 
-      <Dialog
-        open={organizationPicker.isOpen}
-        onClose={() =>
-          setOrganizationPicker((prev) => ({
-            ...prev,
-            isOpen: false,
-          }))
-        }
-        fullWidth
-        maxWidth="sm"
-      >
-        <div className="p-4">
-          <h2 className="text-lg font-bold mb-4">انتخاب نماینده</h2>
-          <PickOrganizationModal
-            setOrganId={handleOrganizationSelect}
-            url={`/v1/api/guarantee/admin/guaranteeOrganizations`}
-            setOrganOpen={setOrganizationPicker}
-          />
-        </div>
-      </Dialog>
     </>
   );
 };

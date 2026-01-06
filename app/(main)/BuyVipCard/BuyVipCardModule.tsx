@@ -5,12 +5,13 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import VipCard from './Vip';
+import DiscountCode from './DiscountCode';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { fetcher } from '@/app/components/admin-components/fetcher';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-export default function BuyVipCardModule({ session, vipCards, paymentGateways }) {
+export default function BuyVipCardModule({ session, vipCards, paymentGateways }: { session: any, vipCards: any[], paymentGateways: any[] }) {
     const [selectedCardId, setSelectedCardId] = useState(vipCards[0]?.id || null);
     const swiperRef = useRef(null);
     const navigationPrevRef = useRef(null);
@@ -19,6 +20,7 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
     const [isLoading, setIsLoading] = useState(false);
     const [isBeginning, setIsBeginning] = useState(true);
     const [isEnd, setIsEnd] = useState(false);
+    const [discountData, setDiscountData] = useState<any>(null);
     const router = useRouter();
 
     const handleSlideClick = (index) => {
@@ -36,13 +38,19 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
 
         setIsLoading(true);
         try {
+            const requestBody: any = {
+                vipBundleTypeId: selectedCardId,
+                paymentGatewayId: selectedGateway
+            };
+            
+            if (discountData) {
+                requestBody.discountCode = discountData.discountCode;
+            }
+            
             const res = await fetcher({
                 method: "POST",
                 url: '/v1/api/guarantee/client/payVipBundles',
-                body: {
-                    vipBundleTypeId: selectedCardId,
-                    paymentGatewayId: selectedGateway
-                }
+                body: requestBody
             });
             router.push(res.result.redirectUrl);
         } catch (error) {
@@ -139,6 +147,12 @@ export default function BuyVipCardModule({ session, vipCards, paymentGateways })
                     ))}
                 </Swiper>
             </div>
+
+            <DiscountCode 
+                vipBundleTypeId={selectedCardId}
+                onDiscountApplied={(data) => setDiscountData(data)}
+                onDiscountRemoved={() => setDiscountData(null)}
+            />
 
             <div className="my-6 p-4 bg-gray-50 rounded-lg">
                 <p className="font-bold mb-4 text-right">درگاه پرداخت:</p>

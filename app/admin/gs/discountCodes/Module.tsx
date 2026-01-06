@@ -14,13 +14,7 @@ import {
   DiscountCodeFormValues,
   DiscountType,
   EditModalState,
-  OrganizationPickerState,
 } from "./types";
-
-const defaultOrganizationPicker: OrganizationPickerState = {
-  isOpen: false,
-  value: null,
-};
 
 export default function DiscountCodesModule() {
   const [, setTitle] = useAtom(pageTitle);
@@ -32,8 +26,6 @@ export default function DiscountCodesModule() {
     id: null,
     active: false,
   });
-  const [organizationPicker, setOrganizationPicker] =
-    useState<OrganizationPickerState>(defaultOrganizationPicker);
 
   const fetchDiscountTypes = useCallback(async () => {
     try {
@@ -65,7 +57,6 @@ export default function DiscountCodesModule() {
       validFrom: null as string | null,
       validUntil: null as string | null,
       isActive: true,
-      organizationId: null as string | null,
       description: "",
     },
     onSubmit: async (values, { resetForm }) => {
@@ -84,7 +75,6 @@ export default function DiscountCodesModule() {
         });
         toast.success("عملیات با موفقیت انجام شد");
         setIsEditModal({ open: false, id: null, active: false });
-        setOrganizationPicker(defaultOrganizationPicker);
         setTriggered((prev) => !prev);
         resetForm();
       } catch (error: any) {
@@ -97,7 +87,6 @@ export default function DiscountCodesModule() {
 
   const handleOpenCreate = useCallback(() => {
     discountFormik.resetForm();
-    setOrganizationPicker(defaultOrganizationPicker);
     setIsEditModal({
       open: true,
       id: null,
@@ -122,8 +111,6 @@ export default function DiscountCodesModule() {
         formik={discountFormik}
         setIsEdit={setIsEditModal}
         discountTypes={discountTypes}
-        organizationPicker={organizationPicker}
-        setOrganizationPicker={setOrganizationPicker}
       />
 
       <LightDataGrid
@@ -134,9 +121,9 @@ export default function DiscountCodesModule() {
           setIsEditModal,
           triggered,
           setTriggered,
-          discountFormik,
-          setOrganizationPicker
+          discountFormik
         )}
+        detailPanel={undefined}
       />
     </div>
   );
