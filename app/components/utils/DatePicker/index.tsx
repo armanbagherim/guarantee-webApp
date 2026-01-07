@@ -17,7 +17,15 @@ const cacheRtl = createCache({
   stylisPlugins: [prefixer, rtlPlugin],
 });
 
-const DatePickerPersian = ({
+type DatePickerPersianProps = {
+  date: string | Date | null;
+  onChange: (value: string | null) => void;
+  label?: string | null;
+  format?: string;
+  openPast?: boolean;
+};
+
+const DatePickerPersian: React.FC<DatePickerPersianProps> = ({
   date,
   onChange,
   label = null,
