@@ -66,9 +66,8 @@ export default function RewardRulesModule() {
       try {
         setLoading(true);
         await fetcher({
-          url: `/v1/api/guarantee/admin/rewardRules${
-            isEditModal.active ? `/${isEditModal.id}` : ""
-          }`,
+          url: `/v1/api/guarantee/admin/rewardRules${isEditModal.active ? `/${isEditModal.id}` : ""
+            }`,
           method: isEditModal.active ? "PUT" : "POST",
           body: payload,
         });

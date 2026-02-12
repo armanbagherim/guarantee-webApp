@@ -22,8 +22,8 @@ import { fetcher } from "@/app/components/admin-components/fetcher";
 import toast from "@/app/components/toast";
 import PickOrganizationModal from "./Organization";
 
-export default function EavTypesModule({ session }) {
-  const [title, setTitle] = useAtom(pageTitle);
+export default function EavTypesModule({ session }: any) {
+  const [, setTitle] = useAtom(pageTitle);
   const [triggered, setTriggered] = useState(false);
   const [activeRequestActionModal, setActiveRequestActionModal] = useState({
     currentOperation: null,
@@ -66,13 +66,14 @@ export default function EavTypesModule({ session }) {
   const [requestTypes, setRequestTypes] = useState([]);
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrg, setSelectedOrg] = useState(null);
-  const [totals, setTotals] = useState(null);
+  const [totals, setTotals] = useState<any>(null);
 
   useEffect(() => {
     setTitle({
       title: "کارتابل",
       buttonTitle: null,
       link: null,
+      onClick: null,
     });
 
     const fetchRequestTypes = async () => {
@@ -95,7 +96,7 @@ export default function EavTypesModule({ session }) {
     fetchRequestTypes();
   }, []);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
       ...prev,
@@ -116,11 +117,11 @@ export default function EavTypesModule({ session }) {
   const fetchTotals = async () => {
     try {
       const queryString = buildQueryString();
-      const res = await fetcher({
+      const res = (await fetcher({
         method: "GET",
         url: `/v1/api/guarantee/report/incomeReports/total?${queryString}`,
-      });
-      setTotals(res.result || null);
+      })) as any;
+      setTotals(res?.result || null);
     } catch (error) {
       console.error("Error fetching totals:", error);
       setTotals(null);
@@ -172,7 +173,11 @@ export default function EavTypesModule({ session }) {
       });
 
       // Create a download link
-      const url = window.URL.createObjectURL(new Blob([response]));
+      const url = window.URL.createObjectURL(
+        new Blob([response as BlobPart], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        })
+      );
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute(
@@ -202,8 +207,9 @@ export default function EavTypesModule({ session }) {
               openPast={true}
               label="از تاریخ"
               date={filters.beginDate}
-              onChange={(e) => {
-                const date = new Date(e);
+              onChange={(value: string | null) => {
+                if (!value) return;
+                const date = new Date(value);
                 date.setHours(0, 0, 0, 0);
                 setFilters((prev) => ({
                   ...prev,
@@ -217,8 +223,9 @@ export default function EavTypesModule({ session }) {
               label="تا تاریخ"
               openPast={true}
               date={filters.endDate}
-              onChange={(e) => {
-                const date = new Date(e);
+              onChange={(value: string | null) => {
+                if (!value) return;
+                const date = new Date(value);
                 date.setHours(23, 59, 59, 999);
                 setFilters((prev) => ({
                   ...prev,
@@ -396,15 +403,7 @@ export default function EavTypesModule({ session }) {
       <LightDataGrid
         triggered={triggered}
         url={`/v1/api/guarantee/report/incomeReports?${buildQueryString()}`}
-        columns={columns(
-          triggered,
-          setTriggered,
-          setActiveRequestActionModal,
-          historyOpen,
-          setHistoryOpen,
-          attachementsOpen,
-          setAttachementsOpen
-        )}
+        columns={columns()}
         detailPanel={DetailPanel}
       />
     </div>

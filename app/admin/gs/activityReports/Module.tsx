@@ -42,8 +42,8 @@ interface ActivityReportItem {
   // Add other properties as needed
 }
 
-export default function EavTypesModule({ session }) {
-  const [title, setTitle] = useAtom(pageTitle);
+export default function EavTypesModule({ session }: any) {
+  const [, setTitle] = useAtom(pageTitle);
   const [triggered, setTriggered] = useState(false);
   const [reportData, setReportData] = useState<ActivityReportItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -74,6 +74,7 @@ export default function EavTypesModule({ session }) {
       title: "گزارش فعالیت کاربران",
       buttonTitle: null,
       link: null,
+      onClick: null,
     });
   }, []);
 
@@ -93,7 +94,7 @@ export default function EavTypesModule({ session }) {
         method: "GET",
         url: `/v1/api/guarantee/report/activityReports?${queryString}`,
       });
-      setReportData(response.result || []);
+      setReportData(((response as any)?.result || []) as ActivityReportItem[]);
     } catch (error) {
       console.error("Error fetching report data:", error);
       toast.error("خطا در دریافت داده‌ها");
@@ -128,7 +129,11 @@ export default function EavTypesModule({ session }) {
         responseType: "blob",
       });
 
-      const url = window.URL.createObjectURL(new Blob([response]));
+      const url = window.URL.createObjectURL(
+        new Blob([response as BlobPart], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        })
+      );
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute(
@@ -162,8 +167,9 @@ export default function EavTypesModule({ session }) {
               openPast
               label="از تاریخ"
               date={filters.startDate}
-              onChange={(e) => {
-                const date = new Date(e);
+              onChange={(value: string | null) => {
+                if (!value) return;
+                const date = new Date(value);
                 date.setHours(0, 0, 0, 0);
                 setFilters((prev) => ({
                   ...prev,
@@ -177,8 +183,9 @@ export default function EavTypesModule({ session }) {
               label="تا تاریخ"
               openPast
               date={filters.endDate}
-              onChange={(e) => {
-                const date = new Date(e);
+              onChange={(value: string | null) => {
+                if (!value) return;
+                const date = new Date(value);
                 date.setHours(23, 59, 59, 999);
                 setFilters((prev) => ({
                   ...prev,

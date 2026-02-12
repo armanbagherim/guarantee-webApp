@@ -42,10 +42,10 @@ const DataHandler: React.FC<DataHandlerProps> = ({
 
   const handleNumberChange =
     (field: string) =>
-    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const value = event.target.value;
-      formik.setFieldValue(field, value === "" ? null : Number(value));
-    };
+      (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = event.target.value;
+        formik.setFieldValue(field, value === "" ? null : Number(value));
+      };
 
   const handleDiscountTypeChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
@@ -145,6 +145,7 @@ const DataHandler: React.FC<DataHandlerProps> = ({
             />
             <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <DatePickerPersian
+                openPast
                 label="تاریخ شروع"
                 date={formik.values.validFrom ?? null}
                 onChange={(value: string | null) =>

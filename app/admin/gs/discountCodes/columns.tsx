@@ -40,6 +40,12 @@ export function columns(
   setTriggered: Dispatch<SetStateAction<boolean>>,
   formik: FormikProps<DiscountCodeFormValues>
 ): MRT_ColumnDef<DiscountCodeRow>[] {
+  const toNumberOrNull = (value: unknown) => {
+    if (value === null || value === undefined || value === "") return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  };
+
   const getData = async (id: string) => {
     try {
       const res: any = await fetcher({
@@ -91,10 +97,10 @@ export function columns(
         data.discountType?.id ??
         formik.values.discountTypeId ??
         null,
-      discountValue: data.discountValue ?? null,
-      totalUsageLimit: data.totalUsageLimit ?? null,
-      perUserUsageLimit: data.perUserUsageLimit ?? null,
-      maxDiscountAmount: +data.maxDiscountAmount ?? null,
+      discountValue: toNumberOrNull((data as any).discountValue),
+      totalUsageLimit: toNumberOrNull((data as any).totalUsageLimit),
+      perUserUsageLimit: toNumberOrNull((data as any).perUserUsageLimit),
+      maxDiscountAmount: toNumberOrNull((data as any).maxDiscountAmount),
       validFrom: data.validFrom ?? null,
       validUntil: data.validUntil ?? null,
       isActive:

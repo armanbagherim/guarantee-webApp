@@ -8,7 +8,7 @@ import { AdapterDateFnsJalali } from "@mui/x-date-pickers/AdapterDateFnsJalaliV3
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
-import { FormLabel, TextField } from "@mui/material";
+import { FormLabel } from "@mui/material";
 import { startOfDay } from "date-fns-jalali";
 
 // Create RTL cache
@@ -31,7 +31,7 @@ const DatePickerPersian: React.FC<DatePickerPersianProps> = ({
   label = null,
   format = "yyyy/MM/dd",
   openPast = false, // Added openPast prop with default false
-}) => {
+}: DatePickerPersianProps) => {
   const existingTheme = useTheme();
 
   const theme = React.useMemo(
@@ -41,7 +41,7 @@ const DatePickerPersian: React.FC<DatePickerPersianProps> = ({
 
   const today = startOfDay(new Date());
 
-  const handleDateChange = (newValue) => {
+  const handleDateChange = (newValue: Date | null) => {
     if (!newValue) return onChange(null);
 
     // تنظیم ساعت روی 12:00 برای جلوگیری از تبدیل اشتباه به UTC

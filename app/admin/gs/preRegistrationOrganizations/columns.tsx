@@ -121,8 +121,8 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
         const [openImages, setOpenImages] = useState(false);
         const [openConfirm, setOpenConfirm] = useState(false);
 
-        const [startDate, setStartDate] = useState(null);
-        const [endDate, setEndDate] = useState(null);
+        const [startDate, setStartDate] = useState<string | null>(null);
+        const [endDate, setEndDate] = useState<string | null>(null);
         const [representativeShare, setRepresentativeShare] = useState("");
         const [organizationCode, setOrganizationCode] = useState("");
 
@@ -288,8 +288,20 @@ export function columns(isEditEav, setIsEditEav, triggered, setTriggered) {
             <Dialog open={openConfirm} onClose={() => { setOpenConfirm(false); resetFields(); }} maxWidth="sm" fullWidth>
               <DialogTitle>تایید نمایندگی</DialogTitle>
               <DialogContent dividers className="space-y-4">
-                <DatePickerPersian label="تاریخ شروع" date={startDate} onChange={(e) => setStartDate(new Date(e).toISOString())} />
-                <DatePickerPersian label="تاریخ پایان" date={endDate} onChange={(e) => setEndDate(new Date(e).toISOString())} />
+                <DatePickerPersian
+                  label="تاریخ شروع"
+                  date={startDate}
+                  onChange={(value: string | null) =>
+                    setStartDate(value ? new Date(value).toISOString() : null)
+                  }
+                />
+                <DatePickerPersian
+                  label="تاریخ پایان"
+                  date={endDate}
+                  onChange={(value: string | null) =>
+                    setEndDate(value ? new Date(value).toISOString() : null)
+                  }
+                />
                 <TextField fullWidth label="سهم نماینده (%)" type="number" value={representativeShare} onChange={(e) => setRepresentativeShare(e.target.value)} />
                 <TextField fullWidth label="کد سازمانی" value={organizationCode} onChange={(e) => setOrganizationCode(e.target.value)} />
               </DialogContent>

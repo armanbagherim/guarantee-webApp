@@ -42,10 +42,10 @@ const DataHandler: React.FC<DataHandlerProps> = ({
 
   const handleNumberChange =
     (field: keyof RewardRuleFormValues) =>
-    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const value = event.target.value;
-      formik.setFieldValue(field, value === "" ? null : Number(value));
-    };
+      (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = event.target.value;
+        formik.setFieldValue(field, value === "" ? null : Number(value));
+      };
 
   const handleVipBundleChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;

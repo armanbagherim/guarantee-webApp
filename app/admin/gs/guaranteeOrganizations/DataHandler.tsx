@@ -52,9 +52,9 @@ const DataHandler = ({
   const fetchAddress = async () => {
     // Validate latitude and longitude before proceeding
     if (!formik.values.address.latitude || !formik.values.address.longitude) {
-      formik.setTouched({ 
-        "address.latitude": true, 
-        "address.longitude": true 
+      formik.setTouched({
+        "address.latitude": true,
+        "address.longitude": true
       });
       toast.error("لطفا یک نقطه روی نقشه انتخاب کنید");
       return;
@@ -71,7 +71,7 @@ const DataHandler = ({
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch address");
       }
@@ -81,17 +81,17 @@ const DataHandler = ({
         const normalizedState = normalizePersianText(
           result.state?.replace("استان", "") || ""
         );
-        
+
         const matchedProvince = provinces.find(
           (province) => normalizePersianText(province.name) === normalizedState
         );
-        
+
         if (matchedProvince) {
           formik.setFieldValue("address.provinceId", matchedProvince.id);
         } else {
           console.warn(`No province found for ${normalizedState}`);
         }
-        
+
         formik.setFieldValue("address.street", result.formatted_address || "");
         handleNext(); // برو به مرحله مشخصات مکانی
       } else {
@@ -164,10 +164,10 @@ const DataHandler = ({
                     <DatePickerPersian
                       label="تاریخ مجوز"
                       date={formik.values.licenseDate}
-                      onChange={(e) =>
+                      onChange={(value: string | null) =>
                         formik.setFieldValue(
                           "licenseDate",
-                          new Date(e).toISOString()
+                          value ? new Date(value).toISOString() : null
                         )
                       }
                     />

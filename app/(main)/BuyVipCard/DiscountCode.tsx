@@ -46,7 +46,7 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
       });
 
       const discountResult = (response as any).result as DiscountCodePreviewResultDto;
-      
+
       if (discountResult.canApply) {
         setDiscountData(discountResult);
         onDiscountApplied(discountResult);
@@ -88,7 +88,7 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+
         <div className="space-y-1 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">کد تخفیف:</span>
@@ -96,15 +96,15 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">قیمت اصلی:</span>
-            <span className="font-medium">{discountData.originalPrice.toLocaleString()} تومان</span>
+            <span className="font-medium">{discountData.originalPrice.toLocaleString()} ریال</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">مبلغ تخفیف:</span>
-            <span className="font-medium text-green-600">{Number(discountData.discountAmount).toLocaleString()} تومان</span>
+            <span className="font-medium text-green-600">{Number(discountData.discountAmount).toLocaleString()} ریال</span>
           </div>
           <div className="flex justify-between font-bold text-base pt-2 border-t border-green-200">
             <span>مبلغ نهایی:</span>
-            <span className="text-green-700">{discountData.finalPrice.toLocaleString()} تومان</span>
+            <span className="text-green-700">{discountData.finalPrice.toLocaleString()} ریال</span>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
   return (
     <div className="bg-gray-50 rounded-xl p-4">
       <p className="font-bold mb-3 text-right">کد تخفیف:</p>
-      
+
       <div className="flex gap-2">
         <input
           type="text"
@@ -128,7 +128,7 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
           className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-right"
           dir="ltr"
         />
-        
+
         <button
           onClick={handleApplyDiscount}
           disabled={isLoading || !discountCode.trim()}
@@ -146,7 +146,7 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
           )}
         </button>
       </div>
-      
+
       {error && (
         <div className="flex items-center gap-2 mt-2 text-red-600 text-sm">
           <AlertCircle className="w-4 h-4" />
