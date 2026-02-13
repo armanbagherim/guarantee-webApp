@@ -96,15 +96,15 @@ export default function DiscountCode({ vipBundleTypeId, onDiscountApplied, onDis
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">قیمت اصلی:</span>
-            <span className="font-medium">{discountData.originalPrice.toLocaleString()} ریال</span>
+            <span className="font-medium">{discountData.originalPrice.toLocaleString()} ریال  </span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">مبلغ تخفیف:</span>
-            <span className="font-medium text-green-600">{Number(discountData.discountAmount).toLocaleString()} ریال</span>
+            <span className="font-medium text-green-600">{Number(discountData.discountAmount).toLocaleString()} ریال  </span>
           </div>
           <div className="flex justify-between font-bold text-base pt-2 border-t border-green-200">
             <span>مبلغ نهایی:</span>
-            <span className="text-green-700">{discountData.finalPrice.toLocaleString()} ریال</span>
+            <span className="text-green-700">{discountData.finalPrice.toLocaleString()} ریال  </span>
           </div>
         </div>
       </div>

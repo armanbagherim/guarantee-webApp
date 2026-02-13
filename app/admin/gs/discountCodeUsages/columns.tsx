@@ -25,39 +25,46 @@ const formatDate = (value?: string | null) => {
 export function columns(): MRT_ColumnDef<any>[] {
   return [
     {
-      accessorKey: "discountCode",
+      accessorFn: (row) => row.discountCode?.code ?? "—",
+      id: "discountCode",
       header: "کد تخفیف",
     },
     {
-      accessorKey: "userFullName",
+      accessorFn: (row) =>
+        row.userFullName ??
+        (`${row.user?.firstname ?? ""} ${row.user?.lastname ?? ""}`.trim() || "—"),
+      id: "userFullName",
       header: "نام کاربر",
-      Cell: ({ row }) => row.original.userFullName ?? "—",
     },
     {
-      accessorKey: "phoneNumber",
-      header: "شماره موبایل",
-      Cell: ({ row }) =>
-        row.original.phoneNumber ||
-        row.original.userPhoneNumber ||
-        row.original.username ||
+      accessorFn: (row) =>
+        row.phoneNumber ||
+        row.userPhoneNumber ||
+        row.username ||
+        row.user?.username ||
         "—",
+      id: "phoneNumber",
+      header: "شماره موبایل",
     },
     {
-      accessorKey: "orderId",
+      accessorFn: (row) => row.orderId || row.transactionId || row.factor?.id || "—",
+      id: "orderId",
       header: "شناسه تراکنش/سفارش",
-      Cell: ({ row }) =>
-        row.original.orderId || row.original.transactionId || "—",
     },
     {
-      accessorKey: "discountAmount",
+      accessorFn: (row) =>
+        formatNumber(
+          row.discountAmount ?? row.discountCode?.discountValue ?? row.factor?.totalPrice
+        ),
+      id: "discountAmount",
       header: "مبلغ تخفیف",
-      Cell: ({ row }) => `${formatNumber(row.original.discountAmount)} تومان`,
+      Cell: ({ cell }) => `${cell.getValue<string>()} تومان`,
     },
     {
-      accessorKey: "usedAt",
+      accessorFn: (row) => row.usedAt ?? row.createdAt ?? row.factor?.expireDate ?? null,
+      id: "usedAt",
       header: "تاریخ استفاده",
-      Cell: ({ row }) =>
-        formatDate(row.original.usedAt ?? row.original.createdAt),
+      Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     },
   ];
 }
