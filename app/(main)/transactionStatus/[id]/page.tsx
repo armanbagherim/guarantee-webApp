@@ -45,7 +45,7 @@ const statusConfig = {
 };
 
 const formatPrice = (price) => {
-    return new Intl.NumberFormat('fa-IR').format(parseInt(price)) + ' تومان';
+    return new Intl.NumberFormat('fa-IR').format(parseInt(price)) + ' ریال';
 };
 
 const formatDate = (dateString) => {

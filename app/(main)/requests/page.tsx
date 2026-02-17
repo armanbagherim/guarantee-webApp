@@ -46,7 +46,7 @@ export default async function UserRequestsList({
       {/* Requests List */}
       <div className="space-y-4">
         {requests.map((request) => (
-          <ClientRequestCard key={request.id} request={request} />
+          <ClientRequestCard key={request.id} request={request} token={session.token} />
         ))}
       </div>
 

@@ -6,7 +6,6 @@ export interface VipBundleTypeOption {
 export interface RewardRuleFormValues {
     title: string;
     rewardAmount: number | null;
-    vipBundleTypeId: number | null;
     monthPeriod: number | null;
     validFrom: string | Date | null;
     validUntil: string | Date | null;
@@ -24,7 +23,6 @@ export interface RewardRuleRow {
     id: string;
     title: string;
     rewardAmount?: number;
-    vipBundleTypeId?: number;
     vipBundleType?: {
         id: number;
         title: string;

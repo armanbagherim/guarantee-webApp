@@ -3,6 +3,7 @@
 import React from "react";
 import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
+import PriceInput from "@/app/components/admin-components/PriceInput";
 import {
   Checkbox,
   FormControl,
@@ -79,34 +80,15 @@ const DataHandler: React.FC<DataHandlerProps> = ({
               }
               fullWidth
             />
-            <Input
-              onChange={handleNumberChange("rewardAmount")}
+            <PriceInput
+              onChange={(val) => formik.setFieldValue("rewardAmount", val)}
               variant="outlined"
               value={formik.values.rewardAmount ?? ""}
               label="مبلغ پاداش"
               name="rewardAmount"
-              type="number"
               fullWidth
             />
-            <FormControl fullWidth>
-              <InputLabel id="vip-bundle-type-label">نوع کارت VIP</InputLabel>
-              <Select
-                labelId="vip-bundle-type-label"
-                value={
-                  typeof formik.values.vipBundleTypeId === "number"
-                    ? String(formik.values.vipBundleTypeId)
-                    : ""
-                }
-                label="نوع کارت VIP"
-                onChange={handleVipBundleChange}
-              >
-                {vipBundleTypes.map((type) => (
-                  <MenuItem key={type.id} value={String(type.id)}>
-                    {type.title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+
             <Input
               onChange={handleNumberChange("monthPeriod")}
               variant="outlined"

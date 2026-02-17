@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
+import PriceInput from "@/app/components/admin-components/PriceInput";
 
 const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
 
@@ -37,10 +38,10 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
               fullWidth
               margin="normal"
             />
-            <Input
-              onChange={e => formik.setFieldValue('price', +e.target.value)}
+            <PriceInput
+              onChange={(val) => formik.setFieldValue("price", val)}
               variant="outlined"
-              value={formik.values.price || ""}
+              value={formik.values.price ?? ""}
               label="قیمت"
               name="price"
               error={

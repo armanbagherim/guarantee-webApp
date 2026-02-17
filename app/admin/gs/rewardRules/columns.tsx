@@ -86,11 +86,6 @@ export function columns(
       ...formik.values,
       title: data.title ?? "",
       rewardAmount: data.rewardAmount ?? null,
-      vipBundleTypeId:
-        data.vipBundleTypeId ??
-        data.vipBundleType?.id ??
-        formik.values.vipBundleTypeId ??
-        null,
       monthPeriod: data.monthPeriod ?? null,
       validFrom: data.validFrom ?? null,
       validUntil: data.validUntil ?? null,
@@ -112,11 +107,7 @@ export function columns(
       header: "مبلغ پاداش",
       Cell: ({ row }) => `${formatNumber(row.original.rewardAmount)} تومان`,
     },
-    {
-      accessorKey: "vipBundleType",
-      header: "نوع کارت VIP",
-      Cell: ({ row }) => row.original.vipBundleType?.title ?? "—",
-    },
+
     {
       accessorKey: "monthPeriod",
       header: "بازه ماهانه",
@@ -150,25 +141,7 @@ export function columns(
       maxSize: 20,
       Cell: ({ row }) => (
         <div className="flex items-center gap-1">
-          <Tooltip title="ویرایش">
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={async () => {
-                const data = await getData(row.original.id);
-                if (!data) return;
 
-                setIsEditModal({
-                  open: true,
-                  id: row.original.id,
-                  active: true,
-                });
-                mapResponseToFormik(data);
-              }}
-            >
-              <ModeEditIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
 
           <Tooltip title="حذف">
             <IconButton

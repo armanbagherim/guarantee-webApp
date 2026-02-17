@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
+import PriceInput from "@/app/components/admin-components/PriceInput";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import Map from "@/app/components/design/NewAddress/Map";
 import AdditionalData from "@/app/components/design/NewAddress/AdditionalData";
@@ -41,10 +42,10 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
               fullWidth
               margin="normal"
             />
-            <Input
-              onChange={e => formik.setFieldValue('price', +e.target.value)}
+            <PriceInput
+              onChange={(val) => formik.setFieldValue('price', val)}
               variant="outlined"
-              value={formik.values.price || ""}
+              value={formik.values.price ?? ""}
               label="قیمت"
               name="price"
               error={formik.errors.price && formik.touched.price}
@@ -54,10 +55,10 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
             />
           </div>
           <div className="flex gap-4 mb-8">
-            <Input
+            <PriceInput
               variant="outlined"
-              value={formik.values.fee || ""}
-              onChange={e => formik.setFieldValue('fee', +e.target.value)}
+              value={formik.values.fee ?? ""}
+              onChange={(val) => formik.setFieldValue('fee', val)}
               label="مقدار اعتبار"
               name="fee"
               error={formik.errors.fee && formik.touched.fee}

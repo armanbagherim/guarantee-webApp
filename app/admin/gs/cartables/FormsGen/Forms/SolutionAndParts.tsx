@@ -9,6 +9,7 @@ import { columns } from "./columns";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
 import { ConvertToNull } from "@/app/components/utils/ConvertToNull";
+import PriceInput from "@/app/components/admin-components/PriceInput";
 
 const SolutionAndParts = ({ currentOperation, nodeCommands, setAction, setTriggered, triggered, session, ...node }) => {
     const [selectedSolutions, setSelectedSolutions] = useState([]);
@@ -83,8 +84,7 @@ const SolutionAndParts = ({ currentOperation, nodeCommands, setAction, setTrigge
 
     const handlePartChange = (e) => {
         const { name, value } = e.target;
-        // Normalize numeric fields (price and qty) using ConvertToNull
-        const normalizedValue = (name === 'price' || name === 'qty')
+        const normalizedValue = name === 'qty'
             ? ConvertToNull({ value }).value || ''
             : value;
         setCurrentPart(prev => ({
@@ -101,7 +101,7 @@ const SolutionAndParts = ({ currentOperation, nodeCommands, setAction, setTrigge
             return;
         }
 
-        const priceValue = Number(price.replace(/,/g, ''));
+        const priceValue = typeof price === "number" ? price : Number(String(price).replace(/,/g, ''));
         const qtyValue = Number(qty);
 
         if (isNaN(priceValue) || isNaN(qtyValue)) {
@@ -276,12 +276,13 @@ const SolutionAndParts = ({ currentOperation, nodeCommands, setAction, setTrigge
                                 onChange={handlePartChange}
                                 fullWidth
                             />
-                            <TextField
+                            <PriceInput
                                 name="price"
                                 label="قیمت (تومان)"
                                 value={currentPart.price}
-                                onChange={handlePartChange}
+                                onChange={(val) => setCurrentPart(prev => ({ ...prev, price: val ?? '' }))}
                                 fullWidth
+                                margin="none"
                             />
                             <TextField
                                 name="qty"

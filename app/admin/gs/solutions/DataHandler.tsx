@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "@/app/components/admin-components/Modal";
 import Input from "@/app/components/admin-components/Input";
+import PriceInput from "@/app/components/admin-components/PriceInput";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -101,10 +102,10 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
               />
 
               {/* Fee Input */}
-              <Input
-                onChange={(e) => formik.setFieldValue("fee", +e.target.value)}
+              <PriceInput
+                onChange={(val) => formik.setFieldValue("fee", val)}
                 variant="outlined"
-                value={formik.values.fee || ""}
+                value={formik.values.fee ?? ""}
                 label="فی هزینه"
                 name="fee"
                 error={formik.errors.fee && formik.touched.fee}
@@ -159,10 +160,10 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                     {province.name ?? province.province.name}
                   </Typography>
 
-                  <Input
-                    onChange={formik.handleChange}
+                  <PriceInput
+                    onChange={(val) => formik.setFieldValue(`provinceSolutions[${index}].fee`, val)}
                     variant="outlined"
-                    value={province.fee || ""}
+                    value={province.fee ?? ""}
                     label="هزینه"
                     name={`provinceSolutions[${index}].fee`}
                     fullWidth

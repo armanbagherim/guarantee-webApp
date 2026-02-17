@@ -51,7 +51,6 @@ export default function RewardRulesModule() {
     initialValues: {
       title: "",
       rewardAmount: null,
-      vipBundleTypeId: null,
       monthPeriod: null,
       validFrom: null,
       validUntil: null,

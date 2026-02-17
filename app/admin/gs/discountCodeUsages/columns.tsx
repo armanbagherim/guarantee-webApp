@@ -25,6 +25,11 @@ const formatDate = (value?: string | null) => {
 export function columns(): MRT_ColumnDef<any>[] {
   return [
     {
+      accessorFn: (row) => row.orderId || row.transactionId || row.factor?.id || "—",
+      id: "orderId",
+      header: "شناسه تراکنش/سفارش",
+    },
+    {
       accessorFn: (row) => row.discountCode?.code ?? "—",
       id: "discountCode",
       header: "کد تخفیف",
@@ -46,10 +51,15 @@ export function columns(): MRT_ColumnDef<any>[] {
       id: "phoneNumber",
       header: "شماره موبایل",
     },
+
     {
-      accessorFn: (row) => row.orderId || row.transactionId || row.factor?.id || "—",
-      id: "orderId",
-      header: "شناسه تراکنش/سفارش",
+      accessorFn: (row) =>
+        formatNumber(
+          row.factor.totalPrice
+        ),
+      id: "factor.totalPrice",
+      header: "مبلغ کل",
+      Cell: ({ cell }) => `${cell.getValue<string>()} ریال`,
     },
     {
       accessorFn: (row) =>
@@ -59,12 +69,6 @@ export function columns(): MRT_ColumnDef<any>[] {
       id: "discountAmount",
       header: "مبلغ تخفیف",
       Cell: ({ cell }) => `${cell.getValue<string>()} تومان`,
-    },
-    {
-      accessorFn: (row) => row.usedAt ?? row.createdAt ?? row.factor?.expireDate ?? null,
-      id: "usedAt",
-      header: "تاریخ استفاده",
-      Cell: ({ cell }) => formatDate(cell.getValue<string>()),
     },
   ];
 }

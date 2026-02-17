@@ -135,12 +135,7 @@ export function columns(
       header: "سقف تخفیف",
       Cell: ({ row }) => `${formatNumber(row.original.maxDiscountAmount)} تومان`,
     },
-    {
-      accessorKey: "organizationName",
-      header: "نماینده",
-      Cell: ({ row }) =>
-        row.original.organization?.name ?? row.original.organizationName ?? "—",
-    },
+
     {
       accessorKey: "validUntil",
       header: "مهلت استفاده",
