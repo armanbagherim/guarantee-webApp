@@ -106,7 +106,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                 onChange={(val) => formik.setFieldValue("fee", val)}
                 variant="outlined"
                 value={formik.values.fee ?? ""}
-                label="فی هزینه"
+                label="فی هزینه (تومان)"
                 name="fee"
                 error={formik.errors.fee && formik.touched.fee}
                 helperText={formik.touched.fee && formik.errors.fee}
@@ -164,7 +164,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
                     onChange={(val) => formik.setFieldValue(`provinceSolutions[${index}].fee`, val)}
                     variant="outlined"
                     value={province.fee ?? ""}
-                    label="هزینه"
+                    label="هزینه (تومان)"
                     name={`provinceSolutions[${index}].fee`}
                     fullWidth
                     margin="normal"

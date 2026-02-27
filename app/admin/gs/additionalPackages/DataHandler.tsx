@@ -42,7 +42,7 @@ const DataHandler = ({ editData, loading, formik, setIsEdit }) => {
               onChange={(val) => formik.setFieldValue("price", val)}
               variant="outlined"
               value={formik.values.price ?? ""}
-              label="قیمت"
+              label="قیمت (تومان)"
               name="price"
               error={
                 formik.errors.price &&

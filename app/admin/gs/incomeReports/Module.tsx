@@ -199,8 +199,10 @@ export default function EavTypesModule({ session }: any) {
   };
 
   return (
-    <div>
+    <div dir="rtl">
+      {/* Filter Section */}
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+        {/* Main Filter Grid */}
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <DatePickerPersian
@@ -234,10 +236,14 @@ export default function EavTypesModule({ session }: any) {
               }}
             />
           </Grid>
-          <div className="h-full">
-            <h4 className="mb-4 font-bold">انتخاب نماینده</h4>
+          <Grid item xs={12} sm={6} md={3}>
+            <p
+              className="pb-3"
+            >
+              انتخاب نماینده
+            </p>
             <button
-              className="bg-gray-100 block !py-12 px-4 font-bold text-md w-full rounded-xl text-right"
+              className="bg-gray-100 block !py-4 px-4 font-bold text-md w-full rounded-xl text-right"
               onClick={(e) =>
                 setOrganOpen({
                   ...organOpen,
@@ -249,12 +255,7 @@ export default function EavTypesModule({ session }: any) {
             </button>
             <Dialog
               open={organOpen.isOpen}
-              onClose={() =>
-                setOrganOpen({
-                  ...organOpen,
-                  isOpen: false,
-                })
-              }
+              onClose={() => setOrganOpen({ ...organOpen, isOpen: false })}
               fullWidth
               maxWidth="sm"
             >
@@ -267,46 +268,42 @@ export default function EavTypesModule({ session }: any) {
                 />
               </div>
             </Dialog>
-          </div>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            container
-            alignItems="center"
-            spacing={1}
-          >
-            <Grid item>
-              <Button
-                variant="outlined"
-                startIcon={<ClearIcon />}
-                onClick={resetFilters}
-              >
-                حذف فیلترها
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<FilterListIcon />}
-                onClick={applyFilters}
-              >
-                اعمال فیلتر
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<DownloadIcon />}
-                onClick={downloadExcel}
-                color="secondary"
-              >
-                خروجی اکسل
-              </Button>
-            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            {/* Empty space for alignment */}
           </Grid>
         </Grid>
+
+        {/* Buttons Row - Full sized with happy colors */}
+        <div className="flex gap-4 mt-6">
+          <button
+            onClick={resetFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl border-2 border-orange-400 text-orange-600 bg-orange-50 font-semibold text-base transition-all duration-300 hover:border-orange-500 hover:bg-orange-100 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            حذف فیلترها
+          </button>
+          <button
+            onClick={applyFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold text-base transition-all duration-300 hover:from-green-600 hover:to-emerald-700 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            اعمال فیلتر
+          </button>
+          <button
+            onClick={downloadExcel}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-base transition-all duration-300 hover:from-blue-600 hover:to-indigo-700 hover:scale-[1.02]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            خروجی
+          </button>
+        </div>
       </Paper>
 
       {/* Totals Summary */}

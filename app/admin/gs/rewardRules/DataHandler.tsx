@@ -84,7 +84,7 @@ const DataHandler: React.FC<DataHandlerProps> = ({
               onChange={(val) => formik.setFieldValue("rewardAmount", val)}
               variant="outlined"
               value={formik.values.rewardAmount ?? ""}
-              label="مبلغ پاداش"
+              label="مبلغ پاداش (تومان)"
               name="rewardAmount"
               fullWidth
             />

@@ -31,7 +31,7 @@ export default function DiscountCodeUsagesModule() {
   const exportUrl = "/v1/api/guarantee/report/discountCodeUsages/export";
 
   const [triggered, setTriggered] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState(baseUrl);
+  const [currentUrl, setCurrentUrl] = useState("");
   const [loading, setLoading] = useState(false);
   type FilterState = {
     discountCode: string;
@@ -54,7 +54,6 @@ export default function DiscountCodeUsagesModule() {
       link: null,
       onClick: null,
     });
-    setTriggered(true);
   }, [setTitle]);
 
   const handleFilterChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,8 +113,8 @@ export default function DiscountCodeUsagesModule() {
       startDate: null,
       endDate: null,
     });
-    setCurrentUrl(baseUrl);
-    setTriggered((prev) => !prev);
+    setCurrentUrl("");
+    setTriggered(false);
   }, [baseUrl]);
 
   const activeFiltersCount = useMemo(
@@ -247,36 +246,46 @@ export default function DiscountCodeUsagesModule() {
           </Grid>
         </Grid>
 
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{ mt: 2, justifyContent: "flex-end" }}
-        >
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<ClearIcon />}
+        <div className="flex gap-4 mt-6">
+          <button
             onClick={resetFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl border-2 border-orange-400 text-orange-600 bg-orange-50 font-semibold text-base transition-all duration-300 hover:border-orange-500 hover:bg-orange-100 hover:scale-[1.02]"
           >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
             پاکسازی
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<FilterListIcon />}
+          </button>
+          <button
             onClick={applyFilters}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold text-base transition-all duration-300 hover:from-green-600 hover:to-emerald-700 hover:scale-[1.02]"
           >
-            اعمال فیلتر
-          </Button>
-        </Stack>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            دریافت گزارش
+          </button>
+          <button
+            onClick={downloadExcel}
+            disabled={loading}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 h-14 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-base transition-all duration-300 hover:from-blue-600 hover:to-indigo-700 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {loading ? "در حال دانلود..." : "خروجی"}
+          </button>
+        </div>
       </Box>
 
-      <LightDataGrid
-        triggered={triggered}
-        url={currentUrl}
-        columns={columns()}
-        detailPanel={undefined}
-      />
+      {currentUrl && (
+        <LightDataGrid
+          triggered={triggered}
+          url={currentUrl}
+          columns={columns()}
+          detailPanel={undefined}
+        />
+      )}
     </Box>
   );
 }
